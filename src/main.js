@@ -1,28 +1,17 @@
 
 
-
-import { createApp } from 'vue'
-import { createRouter, createWebHistory } from 'vue-router'
-
-
-
-import App from './App.vue'
-import CompOne from './components/CompOne.vue'
-import CompTwo from './components/CompTwo.vue'
+import { createApp } from 'vue';
+import App from  './App.vue'
+import { FwbListGroup, FwbListGroupItem, FwbDropdown   } from 'flowbite-vue';
+import { FwbButton } from 'flowbite-vue';
 
 
-// const router = createRouter({
-//     history: createWebHistory(),
-//     routes: [
-//         { path: '/:comp1', component: CompOne },
-//         { path: '/:comp2', component: CompTwo },
-//     ]
-// });
+const app = createApp(App);
 
-const app = createApp(App)
+// Register components globally
+app.component('fwb-list-group', FwbListGroup);
+app.component('fwb-list-group-item', FwbListGroupItem);
+app.component('fwb-dropdown', FwbDropdown);
+app.component('fwb-button', FwbButton);
 
-// app.use(router);
-app.component('comp1', CompOne);
-app.component('comp2', CompTwo);
-
-app.mount('#app')
+app.mount('#app');
