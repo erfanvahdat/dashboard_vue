@@ -1,0 +1,15 @@
+
+$base-color : #323237;
+$primary_color  : #7272d2;
+
+$font-weight_variable :(
+    'bold':200,
+    "medium" : 400,
+    "Cap" : uppercase,
+);
+
+@function weight($variable){
+    @return map-get( $font-weight_variable ,  $variable  )
+};
+
+
