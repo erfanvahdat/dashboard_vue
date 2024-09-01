@@ -1,41 +1,28 @@
-
-
-
+// src/main.js
 import { createApp } from 'vue';
+import App from './App.vue';
 import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
-import App from  './App.vue'
+import router from './router/router.js' ;  // Import the router
 
+import { 
+  FwbListGroup, FwbListGroupItem, FwbDropdown, FwbButton,
+  FwbSidebar, FwbSidebarItem, FwbSidebarDropdownItem,
+  FwbNavbar, FwbNavbarCollapse, FwbNavbarLink, FwbNavbarLogo 
+} from 'flowbite-vue';
 
-
-
-
-import { FwbListGroup, FwbListGroupItem, FwbDropdown   , FwbButton  } from 'flowbite-vue';
-import { FwbSidebar, FwbSidebarItem, FwbSidebarDropdownItem } from 'flowbite-vue'
-
-import { BeakerIcon  } from '@heroicons/vue/24/solid'
-import AlertIcon from 'vue-ionicons/dist/ios-alert.vue'
-
-// important components
-import dashboard from './components/dashboard.vue';
-import Chart from './components/Chart.vue';
-
-
-import {
-    FwbNavbar,
-    FwbNavbarCollapse,
-    FwbNavbarLink,
-    FwbNavbarLogo,
-  } from 'flowbite-vue'
+import { BeakerIcon } from '@heroicons/vue/24/solid';
+import AlertIcon from 'vue-ionicons/dist/ios-alert.vue';
 
 import Menubar from 'primevue/menubar';
-
-
-import Button from "primevue/button"
+import Button from 'primevue/button';
 import Timeline from 'primevue/timeline';
 
+import Dashboard from './components/dashboard.vue';
+import Chart from './components/Chart.vue';
 
 const app = createApp(App);
+
 app.use(PrimeVue, {
     theme: {
         preset: Aura
@@ -43,47 +30,36 @@ app.use(PrimeVue, {
 });
 
 // Register components globally
-app.component('fwb-list-group', FwbListGroup);
-app.component('fwb-list-group-item', FwbListGroupItem);
+var  comp = {
+  'fwb-list-group': FwbListGroup,
+  'fwb-list-group-item': FwbListGroupItem,
+  'fwb-dropdown': FwbDropdown,
+  'fwb-button': FwbButton,
+  'fwb-sidebar': FwbSidebar,
+  'fwb-sidebar-item': FwbSidebarItem,
+  'fwb-sidebar-dropdown-item': FwbSidebarDropdownItem,
+  'fwb-navbar': FwbNavbar,
+  'fwb-navbar-collapse': FwbNavbarCollapse,
+  'fwb-navbar-link': FwbNavbarLink,
+  'fwb-navbar-logo': FwbNavbarLogo,
+  'BeakerIcon': BeakerIcon,
+  'AlertIcon': AlertIcon,
+  'Menubar': Menubar,
+  'BB': Button,
+  'Timeline': Timeline,
+  'dashboard': Dashboard,
+  'Chart': Chart
+};
 
 
-app.component('fwb-dropdown', FwbDropdown);
-app.component('fwb-button', FwbButton);
-app.component('fwb-sidebar', FwbSidebar);
-app.component('fwb-sidebar-item', FwbSidebarItem);
-app.component('fwb-sidebar-dropdown-item', FwbSidebarDropdownItem);
+// app.component(comp);
 
-app.component('fwb-navbar', FwbNavbar);
-app.component('fwb-navbar-collapse', FwbNavbarCollapse);
-app.component('fwb-navbar-link', FwbNavbarLink);
-app.component('fwb-navbar-logo', FwbNavbarLogo);
-
-app.component('BeakerIcon', BeakerIcon);
-app.component('AlertIcon', AlertIcon);
-app.component('Menubar', Menubar);
-app.component('BB', Button);
-app.component('Timeline', Timeline );
+Object.entries(comp).forEach(([name, component]) => {
+  app.component(name, component);
+});
 
 
 
-
-
-app.component("dashboard", dashboard);
-app.component("Chart", Chart);
+app.use(router);  // Use the router
 
 app.mount('#app');
-
-
-
-//For Demo only
-// var links = document.getElementsByClassName('link')
-// for(var i = 0; i <= links.length; i++)
-//    addClass(i)
-
-
-// function addClass(id){
-//    setTimeout(function(){
-//       if(id > 0) links[id-1].classList.remove('hover')
-//       links[id].classList.add('hover')
-//    }, id*750) 
-// }

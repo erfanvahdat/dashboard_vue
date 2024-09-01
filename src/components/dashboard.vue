@@ -115,6 +115,11 @@
               <p>{{ post.body }}</p>
             </li>
           </ul>
+
+
+
+          <button @click="fetchData">Fetch Data</button>
+
         </div>
 
 
@@ -138,13 +143,27 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      posts: []
+      posts: [],
+      message: '',
     };
   },
 
 
 
   methods: {
+
+    async fetchData() {
+      try {
+        const response = await axios.get('http://localhost:3001/api/data/');
+        this.message = response.data.message;
+        console.log(response)
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        this.message = 'Failed to fetch data';
+      }
+    },
+
     async created() {
 
       try {
