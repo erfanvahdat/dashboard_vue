@@ -1,188 +1,114 @@
 <template>
-
-  <div class="7">
-
+  <div class="section-7">
     <!-- header  -->
     <header>
-
-      <div class="cont1   grid grid-cols-5  col-span-1  border-1  border-solid  border-gray-600    p-2 font text-lg	 	">
-
-        <h1 class="logo   ">PHOENIX</h1>
+      <div class="cont1 grid grid-cols-5 col-span-1 border border-gray-600 p-2 text-lg">
+        <h1 class="logo">PHOENIX</h1>
         <nav>
           <ul>
             <li>
-
-              <a href="#">
-                HOME
-                <i class="  fa-solid fa-house     "></i>
-
-              </a>
+              <a href="#">HOME <i class="fa-solid fa-house"></i></a>
             </li>
           </ul>
         </nav>
-
         <nav>
-          <li><a href="#">Pricing <i class="fa-regular fa-star"></i></a></li>
-
-
-
+          <ul>
+            <li><a href="#">Pricing <i class="fa-regular fa-star"></i></a></li>
+          </ul>
         </nav>
-
-
         <nav>
-          <li><a href="#">Contact <i class="fa-solid fa-rotate-left"></i></a></li>
+          <ul>
+            <li><a href="#">Contact <i class="fa-solid fa-rotate-left"></i></a></li>
+          </ul>
         </nav>
-
         <nav>
-          <li><a href="#">About <i class="fa-solid fa-envelope"></i></a></li>
+          <ul>
+            <li><a href="#">About <i class="fa-solid fa-envelope"></i></a></li>
+          </ul>
         </nav>
       </div>
-
-
     </header>
 
     <!-- Sidebar -->
-
     <div class="sidebar">
-
       <h2>CREATIVE TIM</h2>
-
       <ul>
-
-        <li>
-          <a href="">
-            HOME
-            <i class="fa-solid fa-house fa-lg	  m-3		"></i>
-          </a>
-
-        </li>
-
-        <li>
-          <a href="">
-            Analyzing
-            <i class="fa-solid fa-chart-pie m-3"></i>
-          </a>
-
-
-        </li>
-
-
-        <li>
-          <a href="">
-            Chart
-            <i class="fa-solid fa-chart-line m-3"></i>
-          </a>
-        </li>
-
-        <li>
-          <a href="">
-            Ranking
-            <i class="fa-solid fa-ranking-star m-3"></i>
-          </a>
-        </li>
-
-        <li>
-          <a href="">
-            Settig
-            <i class="fa-solid fa-gear m-3"></i>
-          </a>
-        </li>
-
-
-        <li>
-          <a href="">
-            Trade_history
-            <i class="fa-solid fa-clock-rotate-left m-3"></i>
-          </a>
-        </li>
-
-
+        <li><a href="#">HOME <i class="fa-solid fa-house fa-lg m-3"></i></a></li>
+        <li><a href="#">Analyzing <i class="fa-solid fa-chart-pie m-3"></i></a></li>
+        <li><a href="#">Chart <i class="fa-solid fa-chart-line m-3"></i></a></li>
+        <li><a href="#">Ranking <i class="fa-solid fa-ranking-star m-3"></i></a></li>
+        <li><a href="#">Setting <i class="fa-solid fa-gear m-3"></i></a></li>
+        <li><a href="#">Trade_history <i class="fa-solid fa-clock-rotate-left m-3"></i></a></li>
       </ul>
     </div>
 
-    <div class="main-content">
+    <!-- Main Content -->
+    <div class="main-content border border-gray-500 rounded">
+      <div class="grid_container grid grid-cols-3 grid-flow-row gap-4 p-2">
+        <div class="row-span-3">01</div>
+        <div class="col-span-2">02</div>
+        <div class="row-span-2 col-span-2">03</div>
+      </div>
+    </div>
 
+    <!-- ECharts Section -->
+    <div class="main-content border border-gray-500 rounded">
+      <div class="grid_container grid grid-cols-3 grid-flow-row gap-4 p-2">
+        <div class="row-span-3">
 
-      <!-- Chart presenting -->
-      <div class="card">
-
-
-        <div>
-          <h2>Posts</h2>
-          <ul>
-            <li v-for="post in posts" :key="post.id">
-              <h3>{{ post.title }}</h3>
-              <p>{{ post.body }}</p>
-            </li>
-          </ul>
-
-
-
-          <button @click="fetchData">Fetch Data</button>
-
+            <div id="main" style="width: 300px; height: 300px;"></div>
         </div>
 
 
-
+        <div class="col-span-2">02</div>
+        <div class="row-span-2 col-span-2">03</div>
       </div>
-
     </div>
 
 
-
+  
   </div>
 </template>
 
 
-
-
-
 <script>
-import axios from 'axios';
+import * as echarts from 'echarts';
+import { line_plot } from '../chartConfig.js'; // Adjust the path as necessary
 
 export default {
+  name: 'LineChart',
   data() {
     return {
-      posts: [],
-      message: '',
+      // Your data array
+      chartData: [
+        { value: 335, name: 'Direct Access' },
+        { value: 310, name: 'Email Marketing' },
+        { value: 234, name: 'Affiliate Ads' },
+        { value: 135, name: 'Video Ads' },
+        { value: 1548, name: 'Search Engines' }
+      ]
     };
   },
-
-
-
   methods: {
-
-    async fetchData() {
-      try {
-        const response = await axios.get('http://localhost:3001/api/data/');
-        this.message = response.data.message;
-        console.log(response)
-
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        this.message = 'Failed to fetch data';
-      }
-    },
-
-    async created() {
-
-      try {
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts');
-        this.posts = response.data;
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
+    
   },
 
+  mounted() {
 
 
+    var myChart = echarts.init(document.getElementById('main'))
 
-};
+    const option= line_plot(this.chartData)
+
+    myChart.setOption(this.initChart())
+
+
+  },
+  
+}
 </script>
 
-
-<style lang="scss">
-@import '../dashboard.css'
+<style>
+@import '../dashboard.css';
 </style>
+

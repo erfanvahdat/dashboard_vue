@@ -1,24 +1,23 @@
 
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 
 
 .cont1 {
-  @apply bg-[#1F2235] border border-[#1F2235]
+  @apply bg-[#1F2235] border border-[#1F2235];
 }
-
 
 .cont1 nav li {
-
-  @apply ml-10 inline-block text-gray font-medium   
+  @apply ml-10 inline-block text-gray-500 font-medium;
 }
 
 
-.main-content {
-  margin-left: 270px;
-  padding: 20px;
-  /* display: flex;
-  flex-wrap: wrap; */
-  gap: 20px;
+
+.sidebar {
+  width: 180px; /* Adjust this value as needed */
 }
 
 .card {
@@ -26,17 +25,27 @@
   border-radius: 10px;
   color: white;
   padding: 20px;
-  /* flex: 1 1 calc(33% - 20px); */
-  height:  50vh ;
-  width:  50vw ;
-
-  /* Flex basis for 3 columns */
-  /* min-width: 300px; */
-  /* Minimum width to maintain card shape */
+  height: 50vh;
+  width: 50vw;
   box-sizing: border-box;
 }
 
 .card h3 {
   margin: 0;
   font-size: 24px;
+}
+
+.main-content {
+  margin-left: 200px;
+  padding: 5px;
+  margin-top:10px;
+  gap: 20px;
+}
+
+.grid_container {
+  border: 1px solid blue;
+}
+
+.grid_container div {
+  @apply border border-solid border-gray-700 rounded-lg p-1 bg-gray-700
 }

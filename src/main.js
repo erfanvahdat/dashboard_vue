@@ -21,6 +21,12 @@ import Timeline from 'primevue/timeline';
 import Dashboard from './components/dashboard.vue';
 import Chart from './components/Chart.vue';
 
+
+// Chart import modules
+import ApexCharts from 'apexcharts'
+import { Bar,Line } from 'vue-chartjs'
+
+
 const app = createApp(App);
 
 app.use(PrimeVue, {
@@ -29,8 +35,11 @@ app.use(PrimeVue, {
     }
 });
 
+
 // Register components globally
 var  comp = {
+
+  "apexchart":ApexCharts,
   'fwb-list-group': FwbListGroup,
   'fwb-list-group-item': FwbListGroupItem,
   'fwb-dropdown': FwbDropdown,
@@ -48,7 +57,8 @@ var  comp = {
   'BB': Button,
   'Timeline': Timeline,
   'dashboard': Dashboard,
-  'Chart': Chart
+  'Chart': Chart,
+  "BAR":Bar,
 };
 
 
