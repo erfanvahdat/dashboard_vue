@@ -7,7 +7,7 @@
 
 
 .cont1 {
-  @apply bg-[#1F2235] border border-[#1F2235];
+  @apply bg-[#1F2235] 
 }
 
 .cont1 nav li {
@@ -42,10 +42,14 @@
   gap: 20px;
 }
 
-.grid_container {
-  border: 1px solid blue;
+
+.main-content .grid_container{
+  border: 1px solid rgb(126, 126, 126);
+
 }
 
 .grid_container div {
-  @apply border border-solid border-gray-700 rounded-lg p-1 bg-gray-700
+  @apply  p-1 bg-gray-700 rounded mr-10
+  
 }
+/* border border-solid border-gray-700 rounded-lg */
