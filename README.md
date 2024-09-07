@@ -10,8 +10,11 @@ $ npm install
 $ npm run dev
 
 ```
+<<<<<<< HEAD
 ## Preview
 ![Alt text](src/assets/main_page.png)
+=======
+>>>>>>> 40956161627d7e824061c1de3a86ba60a75498e8
 
 
 ## introduction
@@ -25,3 +28,8 @@ $ npm run dev
 4. ...
    
   
+<<<<<<< HEAD
+=======
+
+  
+>>>>>>> 40956161627d7e824061c1de3a86ba60a75498e8
