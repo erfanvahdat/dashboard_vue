@@ -72,6 +72,57 @@
     </div>
 
 
+      
+
+    <div class=" main-content 	grid_container	">
+    
+      <div class=" grid_container flex flex-wrap-row   p-2   ">
+
+      <header class="">
+        this is the header
+      </header>
+    
+      
+        <button  class=" border-2 border-purple-500  rounded-lg   px-4 py-2 	 hover:bg-purple-500  transition-colors duration-300   m-2.5">click here</button>
+
+      
+      <div class=" gird_container ">02</div>
+      <div class="gird_container">02</div>
+
+    </div>
+
+  </div>
+    
+  <!-- Live_position -->
+  <div class=" main-content bg-gray-800 p-1.5 text-white  rounded-lg 	">
+  <!-- Header Section -->
+  <div class="flex justify-between items-center mb-2 text-orange-300 ">
+    
+    
+    <h1 class="flip-animate font-bold   ml-1 font-serif " target="_blank">Live_<span data-hover="Position">Position</span></h1>
+    <span class="text-sm">Week total: <span class="font-mono">05:31:41</span></span>
+  </div>
+
+  <!-- Today Section -->
+  <div class="bg-gray-900 rounded-lg p-4 mb-2">
+    <div class="flex justify-between items-center border-b border-gray-700 pb-2 mb-2">
+      <span class="text-md font-semibold">Today</span>
+      <span class="text-sm">Total: <span class="font-mono">03:50:26</span></span>
+    </div>
+
+    <!-- Task Entry -->
+    <div class="flex justify-between items-center text-sm">
+      <div class="flex items-center space-x-2">
+        <span class="text-gray-400">Add description</span>
+        <span class="text-green-400">• CRM</span>
+      </div>
+ 
+    </div>
+  </div>
+</div>
+
+  
+
 
   
   </div>
@@ -168,5 +219,7 @@ export default {
 
 <style>
 @import '../dashboard.css';
+@import '../text.scss';
 </style>
+
 

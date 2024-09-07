@@ -1,5 +1,27 @@
-# Vue 3 + Vite
+# corptia-nuxt
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## Build Setup
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+```bash
+# install dependencies with npm 
+$ npm install
+
+# run the project in developer environment 
+$ npm run dev
+
+```
+## Preview
+![Alt text](src/assets/main_page.png)
+
+
+## introduction
+  this is the **vue dahboard** specially designed for helping traders to handle their crypto future trading  easily. APi for connecting to bingX exchange are reserved and also for multiple view tradingview chart(emdeded) platform is written to have a `ncie` view of movement of the market.
+
+
+## Main_sections
+1. Trade API(`BINGX`).
+2. Multi window emdeded chart.
+3. Analyzing Trade section.
+4. ...
+   
+  

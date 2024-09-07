@@ -33,19 +33,21 @@
 .card h3 {
   margin: 0;
   font-size: 24px;
-}
+}   
 
 .main-content {
   margin-left: 200px;
   padding: 5px;
   margin-top:10px;
+  margin-right:  25px;
   gap: 20px;
+  
 }
 
 
 .main-content .grid_container{
   border: 1px solid rgb(126, 126, 126);
-
+  
 }
 
 .grid_container div {
@@ -53,3 +55,15 @@
   
 }
 /* border border-solid border-gray-700 rounded-lg */
+
+
+
+
+
+.text_1 {
+  text-decoration: none;
+}
+
+.text_1:hover {
+  text-decoration: underline;
+}
