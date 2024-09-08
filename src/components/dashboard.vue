@@ -1,58 +1,13 @@
 <template>
   <div class="section-7">
 
+    <Sidebar></Sidebar>
 
-    
+    <Head></Head>
 
-    <sidebar>
+    <Status>
 
-    </sidebar>
-
-
-
-    <!-- header  -->
-    <header>
-      <div class="cont1 grid grid-cols-5 col-span-1 p-2 text-lg ">
-        <h1 class="logo">PHOENIX</h1>
-        <nav>
-          <ul>
-            <li>
-              <a href="#">HOME <i class="fa-solid fa-house"></i></a>
-            </li>
-          </ul>
-        </nav>
-        <nav>
-          <ul>
-            <li><a href="#">Pricing <i class="fa-regular fa-star"></i></a></li>
-          </ul>
-        </nav>
-        <nav>
-          <ul>
-            <li><a href="#">Contact <i class="fa-solid fa-rotate-left"></i></a></li>
-          </ul>
-        </nav>
-        <nav>
-          <ul>
-            <li><a href="#">About <i class="fa-solid fa-envelope"></i></a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
-
-
-    <!-- Main Content -->
-    
-    <div class="main-content ">
-
-        <div class="grid_container grid grid-cols-3 grid-flow-row gap-4 p-2 ">
-
-        <div class="row-span-3  ">01</div>
-        <div class="col-span-2">02</div>
-        <div class="row-span-2 col-span-2">03</div>
-      </div>
-
-    </div>
-
+    </Status>
 
         <!-- ECharts Section -->
         <div class=" main-content ">
@@ -68,8 +23,6 @@
           <div class="row-span-2 col-span-2">03</div>
         </div>
     </div>
-
-
       
 
     <div class=" main-content 	grid_container	">
@@ -89,6 +42,8 @@
 
   </div>
     
+
+  
   <!-- Live_position -->
   <div class=" main-content bg-gray-800 p-1.5 text-white  rounded-lg 	">
   <!-- Header Section -->
@@ -159,6 +114,7 @@
     
     </div>
 
+
   <button  class=" border-2 border-purple-500  rounded-lg   px-4 py-2 	 hover:bg-purple-500  transition-colors duration-300   m-2.5">click here</button>
 
 
@@ -176,91 +132,11 @@
 
 <script>
 import * as echarts from 'echarts';
+import Status from './Status.vue';
 
-
-
-// import { line_plot } from '../chartConfig.js'; // Adjust the path as necessary
-
-
-// import { option } from '../chart/line.js'; // Adjust the path as necessary
 
 export default {
-  name: 'LineChart',
-  data() {
-    return {
-      // Your data array
-      chartData: [
-        { value: 335, name: 'Direct Access' },
-        { value: 310, name: 'Email Marketing' },
-        { value: 234, name: 'Affiliate Ads' },
-        { value: 135, name: 'Video Ads' },
-        { value: 1548, name: 'Search Engines' }
-      ]
-    };
-  },
-  methods: {
-    
-  },
-
-  mounted() {
-
-    const option_1 = {
-  tooltip: {
-    trigger: 'item',
-    formatter: '{a} <br/>{b} : {c} ({d}%)'
-  },
-  legend: {
-    orient: 'vertical',
-    left: 'left',
-    data: [
-      'Direct Access',
-      'Email Marketing',
-      'Affiliate Ads',
-      'Video Ads',
-      'Search Engines'
-    ],
-    textStyle: {
-      color: 'white', // Change this to your desired color
-      fontSize: 15,     // Adjust the font size
-      fontWeight: 'bold', // You can also adjust the font weight,
-      
-
-    }
-  },
-  series: [
-    {
-      name: 'Access Source',
-      type: 'pie',
-      radius: '55%',
-      center: ['70%', '70%'],
-      data: [
-        { value: 335, name: 'Direct Access' },
-        { value: 310, name: 'Email Marketing' },
-        { value: 234, name: 'Affiliate Ads' },
-        { value: 135, name: 'Video Ads' },
-        { value: 1548, name: 'Search Engines' }
-      ],
-      emphasis: {
-        itemStyle: {
-          shadowBlur: 10,
-          shadowOffsetX: 0,
-          shadowColor: 'green'
-        }
-      }
-    }
-  ]
-};  
-
   
-
-    var myChart = echarts.init(document.getElementById('main'))
-
-    // const option= line_plot(x)
-
-    myChart.setOption(option_1)
-
-
-  },
   
 }
 </script>
@@ -268,6 +144,8 @@ export default {
 <style>
 @import '../dashboard.css';
 @import '../text.scss';
+
+
 </style>
 
 

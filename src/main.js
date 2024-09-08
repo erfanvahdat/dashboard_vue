@@ -21,7 +21,13 @@ import Timeline from 'primevue/timeline';
 import Dashboard from './components/dashboard.vue';
 import Chart from './components/Chart.vue';
 
+
+
+
 import sidebar from './components/Sidebar.vue';
+import header from './components/header.vue';
+import Status from './components/Status.vue';
+import Trade_chart from './components/Trading_view_chart.vue';
 
 // Chart import modules
 import ApexCharts from 'apexcharts'
@@ -60,7 +66,10 @@ var  comp = {
   'dashboard': Dashboard,
   'Chart': Chart,
   "BAR":Bar,
-  'sidebar':sidebar,
+  'Sidebar':sidebar,
+  "Head":header,
+  "Status":Status,
+  "Trade_chart":Trade_chart,
 };
 
 

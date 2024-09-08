@@ -21,13 +21,10 @@
 }
 
 
-.sidebar ul a{
-  @apply text-sm 
-
-}
+.Head 
 
 .card {
-  background-color: #1F2235;
+  background-color: #1f2235;
   border-radius: 10px;
   color: white;
   padding: 20px;
@@ -46,10 +43,11 @@
   padding: 5px;
   margin-top:10px;
   margin-right:  25px;
+
+  ;
   gap: 20px;
   
 }
-
 
 .main-content .grid_container{
   border: 1px solid rgb(126, 126, 126);
@@ -57,9 +55,15 @@
 }
 
 .grid_container div {
-  @apply  p-1 bg-gray-700 rounded mr-10
+  @apply   bg-gray-700 rounded mr-5 p-1
   
 }
+
+
+/* .status {
+  @apply   bg-gray-700 rounded mr-5  p-1   border border-solid border-gray-400
+  
+} */
 /* border border-solid border-gray-700 rounded-lg */
 
 
