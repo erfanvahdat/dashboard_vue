@@ -21,6 +21,7 @@ import Timeline from 'primevue/timeline';
 import Dashboard from './components/dashboard.vue';
 import Chart from './components/Chart.vue';
 
+import sidebar from './components/Sidebar.vue';
 
 // Chart import modules
 import ApexCharts from 'apexcharts'
@@ -59,6 +60,7 @@ var  comp = {
   'dashboard': Dashboard,
   'Chart': Chart,
   "BAR":Bar,
+  'sidebar':sidebar,
 };
 
 

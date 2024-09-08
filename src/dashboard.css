@@ -15,9 +15,15 @@
 }
 
 
+.sidebar ul li{
+ /* @apply border-b	   */
+  @apply border-b	 border-gray-500
+}
 
-.sidebar {
-  width: 180px; /* Adjust this value as needed */
+
+.sidebar ul a{
+  @apply text-sm 
+
 }
 
 .card {

@@ -1,5 +1,15 @@
 <template>
   <div class="section-7">
+
+
+    
+
+    <sidebar>
+
+    </sidebar>
+
+
+
     <!-- header  -->
     <header>
       <div class="cont1 grid grid-cols-5 col-span-1 p-2 text-lg ">
@@ -29,18 +39,6 @@
       </div>
     </header>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <h2>CREATIVE TIM</h2>
-      <ul>
-        <li><a href="#">HOME <i class="fa-solid fa-house fa-lg m-3"></i></a></li>
-        <li><a href="#">Analyzing <i class="fa-solid fa-chart-pie m-3"></i></a></li>
-        <li><a href="#">Chart <i class="fa-solid fa-chart-line m-3"></i></a></li>
-        <li><a href="#">Ranking <i class="fa-solid fa-ranking-star m-3"></i></a></li>
-        <li><a href="#">Setting <i class="fa-solid fa-gear m-3"></i></a></li>
-        <li><a href="#">Trade_history <i class="fa-solid fa-clock-rotate-left m-3"></i></a></li>
-      </ul>
-    </div>
 
     <!-- Main Content -->
     
@@ -83,9 +81,7 @@
       </header>
     
       
-        <button  class=" border-2 border-purple-500  rounded-lg   px-4 py-2 	 hover:bg-purple-500  transition-colors duration-300   m-2.5">click here</button>
-
-      
+        
       <div class=" gird_container ">02</div>
       <div class="gird_container">02</div>
 
@@ -97,27 +93,76 @@
   <div class=" main-content bg-gray-800 p-1.5 text-white  rounded-lg 	">
   <!-- Header Section -->
   <div class="flex justify-between items-center mb-2 text-orange-300 ">
-    
-    
+   
     <h1 class="flip-animate font-bold   ml-1 font-serif " target="_blank">Live_<span data-hover="Position">Position</span></h1>
     <span class="text-sm">Week total: <span class="font-mono">05:31:41</span></span>
   </div>
 
   <!-- Today Section -->
-  <div class="bg-gray-900 rounded-lg p-4 mb-2">
-    <div class="flex justify-between items-center border-b border-gray-700 pb-2 mb-2">
-      <span class="text-md font-semibold">Today</span>
-      <span class="text-sm">Total: <span class="font-mono">03:50:26</span></span>
+  <div class=" flex flex-row   space-x-5    bg-gray-900 rounded-lg p-4 mb-2  " >
+  
+    
+    
+    <div class="flex flex-col text-center  border-r border-dashed border-gray-700 "  >
+      
+        <h1 class="font text-s font-sans text-green-600 broder ">Ticker</h1>
+
+
+        <span class=" m-2.5 space-y-2 	"> ETH </span>
+    
+    
     </div>
 
-    <!-- Task Entry -->
-    <div class="flex justify-between items-center text-sm">
-      <div class="flex items-center space-x-2">
-        <span class="text-gray-400">Add description</span>
-        <span class="text-green-400">• CRM</span>
-      </div>
- 
+      
+    <div class="flex flex-col text-center  border-r border-dashed border-gray-700 "  >
+      
+      <h1 class="font text-s font-sans text-green-600 broder ">Size</h1>
+
+
+      <span class=" m-2.5 space-y-2 	"> ETH </span>
+  
+  </div>
+
+    <div class="flex flex-col text-center  border-r border-dashed border-gray-700 "  >
+      
+      <h1 class="font text-s font-sans text-green-600 broder ">Realize_PNL(%)</h1>
+
+
+      <span class=" m-2.5 space-y-2 	"> ETH </span>
+  
+  </div>
+
+
+</div>
+
+<div class="flex flex-row text-center  border-r border-dashed border-gray-700 "  >
+  
+  <h1 class="font text-s font-sans text-green-600 broder ">Realize_PNL(%)</h1>
+
+
+  <span class=" m-2.5 space-y-2 	"> ETH </span>
+
+
+
+
+    <div class="border-r-1 border-dashed "  >
+    <button  class=" border-2 border-purple-500  rounded-lg   px-4 py-2 	 hover:bg-purple-500  transition-colors duration-300   m-2.5">click here</button>
+    
     </div>
+
+    <div class="border-r-1 border-dashed "  >
+    <button  class=" border-2 border-purple-500  rounded-lg   px-4 py-2 	 hover:bg-purple-500  transition-colors duration-300   m-2.5">click here</button>
+    
+    </div>
+    <div class="border-r-1 border-dashed "  >
+    <button  class=" border-2 border-purple-500  rounded-lg   px-4 py-2 	 hover:bg-purple-500  transition-colors duration-300   m-2.5">click here</button>
+    
+    </div>
+
+  <button  class=" border-2 border-purple-500  rounded-lg   px-4 py-2 	 hover:bg-purple-500  transition-colors duration-300   m-2.5">click here</button>
+
+
+
   </div>
 </div>
 
@@ -131,6 +176,9 @@
 
 <script>
 import * as echarts from 'echarts';
+
+
+
 // import { line_plot } from '../chartConfig.js'; // Adjust the path as necessary
 
 
@@ -203,7 +251,7 @@ export default {
   ]
 };  
 
-
+  
 
     var myChart = echarts.init(document.getElementById('main'))
 
