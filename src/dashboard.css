@@ -5,7 +5,6 @@
 @tailwind utilities;
 
 
-
 .cont1 {
   @apply bg-[#1F2235] 
 }

@@ -1,50 +1,36 @@
-<!-- src/App.vue -->
 <template>
 
+  <Head></Head>
+  <Sidebar></Sidebar>
+
+
+  <!-- <Live_pos></Live_pos> -->
+
+  <Trade_chart></Trade_chart>
+
+
+  <!-- <router-link to="/">Home</router-link>
+
+  <router-link to="/dashboard">DASH</router-link> -->
+
+
+  <!-- This will dynamically load components here based on the current route -->
+  <router-view />
 
 
 
-  <dashboard/>
-
-
-
-  
 
 </template>
 
-
-
-
-
-
 <script>
-import axios from 'axios';
+import Live_Pos from './components/Live_Pos.vue';
 
 export default {
-  data() {
-    return {
-      message: ''
-    };
-  },
-  methods: {
-  
-  }
-};
-</script>
-
-
-<!-- <script>
-import Dashboard from './components/dashboard.vue';  // Import Dashboard component
-
-export default {
-  components: {
-    Dashboard  // Register Dashboard component locally
-  }
-};
-</script> -->
+  name: 'App'
+}
+</script> 
 
 <style lang="scss">
 @import './main.css';
-@import './sidebar.css';
-@import './main.css';
+@import './style/sidebar.css';
 </style>

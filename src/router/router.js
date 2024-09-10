@@ -2,37 +2,29 @@
 
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../components/Home.vue';
-
-
-import NotFound from '../components/NotFound.vue'; // 404 component
-import dashboard from '../components/dashboard.vue'; 
+import Test from '../components/test.vue';
+import Dashboard from '../components/dashboard.vue';
 
 const routes = [
-    {
-        path: '',
-        name: 'Home',
-        component: dashboard
-      },
   
-  {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: dashboard
-  },
-  {
-    path: '/:catchAll(.*)', // Catch-all route for 404
-    name: 'NotFound',
-    component: NotFound
-  }
+  { path: '/', component: Home },
+  { path: '/test', component: Test },
+  // { path: '/dashboard', component: Dashboard },
+  
+  // { 
+  //   path: '/dashboard', 
+  //   component: Dashboard,
 
-
+  //   children: [
+  //     { path: '', component: () => import('../components/Home.vue') },  // Default child route
+      
+  //   ]
+  // }
 ];
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
 });
-
-
 
 export default router;

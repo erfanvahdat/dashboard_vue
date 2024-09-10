@@ -1,11 +1,13 @@
 // src/main.js
 import { createApp } from 'vue';
 import App from './App.vue';
-import PrimeVue from 'primevue/config';
-import Aura from '@primevue/themes/aura';
-import router from './router/router.js' ;  // Import the router
 
-import { 
+
+import router from './router/router';
+
+
+// Import components
+import {
   FwbListGroup, FwbListGroupItem, FwbDropdown, FwbButton,
   FwbSidebar, FwbSidebarItem, FwbSidebarDropdownItem,
   FwbNavbar, FwbNavbarCollapse, FwbNavbarLink, FwbNavbarLogo 
@@ -14,39 +16,26 @@ import {
 import { BeakerIcon } from '@heroicons/vue/24/solid';
 import AlertIcon from 'vue-ionicons/dist/ios-alert.vue';
 
-import Menubar from 'primevue/menubar';
-import Button from 'primevue/button';
-import Timeline from 'primevue/timeline';
 
+// Import custom components
 import Dashboard from './components/dashboard.vue';
 import Chart from './components/Chart.vue';
-
-
-
-
-import sidebar from './components/Sidebar.vue';
-import header from './components/header.vue';
+import Sidebar from './components/Sidebar.vue';
+import Header from './components/header.vue';
 import Status from './components/Status.vue';
-import Trade_chart from './components/Trading_view_chart.vue';
+import TradeChart from './components/Trading_view_chart.vue';
+import Live_pos from './components/Live_Pos.vue';
+import test from './components/test.vue';
+
 
 // Chart import modules
-import ApexCharts from 'apexcharts'
-import { Bar,Line } from 'vue-chartjs'
-
-
-const app = createApp(App);
-
-app.use(PrimeVue, {
-    theme: {
-        preset: Aura
-    }
-});
+import ApexCharts from 'apexcharts';
+import { Bar, Line } from 'vue-chartjs';
 
 
 // Register components globally
-var  comp = {
-
-  "apexchart":ApexCharts,
+const globalComponents = {
+  'apexchart': ApexCharts,
   'fwb-list-group': FwbListGroup,
   'fwb-list-group-item': FwbListGroupItem,
   'fwb-dropdown': FwbDropdown,
@@ -60,27 +49,29 @@ var  comp = {
   'fwb-navbar-logo': FwbNavbarLogo,
   'BeakerIcon': BeakerIcon,
   'AlertIcon': AlertIcon,
-  'Menubar': Menubar,
-  'BB': Button,
-  'Timeline': Timeline,
   'dashboard': Dashboard,
   'Chart': Chart,
-  "BAR":Bar,
-  'Sidebar':sidebar,
-  "Head":header,
-  "Status":Status,
-  "Trade_chart":Trade_chart,
+  'BAR': Bar,
+  'Line': Line,
+  'Sidebar': Sidebar,
+  'Head': Header,
+  'Status': Status,
+  'Trade_chart': TradeChart,
+  "Live_pos":Live_pos,
+  "test":test
+  
 };
 
+// Create Vue app instance
+const app = createApp(App);
 
-// app.component(comp);
 
-Object.entries(comp).forEach(([name, component]) => {
+
+
+// Register global components
+Object.entries(globalComponents).forEach(([name, component]) => {
   app.component(name, component);
 });
 
 
-
-app.use(router);  // Use the router
-
-app.mount('#app');
+app.use(router).mount('#app');
