@@ -6,8 +6,8 @@
 
     <!-- Sidebar Section -->
     <div class="flex w-[250px] border-1 border-blue-300 bg-[#1ABC9C]  ">
-      <!-- <Sidebar @showHome="showhome" @showAnalyze="showAnalyze" @showCharts="toggleChartVisibility"
-        @showRanking="showRanking" @showSettings="showSettings" @showHistory="showTradeHistory" /> -->
+      <Sidebar @showHome="showhome" @showAnalyze="showAnalyze" @showCharts="toggleChartVisibility"
+        @showRanking="showRanking" @showSettings="showSettings" @showHistory="showTradeHistory" />
     </div>
 
     <div class="flex flex-col w-full h-screen ml-fit border-1 border-blue-300">

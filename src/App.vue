@@ -70,4 +70,5 @@ export default {
 
 @import './main.css';
 @import './style/sidebar.css';
+@import './style/logo.css';
 </style>

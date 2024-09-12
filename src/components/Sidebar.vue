@@ -1,94 +1,80 @@
-<!-- Sidebar.vue -->
 <template>
+  <div :class="['sidebar', sidebarClasses]">
+    <!-- Toggle Button with SVG Icon -->
+    <button @click="toggleSidebar" class="toggle-button">
+      <svg v-if="!isCollapsed" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6">
+        <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <svg v-if="isCollapsed" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6">
+        <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      click here
+    </button>
 
-  <div class="  flex flex-column">
-    <div class=" sidebar  flex flex-col font-mono    w-fit  pt-[20px]  ">
-
-      <a href="#">
-        <span class="logo mr-5 font-bold border-1 border-solid rounded-2 font-serif ml-8 ">PHOENIX
-          <i class="fa-solid fa-house"></i>
-        </span>
-      </a>
-
-      <div>
-
-        <ul class="ml-8  ">
-          <li @click="$emit('showHome')">
-            <a href="#">HOME
-              <span class="fa-solid fa-house fa-sm m-1"></span>
-            </a>
-          </li>
-
-          <li @click="$emit('showAnalyze')">
-            <a href="#">Analyzing
-              <span class="fa-solid fa-chart-pie m-1"></span>
-            </a>
-          </li>
-
-          <li @click="$emit('showCharts')">
-            <a href="#">Chart
-              <span class="fa-solid fa-chart-pie m-1"></span>
-            </a>
-          </li>
-
-          <li @click="$emit('showRanking')">
-            <a href="#">Ranking
-              <span class="fa-solid fa-sitemap"></span>
-            </a>
-          </li>
-
-          <li @click="$emit('showSettings')">
-            <a href="#">Setting
-              <span class="fa-solid fa-gear m-1"></span>
-            </a>
-          </li>
-
-          <li @click="$emit('showHistory')">
-            <a href="#">Trade History
-              <span class="fa-solid fa-clock-rotate-left"></span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
+    <!-- Sidebar Content -->
+    <ul class="mx-3 mt-12">
+      <li @click="showView('home')">
+        <a href="#" class="text-sm">HOME
+          <span class="fa-solid fa-house fa-sm m-1"></span></a>
+      </li>
+      <li @click="showView('charts')">
+        <a href="#" class="text-sm">Analyzing
+          <span class="fa-solid fa-chart-pie m-1"></span></a>
+      </li>
+      <li @click="showView('ranking')">
+        <a href="#" class="text-sm">Ranking
+          <span class="fa-solid fa-sitemap"></span></a>
+      </li>
+    </ul>
   </div>
 </template>
 
-
-
 <script>
 export default {
+  data() {
+    return {
+      isCollapsed: false,
+    };
+  },
+  computed: {
+    sidebarClasses() {
+      return this.isCollapsed
+        ? 'w-16 translate-x-[-100%] transition-transform ease-in-out duration-300'
+        : 'w-44 translate-x-0 transition-transform ease-in-out duration-300';
+    }
+  },
   methods: {
-    showCharts() {
-      this.$emit('showChart'); // Emit an event to parent when clicked
-
+    toggleSidebar() {
+      this.isCollapsed = !this.isCollapsed;
+    },
+    showView(view) {
+      this.$emit('switchView', view);
     }
   }
 }
 </script>
 
-
-<style>
-@import '../style/logo.css';
-
-.sidebar h2 {
-  @apply ml-[20px] text-lg
+<style scoped>
+.sidebar {
+  position: fixed;
+  height: 100%;
+  background-color: #333;
+  color: white;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-
-.sidebar ul {
-  @apply p-0 mt-[30px]
+.toggle-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
 }
-
-.sidebar ul a {
-  @apply text-lg
-}
-
-
-.sidebar ul li {
-  @apply p-1 m-1 text-lg mb-5
-}
-
-.sidebar ul li:hover {
-  @apply bg-[#16A085]
+.toggle-button svg {
+  stroke: white;
 }
 </style>

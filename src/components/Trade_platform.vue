@@ -1,5 +1,5 @@
 <template>
-  <div class="grid lg:grid-rows-2 lg:grid-cols-3 h-screen gap-1 ml-0 mr-2 mt-2 border-1 border-blue-500">
+  <div class="grid lg:grid-rows-2 lg:grid-cols-3 h-screen gap-1 ml-0 mr-2 mt-2 ">
     <!-- Unified Loop for All Charts -->
     <div v-for="(symbol, key, index) in all_symbol" :key="index" class="flex flex-col items-center m-1">
 
