@@ -1,7 +1,8 @@
 <!-- Sidebar.vue -->
 <template>
+
   <div class="  flex flex-column">
-    <div class=" sidebar  flex flex-col font-mono  h-22  w-fit h-100vh pt-[20px]  ">
+    <div class=" sidebar  flex flex-col font-mono    w-fit  pt-[20px]  ">
 
       <a href="#">
         <span class="logo mr-5 font-bold border-1 border-solid rounded-2 font-serif ml-8 ">PHOENIX
@@ -10,6 +11,7 @@
       </a>
 
       <div>
+
         <ul class="ml-8  ">
           <li @click="$emit('showHome')">
             <a href="#">HOME

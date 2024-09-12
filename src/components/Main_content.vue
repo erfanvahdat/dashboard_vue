@@ -1,22 +1,28 @@
 <template>
 
+
+
   <div class="flex flex-row">
 
     <!-- Sidebar Section -->
     <div class="flex w-[250px] border-1 border-blue-300 bg-[#1ABC9C]  ">
-      <Sidebar @showHome="displayHome" @showAnalyze="showAnalyze" @showCharts="toggleChartVisibility"
-        @showRanking="showRanking" @showSettings="showSettings" @showHistory="showTradeHistory" />
+      <!-- <Sidebar @showHome="showhome" @showAnalyze="showAnalyze" @showCharts="toggleChartVisibility"
+        @showRanking="showRanking" @showSettings="showSettings" @showHistory="showTradeHistory" /> -->
     </div>
 
-    <div class="flex flex-col w-full h-screen ml-0 border-1 border-blue-300">
+    <div class="flex flex-col w-full h-screen ml-fit border-1 border-blue-300">
 
-      <Head></Head>
+      <!-- <Head></Head> -->
+
+      <Head @showHome="showhome" @showAnalyze="showAnalyze" @showCharts="toggleChartVisibility"
+        @showRanking="showRanking" @showSettings="showSettings" @showHistory="showTradeHistory" />
+
 
       <!-- Conditionally render different components -->
-      <Trade_chart v-if="showCharts" />
-      <!-- <Trade_P v-if="HOME" /> -->
+      <Trade_pl v-if="showCharts" />
+      <Live_pos v-if="home" />
 
-
+      <!-- <Live_pos></Live_pos> -->
       <!-- <Analyze_Component v-if="showAnalyzeComponent" />
       <Ranking_Component v-if="showRankingComponent" />
       <Settings_Component v-if="showSettingsComponent" />
@@ -28,10 +34,12 @@
 </template>
 
 <script>
+import Live_Pos from './Live_Pos.vue';
+
 export default {
   data() {
     return {
-      HOME: false,
+      home: false,
       showCharts: false, // State to control the chart visibility
       Trade_platform: false,
       showAnalyzeComponent: false,
@@ -43,7 +51,7 @@ export default {
   methods: {
     // Resets the visibility of all components
     resetComponents() {
-      this.HOME = false;
+      this.home = false;
       this.showCharts = false;
       this.showAnalyzeComponent = false;
       this.showRankingComponent = false;
@@ -52,34 +60,35 @@ export default {
     },
 
 
-    displayHome() {
+    showhome() {
       this.resetComponents();
-      this.HOME = true;
+      this.home = true;
+      console.log(this.home)
     },
     // Toggle chart visibility
     toggleChartVisibility() {
-      this.resetComponents(); // Hide all components first
-      this.showCharts = true; // Show the chart component
+      this.resetComponents();
+      this.showCharts = true;
     },
     // Toggle analyze component visibility
     showAnalyze() {
-      this.resetComponents(); // Hide all components first
-      this.showAnalyzeComponent = true; // Show the analyze component
+      this.resetComponents();
+      this.showAnalyzeComponent = true;
     },
     // Toggle ranking component visibility
     showRanking() {
-      this.resetComponents(); // Hide all components first
-      this.showRankingComponent = true; // Show the ranking component
+      this.resetComponents();
+      this.showRankingComponent = true;
     },
     // Toggle settings component visibility
     showSettings() {
-      this.resetComponents(); // Hide all components first
-      this.showSettingsComponent = true; // Show the settings component
+      this.resetComponents();
+      this.showSettingsComponent = true;
     },
     // Toggle trade history component visibility
     showTradeHistory() {
-      this.resetComponents(); // Hide all components first
-      this.showTradeHistoryComponent = true; // Show the trade history component
+      this.resetComponents();
+      this.showTradeHistoryComponent = true;
     },
   }
 }
