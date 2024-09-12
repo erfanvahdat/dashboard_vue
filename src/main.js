@@ -25,7 +25,9 @@ import Header from './components/header.vue';
 import Status from './components/Status.vue';
 import TradeChart from './components/Trading_view_chart.vue';
 import Live_pos from './components/Live_Pos.vue';
-import test from './components/test.vue';
+import Trade_PL from './components/Trade_platform.vue';
+import Main from './components/Main_content.vue';
+
 
 
 // Chart import modules
@@ -56,9 +58,12 @@ const globalComponents = {
   'Sidebar': Sidebar,
   'Head': Header,
   'Status': Status,
-  'Trade_chart': TradeChart,
+  
   "Live_pos":Live_pos,
-  "test":test
+  "Trade_P":Trade_PL,
+  "Main":Main,
+  'Trade_chart': TradeChart,
+  
   
 };
 

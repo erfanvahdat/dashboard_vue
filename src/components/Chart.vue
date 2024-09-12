@@ -1,5 +1,7 @@
 <template>
+  
   <div id="chart">
+
     <apexchart type="candlestick" :options="chartOptions" :series="series"></apexchart>
   </div>
 </template>

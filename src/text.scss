@@ -24,6 +24,7 @@ h1.flip-animate {
   perspective: 1000px;
   
   span {
+    
     position: relative;
     display: inline-block;
     padding: 0;    
@@ -52,6 +53,6 @@ h1.flip-animate {
   
   &:hover span:before,
   &:focus span:before {
-    color: rgb(210, 73, 54);
+    color: rgb(115, 175, 84);
   }
 }

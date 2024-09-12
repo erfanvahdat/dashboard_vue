@@ -2,13 +2,15 @@
 
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../components/Home.vue';
-import Test from '../components/test.vue';
 import Dashboard from '../components/dashboard.vue';
+import TradeChart from '../components/Trading_view_chart.vue';
 
 const routes = [
   
   { path: '/', component: Home },
-  { path: '/test', component: Test },
+  { path: '/chart', component: TradeChart },
+
+
   // { path: '/dashboard', component: Dashboard },
   
   // { 

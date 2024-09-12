@@ -25,3 +25,4 @@ export default {
 @import '../dashboard.css';
 @import '../text.scss';
 </style>
+
