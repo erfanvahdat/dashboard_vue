@@ -5,13 +5,14 @@
   <div class="flex flex-row">
 
     <!-- Sidebar Section -->
-    <div class="flex w-[250px] border-1 border-blue-300 bg-[#1ABC9C]  ">
-      <Sidebar @showHome="showhome" @showAnalyze="showAnalyze" @showCharts="toggleChartVisibility"
-        @showRanking="showRanking" @showSettings="showSettings" @showHistory="showTradeHistory" />
+    <div class="flex w-[250px] border-1 border-blue-300   ">
+
+      <Sidebar />
+
     </div>
 
+    
     <div class="flex flex-col w-full h-screen ml-fit border-1 border-blue-300">
-
       <!-- <Head></Head> -->
 
       <Head @showHome="showhome" @showAnalyze="showAnalyze" @showCharts="toggleChartVisibility"
@@ -22,8 +23,8 @@
       <Trade_pl v-if="showCharts" />
       <Live_pos v-if="home" />
 
-      <!-- <Live_pos></Live_pos> -->
-      <!-- <Analyze_Component v-if="showAnalyzeComponent" />
+
+      <!-- 
       <Ranking_Component v-if="showRankingComponent" />
       <Settings_Component v-if="showSettingsComponent" />
       <Trade_History_Component v-if="showTradeHistoryComponent" /> -->
@@ -34,7 +35,6 @@
 </template>
 
 <script>
-import Live_Pos from './Live_Pos.vue';
 
 export default {
   data() {
