@@ -1,23 +1,20 @@
 <template>
 
 
+  <!-- body -->
+  <div class="flex flex-row  h-screen ">
 
-  <div class="flex flex-row">
-
-    <!-- Sidebar Section -->
+    <!-- Sidebar -->
     <div class="flex w-[250px]   ">
-
       <Sidebar @showHome="showhome" @showAnalyze="showAnalyze" @showCharts="toggleChartVisibility"
         @showRanking="showRanking" @showSettings="showSettings" @showHistory="showTradeHistory" />
-
     </div>
 
-    <!-- border-1 border-blue-300 -->
-    <div class="flex flex-col w-full h-screen ml-fit ">
+
+    <!-- Main-content -->
+    <div class="flex flex-col w-full   ml-fit ">
       <!-- <Head></Head> -->
 
-      <Head @showHome="showhome" @showAnalyze="showAnalyze" @showCharts="toggleChartVisibility"
-        @showRanking="showRanking" @showSettings="showSettings" @showHistory="showTradeHistory" />
 
 
 
