@@ -42,9 +42,23 @@ const peopleData= [
 // });
 
 
-peopleData.forEach((person,index) => {
-  console.log(index,Object.keys(person)[index]);
-});
+
+import axios from 'axios';
+
+
+
+axios.get('http://192.168.1.104:8000/')
+  .then(response => {
+    console.log(response.data);
+  })
+  .catch(error => {
+    console.error('Error fetching data', error);
+  });
+
+
+// peopleData.forEach((person,index) => {
+//   console.log(index,Object.keys(person)[index]);
+// });
 
 // peopleData.forEach((key ,value) => {
 //   console.log(key.keys,value)

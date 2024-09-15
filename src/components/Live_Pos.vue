@@ -73,15 +73,22 @@
     <!-- Toggle button -->
     <div class="flex ">
       <!-- Toggle button content here -->
+      <h1>token is here:{{ token }}</h1>
     </div>
 
   </div>
 </template>
 
 <script>
+
+const token = localStorage.getItem('authToken');
+
 export default {
+
+
   data() {
     return {
+      token: token,
       pulse_loading: false, // Contring the pulse container display
       objectKeys: [],
       peopleData: [
@@ -99,6 +106,10 @@ export default {
   },
 
   methods: {
+    async get_token() {
+      const token = localStorage.getItem('authToken');
+      return token
+    },
     reloading() {
       this.pulse_loading = true;
 

@@ -28,7 +28,8 @@ import Trade_PL from './components/Trade_platform.vue';
 import Main from './components/Main_content.vue';
 import Rank from './components/Rank.vue';
 import reg from './components/registration.vue';
-
+import Trade_history from './components/Trade_history.vue';
+import Analyzing from './components/Analyzing.vue';
 
 // Chart import modules
 import ApexCharts from 'apexcharts';
@@ -63,7 +64,10 @@ const globalComponents = {
   "Trade_pl":Trade_PL,
   "Main":Main,
   "Rank":Rank,
-  "Registration":reg
+  "Registration":reg,
+  "Trade_history":Trade_history,
+  "Analyzing":Analyzing,
+
   
   
   

@@ -15,6 +15,10 @@
       <Trade_pl v-if="showCharts" />
       <Registration v-if="reg" />
 
+      <Trade_history v-if="showTradeHistoryComponent"></Trade_history>
+      <Analyzing v-if="showAnalyzeComponent"></Analyzing>
+
+
       <!-- Uncomment and use when needed -->
       <!-- <Rank v-if="showRankingComponent" /> -->
       <!-- <Settings_Component v-if="showSettingsComponent" /> -->
@@ -24,6 +28,8 @@
 </template>
 
 <script>
+import Analyzing from './Analyzing.vue';
+
 export default {
   data() {
     return {
@@ -63,7 +69,6 @@ export default {
       this.resetComponents();
       this.reg = true;
     },
-
 
 
     // Toggle analyze component visibility
