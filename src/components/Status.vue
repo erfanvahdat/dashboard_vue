@@ -2,11 +2,11 @@
 
 
   <!-- Status Section -->
-  <div class=" flex flex-row-2 gap-1 p-3 h-45 justify-between font-mono bg-gray-700 rounded ">
+  <div class=" flex flex-row gap-2 p-3 mt-2 h-45 w-fit overflow-hidden justify-start font-mono bg-gray-700 rounded  
+   ">
 
-    <div>
-      <ul class="text-sm">
-
+    <div class="">
+      <ul class="text-sm space-y-1 w-full p-2 ">
 
         <li class="flex justify-between	">
           <div class="underline">Balance</div>
@@ -34,11 +34,15 @@
         </li>
 
       </ul>
+
     </div>
 
 
-
+    <!-- <div class="border-5">hello</div> -->
   </div>
+
+
+
 
 
 </template>

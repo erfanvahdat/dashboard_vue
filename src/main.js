@@ -27,6 +27,7 @@ import Live_pos from './components/Live_Pos.vue';
 import Trade_PL from './components/Trade_platform.vue';
 import Main from './components/Main_content.vue';
 import Rank from './components/Rank.vue';
+import reg from './components/registration.vue';
 
 
 // Chart import modules
@@ -62,6 +63,7 @@ const globalComponents = {
   "Trade_pl":Trade_PL,
   "Main":Main,
   "Rank":Rank,
+  "Registration":reg
   
   
   

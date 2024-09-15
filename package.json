@@ -28,6 +28,7 @@
     "flowbite-vue": "^0.1.6",
     "framer-motion": "^11.3.28",
     "ionicons": "^7.4.0",
+    "ldbutton": "^2.0.4",
     "nodemon": "^3.1.4",
     "papaparse": "^5.4.1",
     "preline": "^2.4.1",

@@ -30,17 +30,31 @@ const array1 = ["BINANCE:BTCUSD.P", "BINANCE:ETHUSD.P", "BINANCE:BNBUSDT.P"];
 // console.log(symbol)
 
 
+
+const peopleData= [
+  { name: "erfan", job: "programmer", favorit_color: "green" },
+  { name: "ali", job: "it", favorit_color: "blue" },
+  { name: "moh", job: "SEO", favorit_color: "red" }
+]
+
 // Object.values(symbol).forEach(value => {
 //   console.log(value);
 // });
 
 
-Object.keys(myDict).forEach((key, index) => {
-  console.log(`Index: ${index}, Key: ${key}, Value: ${myDict[key]}`);
+peopleData.forEach((person,index) => {
+  console.log(index,Object.keys(person)[index]);
 });
 
+// peopleData.forEach((key ,value) => {
+//   console.log(key.keys,value)
+// });
+// Object.keys(peopleData).forEach((key, index) => {
+//   console.log(`Index: ${index}, Key: ${key}, Value: ${peopleData[key]}`);
+// });
 
-for (symbo,index) in myDict{
-  console.log()
-}
+
+// for (symbo,index) in peopleData{
+//   console.log(symbol)
+// }
 

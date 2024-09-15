@@ -1,66 +1,59 @@
 <template>
-
     <div>
-        <ul class="menu bg-base-200  w-56 text-black text-md  h-full  pt-3">
-
-
-            <li @click="$emit('showHome')">
-                <a href="#">HOME
-                    <span class="fa-solid fa-house fa-sm m-1 "></span>
-                </a>
+        <ul class="menu bg-base-200 w-56 text-black text-md h-full pt-3">
+            <li>
+                <router-link to="/" @click.native="emitHome">
+                    <a>
+                        HOME
+                        <span class="fa-solid fa-house fa-sm m-1"></span>
+                    </a>
+                </router-link>
             </li>
 
             <li>
                 <!-- Main -->
                 <a class="group relative inline-block overflow-hidden rounded">
                     <span class="absolute left-0 top-0 mb-0 flex h-full w-0 translate-x-0 transform bg-indigo-500
-            opacity-90 transition-all duration-700 ease-out group-hover:w-full">
+              opacity-90 transition-all duration-700 ease-out group-hover:w-full">
                     </span>
                     <span class="relative group-hover:text-white">Main <i class="fa-solid fa-house"></i></span>
                 </a>
-
-
                 <ul>
-
-                    <li @click="$emit('showCharts')">
-                        
-                        <a href="#">Chart
-
-                            <span class="fa-solid fa-chart-pie m-1"></span>
-
-                            
-                        </a>
-                        
+                    <li>
+                        <router-link to="/charts" @click.native="emitCharts">
+                            <a>
+                                Chart
+                                <span class="fa-solid fa-chart-pie m-1"></span>
+                            </a>
+                        </router-link>
                     </li>
-
-
-
-                    <li @click="$emit('showSettings')">
-                        <a href="#">Setting
-                            <span class="fa-solid fa-gear m-1"></span>
-                        </a>
+                    <li>
+                        <router-link to="/settings" @click.native="emitSettings">
+                            <a>
+                                Setting
+                                <span class="fa-solid fa-gear m-1"></span>
+                            </a>
+                        </router-link>
                     </li>
-
-
-
                 </ul>
-
-
             </li>
 
             <!-- LAB -->
             <li>
                 <a class="group relative inline-block overflow-hidden rounded">
                     <span class="absolute left-0 top-0 mb-0 flex h-full w-0 translate-x-0 transform bg-red-500
-            opacity-90 transition-all duration-700 ease-out group-hover:w-full">
+              opacity-90 transition-all duration-700 ease-out group-hover:w-full">
                     </span>
-                    <span class="relative group-hover:text-white space ">LAB <i class="fa-solid fa-flask"></i></span>
+                    <span class="relative group-hover:text-white space">LAB <i class="fa-solid fa-flask"></i></span>
                 </a>
                 <ul>
-                    <li @click="$emit('showAnalyze')">
-                        <a href="#">Analyzing
-                            <span class="fa-solid fa-chart-pie m-1"></span>
-                        </a>
+                    <li>
+                        <router-link to="/analyze" @click.native="emitAnalyze">
+                            <a>
+                                Analyzing
+                                <span class="fa-solid fa-chart-pie m-1"></span>
+                            </a>
+                        </router-link>
                     </li>
                 </ul>
             </li>
@@ -69,36 +62,70 @@
             <li>
                 <a class="group relative inline-block overflow-hidden rounded">
                     <span class="absolute left-0 top-0 mb-0 flex h-full w-0 translate-x-0 transform bg-green-500
-            opacity-90 transition-all duration-700 ease-out group-hover:w-full">
+              opacity-90 transition-all duration-700 ease-out group-hover:w-full">
                     </span>
-                    <span class="relative group-hover:text-white space ">LAB <i
-                            class="fa-solid fa-book-open"></i></span>
+                    <span class="relative group-hover:text-white space">LAB <i class="fa-solid fa-book-open"></i></span>
                 </a>
                 <ul>
-
-                    <li @click="$emit('showHistory')">
-                        <a href="#">Trade History
-                            <span class="fa-solid fa-clock-rotate-left"></span>
-                        </a>
+                    <li>
+                        <router-link to="/history" @click.native="emitHistory">
+                            <a>
+                                Trade History
+                                <span class="fa-solid fa-clock-rotate-left"></span>
+                            </a>
+                        </router-link>
                     </li>
-                    <li @click="$emit('showRanking')">
-                        <a href="#">Ranking
-                            <span class="fa-solid fa-sitemap text-lg    "></span>
-                        </a>
+                    <li>
+                        <router-link to="/ranking" @click.native="emitRanking">
+                            <a>
+                                Ranking
+                                <span class="fa-solid fa-sitemap text-lg"></span>
+                            </a>
+                        </router-link>
                     </li>
-
-
                 </ul>
             </li>
 
-
-
+            <!-- Registration Form -->
+            <li>
+                <router-link to="/registration" @click.native="emitRegistration">
+                    <a>
+                        Registration
+                        <i class="fa-solid fa-address-card"></i>
+                    </a>
+                </router-link>
+            </li>
         </ul>
     </div>
-
-
 </template>
 
+<script>
+export default {
+    methods: {
+        emitHome() {
+            this.$emit('showHome');
+        },
+        emitCharts() {
+            this.$emit('showCharts');
+        },
+        emitSettings() {
+            this.$emit('showSettings');
+        },
+        emitAnalyze() {
+            this.$emit('showAnalyze');
+        },
+        emitHistory() {
+            this.$emit('showHistory');
+        },
+        emitRanking() {
+            this.$emit('showRanking');
+        },
+        emitRegistration() {
+            this.$emit('registration');
+        },
+    },
+};
+</script>
 
 
 

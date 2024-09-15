@@ -6,13 +6,12 @@
     <div class=" rounded-md bg-blue-500 m-2 h-[70px]">
       <span class="font-serif text-xs ml-2 rounded w-fit text-gray-700">chart_setting</span>
 
-      <div class="flex flex-row space-x-2 ">
+      <div class="flex flex-row space-x-2  ">
+
         <!-- Dropdown for selecting number of charts -->
         <div class="dropdown dropdown-hover">
           <div tabindex="0" role="button" class="btn m-1 btn-sm hover:bg-white-400 hover:border-white-500">
             <span class="font-sans font-bold">{{ chartCount }}- box</span>
-
-
           </div>
           <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-40 p-2 shadow">
             <li
@@ -37,6 +36,14 @@
 
         </div>
 
+
+        <div class="flex inline-flex">
+          <input type="checkbox" class="toggle mt-2 ml-2 bg-green- hover:bg-gray-500"
+            :checked="default_timeframe === '1'" @change="change_all_timeframe" />
+
+          <span class="ml-2 mt-2">{{ default_timeframe }}-Min</span>
+
+        </div>
 
       </div>
     </div>
@@ -151,6 +158,13 @@ export default {
       });
     },
 
+    change_all_timeframe() {
+      this.default_timeframe = this.default_timeframe === '1' ? '5' : '1';
+      this.all_symbol.forEach((symbol, index) => {
+        this.createChart(`chart-all-${index}`, symbol, this.default_timeframe, this.chart_theme);
+      });
+    },
+
     changeChartCount(numberOfCharts) {
       if (numberOfCharts <= 12) {
         this.chartCount = numberOfCharts;
@@ -195,6 +209,8 @@ export default {
     },
 
     initCharts() {
+
+
       this.all_symbol.slice(0, this.chartCount).forEach((symbol, index) => {
         this.createChart(`chart-all-${index}`, symbol, this.timeframes[index], this.chart_theme);
       });
