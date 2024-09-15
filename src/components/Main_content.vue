@@ -16,15 +16,14 @@
       <!-- <Head></Head> -->
 
 
-
-
       <!-- Conditionally render different components -->
       <Trade_pl v-if="showCharts" />
       <Live_pos v-if="home" />
 
+      <!-- <Rank v-if="showRankingComponent" /> -->
 
       <!-- 
-      <Ranking_Component v-if="showRankingComponent" />
+      
       <Settings_Component v-if="showSettingsComponent" />
       <Trade_History_Component v-if="showTradeHistoryComponent" /> -->
 

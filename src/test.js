@@ -43,3 +43,4 @@ Object.keys(myDict).forEach((key, index) => {
 for (symbo,index) in myDict{
   console.log()
 }
+

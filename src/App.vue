@@ -1,7 +1,5 @@
 <template>
 
-
-
   <Main></Main>
 
   <!-- <second_chart></second_chart> -->

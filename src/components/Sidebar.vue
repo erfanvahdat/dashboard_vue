@@ -14,7 +14,7 @@
                 <!-- Main -->
                 <a class="group relative inline-block overflow-hidden rounded">
                     <span class="absolute left-0 top-0 mb-0 flex h-full w-0 translate-x-0 transform bg-indigo-500
-                    opacity-90 transition-all duration-700 ease-out group-hover:w-full">
+            opacity-90 transition-all duration-700 ease-out group-hover:w-full">
                     </span>
                     <span class="relative group-hover:text-white">Main <i class="fa-solid fa-house"></i></span>
                 </a>
@@ -23,9 +23,14 @@
                 <ul>
 
                     <li @click="$emit('showCharts')">
+                        
                         <a href="#">Chart
+
                             <span class="fa-solid fa-chart-pie m-1"></span>
+
+                            
                         </a>
+                        
                     </li>
 
 
@@ -47,7 +52,7 @@
             <li>
                 <a class="group relative inline-block overflow-hidden rounded">
                     <span class="absolute left-0 top-0 mb-0 flex h-full w-0 translate-x-0 transform bg-red-500
-                    opacity-90 transition-all duration-700 ease-out group-hover:w-full">
+            opacity-90 transition-all duration-700 ease-out group-hover:w-full">
                     </span>
                     <span class="relative group-hover:text-white space ">LAB <i class="fa-solid fa-flask"></i></span>
                 </a>
@@ -64,7 +69,7 @@
             <li>
                 <a class="group relative inline-block overflow-hidden rounded">
                     <span class="absolute left-0 top-0 mb-0 flex h-full w-0 translate-x-0 transform bg-green-500
-                    opacity-90 transition-all duration-700 ease-out group-hover:w-full">
+            opacity-90 transition-all duration-700 ease-out group-hover:w-full">
                     </span>
                     <span class="relative group-hover:text-white space ">LAB <i
                             class="fa-solid fa-book-open"></i></span>
@@ -88,26 +93,36 @@
 
 
 
-
-            <!-- <li><a>Item 1</a></li>
-        <li>
-            <a>Parent</a>
-            <ul>
-                <li><a>Submenu 1</a></li>
-                <li><a>Submenu 2</a></li>
-                <li>
-                    <a>Parent</a>
-                    <ul>
-                        <li><a>Submenu 1</a></li>
-                        <li><a>Submenu 2</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </li>
-        <li><a>Item 3</a></li> -->
         </ul>
     </div>
+
+
 </template>
 
 
-<style></style>
+
+
+<!-- 
+loading icon
+<span class="relative flex h-3 w-3">
+    <span
+        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+    <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+</span> -->
+<!-- 
+pulse
+<div class="border border-blue-300 shadow rounded-md p-4 max-w-sm w-full mx-auto">
+    <div class="animate-pulse flex space-x-4">
+      <div class="rounded-full bg-slate-700 h-10 w-10"></div>
+      <div class="flex-1 space-y-6 py-1">
+        <div class="h-2 bg-slate-700 rounded"></div>
+        <div class="space-y-3">
+          <div class="grid grid-cols-3 gap-4">
+            <div class="h-2 bg-slate-700 rounded col-span-2"></div>
+            <div class="h-2 bg-slate-700 rounded col-span-1"></div>
+          </div>
+          <div class="h-2 bg-slate-700 rounded"></div>
+        </div>
+      </div>
+    </div>
+  </div> -->

@@ -26,7 +26,7 @@ import Status from './components/Status.vue';
 import Live_pos from './components/Live_Pos.vue';
 import Trade_PL from './components/Trade_platform.vue';
 import Main from './components/Main_content.vue';
-
+import Rank from './components/Rank.vue';
 
 
 // Chart import modules
@@ -61,6 +61,7 @@ const globalComponents = {
   "Live_pos":Live_pos,
   "Trade_pl":Trade_PL,
   "Main":Main,
+  "Rank":Rank,
   
   
   

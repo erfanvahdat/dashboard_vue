@@ -92,12 +92,15 @@ export default {
 
       isLightTheme: false,  // Default to dark mode
       chart_theme: "Dark",  // Default theme label
-
+      newTimeframe: '1',
+      default_timeframe: '1',
       chartCount: 6, // Default number of charts
       all_symbol: [
+        "BINAN  CE:GALAUSDT.P", "BINANCE:FILUSDT.P", , "BINANCE:DOTUSDT.P",
         "BINANCE:BTCUSD.P", "BINANCE:ETHUSD.P", "BINANCE:BNBUSDT.P",
-        "BINANCE:POLUSDT.P", "BINANCE:DOTUSDT.P", "BINANCE:SOLUSDT.P",
-        "BINANCE:GALAUSDT.P", "BINANCE:FILUSDT.P", "BINANCE:WIFUSDT.P",
+        "BINANCE:POLUSDT.P", "BINANCE:SOLUSDT.P",
+        , "BINANCE:WIFUSDT.P",
+
         "OANDA:EURUSD", "OANDA:GBPUSD", "OANDA:AUDUSD"
       ],
       all_label: [
@@ -144,7 +147,7 @@ export default {
       this.all_symbol.forEach((symbol, index) => {
         // this.updateChart(index, symbol, this.all_label[index]);
 
-        this.createChart(`chart-all-${index}`, symbol, this.timeframe, this.chart_theme);
+        this.createChart(`chart-all-${index}`, symbol, this.default_timeframe, this.chart_theme);
       });
     },
 
@@ -160,7 +163,8 @@ export default {
     changeTimeframe(index, newTimeframe) {
       const symbol = this.all_symbol[index];
       // this.updateChart(index, symbol, this.all_label[index], newTimeframe);
-      this.createChart(`chart-all-${index}`, symbol, newTimeframe, this.chart_theme);
+      this.newTimeframe = newTimeframe
+      this.createChart(`chart-all-${index}`, symbol, this.newTimeframe, this.chart_theme);
     },
 
     createChart(containerId, symbol, timeframe = "1", theme = "Dark") {
@@ -183,10 +187,11 @@ export default {
       });
     },
 
-    updateChart(index, newSymbol, newLabel, timeframe = "1") {
+    updateChart(index, newSymbol, newLabel) {
       this.all_symbol[index] = newSymbol;
       this.all_label[index] = newLabel;
-      this.createChart(`chart-all-${index}`, newSymbol, timeframe, this.chart_theme);
+
+      this.createChart(`chart-all-${index}`, newSymbol, this.timeframes[index], this.chart_theme);
     },
 
     initCharts() {
@@ -194,6 +199,13 @@ export default {
         this.createChart(`chart-all-${index}`, symbol, this.timeframes[index], this.chart_theme);
       });
     }
+  },
+  mounted() {
+
+    this.all_symbol.slice(0, this.chartCount).forEach((symbol, index) => {
+      this.createChart(`chart-all-${index}`, symbol, this.timeframes[index], this.chart_theme);
+    })
+
   }
 };
 </script>
