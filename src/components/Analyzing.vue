@@ -8,13 +8,16 @@
                 <!-- chart Section -->
 
 
-                Chart
+
+
+
+
             </div>
             <div class="flex flex-col rounded   border-1 bg-gray-700 border-blue-500 justify-start items-center gap-5 ">
 
                 <!-- first button -->
                 <div class="mx-2 mt-2">
-                    
+
                     <button class="btn btn-accent">Accent</button>
                 </div>
                 <!-- first button -->

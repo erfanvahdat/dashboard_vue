@@ -1,23 +1,72 @@
 <template>
   <div class="flex flex-col p-2 gap-3 bg-gray-800 h-[100vh] overflow-hidden">
+
     <!-- Status Component -->
-    <div class="rounded w-fit mx-3">
-      <status></status>
+    <div class=" flex flex-row rounded w-full mx-3 gap-2  mr-10 ">
+
+      <!-- status bar -->
+      <div>
+        <status></status>
+      </div>
+
+
+      <div class=" w-full p-2 mt-2 mr-5 overflow-hidden border-1 border-blue-300 rounded bg-gray-700">
+
+        chart section
+
+      </div>
+
+
+
+
+
+
+
+
+    </div>
+
+
+    <div>
+
+      <div>
+        <!-- Collapsible div with an arrow -->
+        <div
+          class="p-2 m-2 overflow-hidden rounded bg-gray-300 hover:bg-gray-700 flex items-center justify-between cursor-pointer"
+          @click="toggleCollapse">
+          <span>Collapsible</span>
+          <!-- Arrow Icon (rotates when clicked) -->
+          <svg xmlns="http://www.w3.org/2000/svg" :class="isOpen ? 'rotate-90' : 'rotate-0'"
+            class="w-6 h-6 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
+
+        <!-- Collapsible content -->
+        <div v-show="isOpen"
+          class="p-2 m-2 overflow-hidden rounded bg-gray-300 hover:bg-gray-700 flex items-center justify-between cursor-pointer">
+
+
+          Lorem ipsum dolor text....
+        </div>
+      </div>
+
+
+
     </div>
 
     <!-- Order Table -->
     <div class="rounded mx-3 border-1">
       <div class="flex flex-row gap-2">
-        <div>
-          <span class="font-b font-serif ml-2 text-white">Orders</span>
+        <div class="mt-2">
+          <span class="font-b font-serif ml-2  text-white">Orders</span>
         </div>
 
-        <div>
+        <div class="mt-1">
           <button
-            class="relative px-2 py-2 bg-blue-500 text-white rounded-lg flex items-center justify-center space-x-2"
-            @click="reloading">
+            class="relative px-2 py-1 bg-blue-500 text-white rounded-[20px] flex items-center justify-center space-x-2"
+            @click="order_reloading">
             <span class="text-sm">reload</span>
-            <div v-if="pulse_loading"
+            <div v-if="order_pulse"
               class="w-3 h-3 border-4 border-solid border-current border-t-transparent rounded-full animate-spin"
               role="status">
             </div>
@@ -27,7 +76,7 @@
 
       <div class="relative">
         <!-- Table with Pulse animation -->
-        <table v-if="!pulse_loading" class="table rounded-lg border border-gray-300 overflow-hidden">
+        <table v-if="!order_pulse" class="table rounded-lg border border-gray-300 overflow-hidden">
           <thead>
             <tr>
               <th></th>
@@ -50,7 +99,74 @@
       </div>
 
       <!-- Loading state with spinning icon and text -->
-      <div v-if="pulse_loading" class="text-center">
+      <div v-if="order_pulse" class="text-center">
+        <div class="border border-blue-300 shadow rounded-md p-4 w-full mx-auto">
+          <div class="animate-pulse flex space-x-4">
+            <div class="rounded-full bg-slate-700 h-10 w-10"></div>
+            <div class="flex-1 space-y-6 py-1">
+              <div class="h-2 bg-slate-700 rounded"></div>
+              <div class="space-y-3">
+                <div class="grid grid-cols-3 gap-4">
+                  <div class="h-2 bg-slate-700 rounded col-span-2"></div>
+                  <div class="h-2 bg-slate-700 rounded col-span-1"></div>
+                </div>
+                <div class="h-2 bg-slate-700 rounded"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+
+    <!-- Pending Order -->
+    <div class="rounded mx-3 border-1">
+      <div class="flex flex-row gap-2">
+        <div class="mt-2">
+          <span class="font-b font-serif ml-2 text-white">Pending_order</span>
+        </div>
+
+        <div class="mt-1">
+          <button
+            class="relative px-2 py-1 bg-blue-500 text-white rounded-[20px] flex items-center justify-center space-x-2"
+            @click="pending_reloading">
+            <span class="text-sm">reload</span>
+            <div v-if="pending_pulse"
+              class="w-3 h-3 border-4 border-solid border-current border-t-transparent rounded-full animate-spin"
+              role="status">
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <div class="relative">
+        <!-- Table with Pulse animation -->
+        <table v-if="!pending_pulse" class="table rounded-lg border border-gray-300 overflow-hidden">
+          <thead>
+            <tr>
+              <th></th>
+              <th v-for="(key, index) in objectKeys" :key="index">{{ key }}</th>
+              <th>Trigger</th>
+              <th>Cancel</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(person, index) in peopleData" :key="index" class="bg-black text-white">
+              <th>{{ index + 1 }}</th>
+              <td>{{ person.name }}</td>
+              <td>{{ person.job }}</td>
+              <td>{{ person.favorit_color }}</td>
+              <td><button class="btn btn-accent">Accent</button></td>
+              <td><button class="btn btn-error">Error</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Loading state with spinning icon and text -->
+      <div v-if="pending_pulse" class="text-center">
         <div class="border border-blue-300 shadow rounded-md p-4 w-full mx-auto">
           <div class="animate-pulse flex space-x-4">
             <div class="rounded-full bg-slate-700 h-10 w-10"></div>
@@ -89,7 +205,9 @@ export default {
   data() {
     return {
       token: token,
-      pulse_loading: false, // Contring the pulse container display
+      order_pulse: false, // Contring the pulse container display
+      pending_pulse: false, // Contring the pulse container display
+      isOpen: false,
       objectKeys: [],
       peopleData: [
         { name: "erfan", job: "programmer", favorit_color: "green" },
@@ -100,24 +218,40 @@ export default {
   },
 
   mounted() {
+
+
     if (this.peopleData.length > 0) {
       this.objectKeys = Object.keys(this.peopleData[0]);
     }
   },
 
   methods: {
+    toggleCollapse() {
+      this.isOpen = !this.isOpen; // Toggle collapse
+    },
     async get_token() {
       const token = localStorage.getItem('authToken');
       return token
     },
-    reloading() {
-      this.pulse_loading = true;
+
+
+    order_reloading() {
+      this.order_pulse = true;
 
       setTimeout(() => {
-        this.pulse_loading = false;
+        this.order_pulse = false;
+      }, 2000);
+    },
+    pending_reloading() {
+      this.pending_pulse = true;
+
+      setTimeout(() => {
+        this.pending_pulse = false;
       }, 2000);
     }
   },
+
+
 
 
 };
