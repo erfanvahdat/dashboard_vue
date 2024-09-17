@@ -1,118 +1,107 @@
 <template>
-    <div>
-        <ul class="menu bg-base-200 w-56 text-black text-md h-full pt-3">
-            <li>
-                <router-link to="/" @click.native="emitHome">
-                    <a>
-                        HOME
-                        <span class="fa-solid fa-house fa-sm m-1"></span>
-                    </a>
-                </router-link>
-            </li>
-
-            <li>
-                <!-- Main -->
-                <a class="group relative inline-block overflow-hidden rounded">
-                    <span class="absolute left-0 top-0 mb-0 flex h-full w-0 translate-x-0 transform bg-indigo-500
-              opacity-90 transition-all duration-700 ease-out group-hover:w-full">
-                    </span>
-                    <span class="relative group-hover:text-white">Main <i class="fa-solid fa-house"></i></span>
+    <div class="card flex ">
+        <Menu :model="items" class="w-full md:w-60">
+            <template #start>
+                <span class="inline-flex items-center gap-1 px-2 py-2">
+                    <!-- <span class="text-xl font-semibold">PRIME<span class="text-primary">APP</span></span> -->
+                </span>
+            </template>
+            <template #submenulabel="{ item }">
+                <span class="text-primary font-bold">{{ item.label }}</span>
+            </template>
+            <template #item="{ item, props }">
+                <a v-ripple class="flex items-center" v-bind="props.action" @click="handleClick(item.class_name)">
+                    <span :class="item.icon" />
+                    <span>{{ item.label }}</span>
+                    <Badge v-if="item.class_name" class="ml-auto" :value="item.badge" />
+                    <span v-if="item.shortcut"
+                        class="ml-auto border border-surface rounded bg-emphasis text-muted-color text-xs p-1">{{
+                            item.shortcut }}</span>
                 </a>
-                <ul>
-                    <li>
-                        <router-link to="/charts" @click.native="emitCharts">
-                            <a>
-                                Chart
-                                <span class="fa-solid fa-chart-pie m-1"></span>
-                            </a>
-                        </router-link>
-                    </li>
-                    <li>
-                        <router-link to="/settings" @click.native="emitSettings">
-                            <a>
-                                Setting
-                                <span class="fa-solid fa-gear m-1"></span>
-                            </a>
-                        </router-link>
-                    </li>
-                </ul>
-            </li>
-
-            <!-- LAB -->
-            <li>
-                <a class="group relative inline-block overflow-hidden rounded">
-                    <span class="absolute left-0 top-0 mb-0 flex h-full w-0 translate-x-0 transform bg-red-500
-              opacity-90 transition-all duration-700 ease-out group-hover:w-full">
+            </template>
+            <template #end>
+                <button v-ripple
+                    class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-none cursor-pointer transition-colors duration-200">
+                    <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" class="mr-2"
+                        shape="circle" />
+                    <span class="inline-flex flex-col items-start">
+                        <span class="font-bold">Amy Elsner</span>
+                        <span class="text-sm">Admin</span>
                     </span>
-                    <span class="relative group-hover:text-white space">LAB <i class="fa-solid fa-flask"></i></span>
-                </a>
-                <ul>
-                    <li>
-                        <router-link to="/analyze" @click.native="emitAnalyze">
-                            <a>
-                                Analyzing
-                                <span class="fa-solid fa-chart-pie m-1"></span>
-                            </a>
-                        </router-link>
-                    </li>
-                </ul>
-            </li>
-
-            <!-- Trade journals -->
-            <li>
-                <a class="group relative inline-block overflow-hidden rounded">
-                    <span class="absolute left-0 top-0 mb-0 flex h-full w-0 translate-x-0 transform bg-green-500
-              opacity-90 transition-all duration-700 ease-out group-hover:w-full">
-                    </span>
-                    <span class="relative group-hover:text-white space">LAB <i class="fa-solid fa-book-open"></i></span>
-                </a>
-                <ul>
-                    <li>
-                        <router-link to="/history" @click.native="emitHistory">
-                            <a>
-                                Trade History
-                                <span class="fa-solid fa-clock-rotate-left"></span>
-                            </a>
-                        </router-link>
-                    </li>
-                    <li>
-                        <router-link to="/ranking" @click.native="emitRanking">
-                            <a>
-                                Ranking
-                                <span class="fa-solid fa-sitemap text-lg"></span>
-                            </a>
-                        </router-link>
-                    </li>
-                </ul>
-            </li>
-
-            <!-- Registration Form -->
-            <li>
-                <router-link to="/registration" @click.native="emitRegistration">
-                    <a>
-                        Registration
-                        <i class="fa-solid fa-address-card"></i>
-                    </a>
-                </router-link>
-            </li>
-        </ul>
+                </button>
+            </template>
+        </Menu>
     </div>
 </template>
 
+
+
 <script>
 export default {
+    data() {
+        return {
+            items: [
+                {
+                    separator: true
+                },
+                {
+                    label: 'Documents',
+                    items: [
+                        {
+                            label: 'Home',
+                            icon: 'pi pi-plus',
+                            shortcut: '⌘+N',
+                            class_name: 'HOME'
+                        },
+                        {
+                            label: 'Analyzing',
+                            icon: 'pi pi-search',
+                            shortcut: 'shift+S',
+                            class_name: 'ANALYZE'
+                        }
+                    ]
+                },
+                {
+                    label: 'Profile',
+                    items: [
+                        {
+                            label: 'Settings',
+                            icon: 'pi pi-cog',
+                            shortcut: '⌘+O'
+                        },
+                        {
+                            label: 'Messages',
+                            icon: 'pi pi-inbox',
+                            badge: 2
+                        },
+                        {
+                            label: 'Logout',
+                            icon: 'pi pi-sign-out',
+                            shortcut: '⌘+Q'
+                        }
+                    ]
+                },
+                {
+                    separator: true
+                }
+            ]
+        };
+    },
     methods: {
-        emitHome() {
+        handleClick(className) {
+            // Dynamically trigger the method based on className
+            if (this[className]) {
+                this[className]();
+            }
+        },
+        HOME() {
             this.$emit('showHome');
         },
-        emitCharts() {
-            this.$emit('showCharts');
+        ANALYZE() {
+            this.$emit('showAnalyze');
         },
         emitSettings() {
             this.$emit('showSettings');
-        },
-        emitAnalyze() {
-            this.$emit('showAnalyze');
         },
         emitHistory() {
             this.$emit('showHistory');
@@ -122,10 +111,12 @@ export default {
         },
         emitRegistration() {
             this.$emit('registration');
-        },
-    },
+        }
+    }
 };
 </script>
+
+
 
 
 

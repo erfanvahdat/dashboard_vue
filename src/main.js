@@ -9,12 +9,7 @@ import Aura from '@primevue/themes/aura';
 import 'primeicons/primeicons.css';
 
 
-
-
-
-import { BeakerIcon } from '@heroicons/vue/24/solid';
-import AlertIcon from 'vue-ionicons/dist/ios-alert.vue';
-import RadioButton from 'primevue/radiobutton';
+import Menu from 'primevue/menu';
 
 
 // Import custom components
@@ -43,8 +38,8 @@ const globalComponents = {
   
   
   
-  'BeakerIcon': BeakerIcon,
-  'AlertIcon': AlertIcon,
+  
+  
   
   'Chart': Chart,
   'BAR': Bar,
@@ -61,8 +56,8 @@ const globalComponents = {
   'Analyzing': Analyzing,
   'Setting': Setting,
 
-  "BUT":Button,
-  "RadioButton":RadioButton,
+  "Menu":Menu,
+  
 };
 
 // Create Vue app instance
