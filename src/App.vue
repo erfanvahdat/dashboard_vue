@@ -62,9 +62,7 @@ export default {
 
 
 <style lang="scss">
-.container>div {
-  border: 2px solid red;
-}
+
 
 @import './main.css';
 @import './style/sidebar.css';

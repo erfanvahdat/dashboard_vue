@@ -19,6 +19,8 @@ module.exports = {
           '100%': { transform: 'rotate(360deg)' },
         },
       },
+      
+      
     },
   },
   plugins: [

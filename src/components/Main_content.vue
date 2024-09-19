@@ -5,20 +5,21 @@
     <div class="flex w-[250px]">
       <Sidebar @showHome="showhome" @showAnalyze="showAnalyze" @showCharts="toggleChartVisibility"
         @showRanking="showRanking" @showSettings="showSettings" @showHistory="showTradeHistory"
-        @registration="showreg" />
+        @live_pos="show_live_pos" @registration="showreg" />
     </div>
 
     <!-- Main-content -->
     <div class="flex flex-col w-full ml-fit">
       <!-- Conditionally render different components -->
-      <Live_pos v-if="showLivePos" />
+      <Home v-if="showLivePos" />
       <Trade_pl v-if="showCharts" />
       <Registration v-if="reg" />
+
+      <Live_pos v-if="live_position"></Live_pos>
 
       <Trade_history v-if="showTradeHistoryComponent"></Trade_history>
       <Analyzing v-if="showAnalyzeComponent"></Analyzing>
 
-      <Setting v-if='showSettingsComponent'></Setting>
 
       <!-- Uncomment and use when needed -->
       <!-- <Rank v-if="showRankingComponent" /> -->
@@ -37,6 +38,7 @@ export default {
       showLivePos: true, // Show Live_pos by default
       showCharts: false, // State to control the chart visibility
       reg: false,
+      live_position: false,
       showAnalyzeComponent: false,
       showRankingComponent: false,
       showSettingsComponent: false,
@@ -48,6 +50,7 @@ export default {
     resetComponents() {
       this.showLivePos = false;
       this.showCharts = false;
+      this.live_position = false;
       this.reg = false;
       this.showAnalyzeComponent = false;
       this.showRankingComponent = false;
@@ -65,6 +68,11 @@ export default {
       this.resetComponents();
       this.showCharts = true;
     },
+    show_live_pos() {
+      this.resetComponents();
+      this.live_position = true;
+    },
+
 
     showreg() {
       this.resetComponents();

@@ -6,19 +6,43 @@ import router from './router/router';
 // PrimeVue and PrimeIcons
 import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
-import 'primeicons/primeicons.css';
+import 'primeicons/primeicons.css'
+
 
 
 import Menu from 'primevue/menu';
+import Select from 'primevue/select';
+import SelectButton from 'primevue/selectbutton';
+import InputText from 'primevue/inputtext';
+import ToggleButton from 'primevue/togglebutton';
+import InputNumber from 'primevue/inputnumber';
+
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import ColumnGroup from 'primevue/columngroup';   // optional
+import Row from 'primevue/row';           
+
+import Tag from 'primevue/tag';
+import Button from 'primevue/button';
+
+import tarea from 'primevue/textarea';
+import FileUpload from 'primevue/fileupload';
+// import useToast from "primevue/usetoast";
+import Toast from 'primevue/toast';
+
+import FloatLabel from 'primevue/floatlabel';
+import RadioButton from 'primevue/radiobutton';
+
+import MultiSelect from 'primevue/multiselect';
+import ripple  from 'primevue/ripple';
 
 
-// Import custom components
-
+// Import Main components
 import Chart from './components/Chart.vue';
 import Sidebar from './components/Sidebar.vue';
 import Header from './components/header.vue';
 import Status from './components/Status.vue';
-import Live_pos from './components/Live_Pos.vue';
+import Home from './components/Home.vue';
 import Trade_PL from './components/Trade_platform.vue';
 import Main from './components/Main_content.vue';
 import Rank from './components/Rank.vue';
@@ -26,6 +50,9 @@ import reg from './components/registration.vue';
 import Trade_history from './components/Trade_history.vue';
 import Analyzing from './components/Analyzing.vue';
 import Setting from './components/setting.vue';
+import Live_pos from './components/Live_position.vue';
+
+
 
 // Chart import modules
 import ApexCharts from 'apexcharts';
@@ -37,17 +64,15 @@ const globalComponents = {
   'apexchart': ApexCharts,
   
   
-  
-  
-  
-  
+
+  // main components
   'Chart': Chart,
   'BAR': Bar,
   'Line': Line,
   'Sidebar': Sidebar,
   'Head': Header,
   'Status': Status,
-  'Live_pos': Live_pos,
+  'Home': Home,
   'Trade_pl': Trade_PL,
   'Main': Main,
   'Rank': Rank,
@@ -55,21 +80,49 @@ const globalComponents = {
   'Trade_history': Trade_history,
   'Analyzing': Analyzing,
   'Setting': Setting,
-
-  "Menu":Menu,
+  "Live_pos":Live_pos,
   
+
+
+  // Primevue components
+  "Menu":Menu,
+  "Select":Select,
+  "SelectButton":SelectButton,
+  "InputText":InputText,
+  "ToggleButton":ToggleButton,
+
+
+  "DataTable":DataTable,
+  "Column":Column,
+  "ColumnGroup":ColumnGroup,
+  "Row":Row,
+  "InputNumber":InputNumber,  
+  "Tag":Tag,
+  "Button":Button,
+  "tarea":tarea,
+  "FileUpload":FileUpload,
+  "Toast":Toast,
+  "MultiSelect":MultiSelect,
+  "FloatLabel":FloatLabel,
+  "RadioButton":RadioButton,
+  "ripple":ripple,
+
+
 };
 
 // Create Vue app instance
 const app = createApp(App);
 
 
-// app.use(PrimeVue);
+
+
 app.use(PrimeVue, {
   theme: {
       preset: Aura
   }
 });
+
+
 
 // Register global components
 Object.entries(globalComponents).forEach(([name, component]) => {
@@ -77,3 +130,4 @@ Object.entries(globalComponents).forEach(([name, component]) => {
 });
 
 app.use(router).mount('#app');
+
