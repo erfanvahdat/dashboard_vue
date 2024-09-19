@@ -7,6 +7,7 @@ import router from './router/router';
 import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
 import 'primeicons/primeicons.css'
+import ConfirmationService from 'primevue/confirmationservice';
 
 
 
@@ -32,6 +33,7 @@ import Toast from 'primevue/toast';
 
 import FloatLabel from 'primevue/floatlabel';
 import RadioButton from 'primevue/radiobutton';
+import ConfirmDialog from 'primevue/confirmdialog';
 
 import MultiSelect from 'primevue/multiselect';
 import ripple  from 'primevue/ripple';
@@ -52,6 +54,10 @@ import Analyzing from './components/Analyzing.vue';
 import Setting from './components/setting.vue';
 import Live_pos from './components/Live_position.vue';
 
+
+// Import sub_component
+import order_button_sub from './sub_component/order_button.vue';
+import input_sub from './sub_component/input.vue';
 
 
 // Chart import modules
@@ -81,6 +87,8 @@ const globalComponents = {
   'Analyzing': Analyzing,
   'Setting': Setting,
   "Live_pos":Live_pos,
+  "order_button_sub":order_button_sub,
+  "input_sub":input_sub,
   
 
 
@@ -90,8 +98,6 @@ const globalComponents = {
   "SelectButton":SelectButton,
   "InputText":InputText,
   "ToggleButton":ToggleButton,
-
-
   "DataTable":DataTable,
   "Column":Column,
   "ColumnGroup":ColumnGroup,
@@ -101,11 +107,12 @@ const globalComponents = {
   "Button":Button,
   "tarea":tarea,
   "FileUpload":FileUpload,
-  "Toast":Toast,
+  // "Toast":Toast,
   "MultiSelect":MultiSelect,
   "FloatLabel":FloatLabel,
   "RadioButton":RadioButton,
   "ripple":ripple,
+  "ConfirmDialog":ConfirmDialog,
 
 
 };
@@ -121,6 +128,7 @@ app.use(PrimeVue, {
       preset: Aura
   }
 });
+app.use(ConfirmationService);
 
 
 

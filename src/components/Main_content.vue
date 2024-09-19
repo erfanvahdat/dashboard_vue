@@ -19,7 +19,7 @@
 
       <Trade_history v-if="showTradeHistoryComponent"></Trade_history>
       <Analyzing v-if="showAnalyzeComponent"></Analyzing>
-
+      <Setting v-if="showSettingsComponent"></Setting>
 
       <!-- Uncomment and use when needed -->
       <!-- <Rank v-if="showRankingComponent" /> -->
