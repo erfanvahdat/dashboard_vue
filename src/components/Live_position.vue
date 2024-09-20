@@ -2,8 +2,8 @@
     <div class="h-full overflow-hidden bg-gray-700">
         <div class="flex flex-row p-2 space-y m-3 gap-5">
 
-            <!-- Limit Order -->
-            <div class="flex flex-row rounded-3  gap-3 bg-gray-800 w-[1000px] h-[300px]">
+            <!-- Trade Section -->
+            <div class="flex flex-row rounded-3  gap-3 bg-gray-800 w-[1000px] h-fit  ">
 
                 <!-- input_limit_section -->
                 <div class=" flex flex-col space-y-0 ml-2 w-[530-px]  ">
@@ -15,6 +15,7 @@
 
                     <!-- Type Toggle_button -->
                     <div class="flex rounded-1 ml-3 mt-3 h-[50px] justify-center">
+
                         <button @click="toggleValue" class="btn btn-sm w-36 my-2 hover:border-gray-600" type="button"
                             :class="type_toggle">
                             <span class='text-sm font-bold font-serif'>{{ isLong ? 'LONG' : 'SHORT' }}</span>
@@ -27,7 +28,7 @@
                         <span class="font-serif  text-xm text-[10px] mb-0 underline "> Limit: </span>
 
                         <div>
-                            <input_sub :value="'Limit'"></input_sub>
+                            <input_sub :value="'Limit'" v-model="limit"></input_sub>
                         </div>
 
                     </div>
@@ -37,30 +38,49 @@
                     <div class="flex flex-row gap-2">
 
                         <div>
-                            <span class="font-serif  text-xm text-[10px] mb-0 underline "> TP: </span>
-
-                            <input_sub :value="'TP Price'"></input_sub>
+                            <span class="font-serif text-xm text-[10px] mb-0 underline "> TP: </span>
+                            <!-- Convert the tp value to an integer -->
+                            <input_sub :value="'TP Price'" v-model="tp" @input="tp = parseInt($event.target.value)">
+                            </input_sub>
                         </div>
                         <div>
-                            <span class="font-serif  text-xm text-[10px] mb-0  underline"> TP: </span>
-                            <input_sub :value="'Sl Price'"></input_sub>
+                            <span class="font-serif text-xm text-[10px] mb-0 underline"> SL: </span>
+                            <!-- Convert the sl value to an integer -->
+                            <input_sub :value="'SL Price'" v-model="sl">
+                            </input_sub>
                         </div>
+
+
+
+
+
+
                     </div>
-                    
+
+
 
 
                     <!-- Submit Button -->
-                    <order_button></order_button>
+
+                    <div class="flex mb-2 justify-center">
+
+                        <order_button_sub :buttonText="'Sumbit'" @click="submit" />
+
+                    </div>
+
+                    <!-- Alert Success -->
+                    <!-- <div
+                            class="bg-green-200 px-6 py-4 mx-2 my-4 rounded-md text-lg flex items-center mx-auto max-w-lg">
+                            <svg viewBox="0 0 24 24" class="text-green-600 w-5 h-5 sm:w-5 sm:h-5 mr-3">
+                                <path fill="currentColor"
+                                    d="M12,0A12,12,0,1,0,24,12,12.014,12.014,0,0,0,12,0Zm6.927,8.2-6.845,9.289a1.011,1.011,0,0,1-1.43.188L5.764,13.769a1,1,0,1,1,1.25-1.562l4.076,3.261,6.227-8.451A1,1,0,1,1,18.927,8.2Z">
+                                </path>
+                            </svg>
+                            <span class="text-green-800">Your account has been saved.</span>
+                        </div> -->
+                    <!-- End Alert Success -->
 
 
-
-                    <!-- <div class="flex justify-center">
-                        <button
-                            class="h-[35px] w-[70px] justify-center bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 rounded-3"
-                            @click="submit">
-                            Trigger
-                        </button>
-                    </div> -->
 
 
                 </div>
@@ -83,6 +103,7 @@ export default {
             timeframe: '1',
             tp: 0,  // Take Profit
             sl: 0,  // Stop Loss
+            limit: 0,
             errorMessage: null, // Error message to display
 
             availableSymbols: [
@@ -105,6 +126,7 @@ export default {
     },
 
     methods: {
+
         createChart(containerId, symbol, timeframe = "1", theme = "Dark") {
             new TradingView.widget({
                 autosize: true,
@@ -136,14 +158,18 @@ export default {
         submit() {
             this.errorMessage = null; // Reset error message before validation
 
-            // Validate TP and SL values
-            if (this.tp <= 0 || this.sl <= 0) {
-                this.errorMessage = 'Error: TP and SL must be greater than zero.';
-                return;
+            // Validate TP, SL, and Limit values
+            if (this.tp <= 0) {
+                this.errorMessage = 'Error: TP, SL, and Limit must be greater than zero.';
+                console.error(this.errorMessage)
+
+            } else {
+
+                // Log TP, SL, and Limit values
+                console.log('TP:', this.tp, 'SL:', typeof parseInt(this.sl), 'Limit:', this.limit)
             }
 
-            // Submit logic (additional logic to handle order placement)
-            console.log('TP:', this.tp, 'SL:', this.sl);
+            // Additional submit logic for order placement
         },
     },
 

@@ -87,7 +87,8 @@ export default {
                 localStorage.setItem('authToken', response.data.token);
 
 
-                this.display_status_cont = true;E
+                this.display_status_cont = true;
+                
                 setTimeout(() => {
                     this.display_status_cont = false;
                 }, 2000);

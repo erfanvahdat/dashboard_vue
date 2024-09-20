@@ -2,7 +2,7 @@
   <div class="flex flex-col h-full overflow-hidden">
     <!-- Setting section -->
     <div class="rounded-md bg-blue-500 m-2 h-[70px]">
-      <span class="font-serif text-sm ml-2 rounded w-fit text-gray-700">chart_setting</span>
+      <span class="font-serif text-xs ml-2 rounded w-fit text-gray-700">chart_setting</span>
 
       <div class="flex flex-row space-x-2">
         <div>
@@ -11,7 +11,12 @@
         </div>
 
         <div>
-          <label class="relative inline-flex cursor-pointer mt-[15px]">
+          <Select :options="timeframe" v-model="main_select_timeframe" @change="changeChartCount(box_select)"
+            placeholder="Boxes" class="w-[115px] h-[35px] m-2"></Select>
+        </div>
+
+        <div>
+          <label class="relative inline-flex cursor-pointer mt-[12px]">
             <input id="switch-3" type="checkbox" class="peer sr-only" v-model="isLightTheme" @change="toggleTheme" />
             <label for="switch-3" class="hidden"></label>
             <div
@@ -39,7 +44,7 @@
               class="w-[170px] h-[40px] m-2 text-sm p-1 text-sm" @change="changeTimeframe(index, select_timeframe)" />
           </div>
 
-          <!-- Select Ticker =Primevue  -->
+          <!-- Select Ticker -->
           <div class="card flex mr-5">
             <Select v-model="selectedTickers[index]" :options="availableSymbols" optionLabel="label"
               placeholder="Select Ticker" class="w-full h-[34px]"
@@ -64,6 +69,7 @@ export default {
       default_timeframe: '1',
       chartCount: 6,
 
+      main_select_timeframe: '1',
       select_timeframe: null,
       box_select: null,
 
@@ -165,8 +171,9 @@ export default {
     },
 
     initCharts() {
+
       this.all_symbol.slice(0, this.chartCount).forEach((symbol, index) => {
-        this.createChart(`chart-all-${index}`, symbol, this.timeframes[index], this.chart_theme);
+        this.createChart(`chart-all-${index}`, symbol, this.main_select_timeframe, this.chart_theme);
       });
     }
   },
