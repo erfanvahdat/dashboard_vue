@@ -10,9 +10,7 @@
                 <span class="text-center text-4xl font-medium">Sign Up</span>
                 <login_icon @click='login_direction'></login_icon>
 
-
             </div>
-
 
 
             <!-- Email or Username input -->
@@ -37,7 +35,7 @@
             <div v-if="responseMessage" class="text-center text-lg mt-4">
                 <p>{{ responseMessage }} _ Status: {{ responseStatus }}</p>
 
-                
+
                 <!-- Show success message for status code 201 -->
                 <div v-if="responseStatus === 201 && display_status_cont"
                     class="mt-2 bg-teal-500 text-sm text-white rounded-lg p-4" role="alert" tabindex="-1"
@@ -111,6 +109,7 @@ export default {
 
                 console.log(this.responseStatus)
                 console.log(this.responseMessage)
+
 
                 setTimeout(() => {
                     this.display_status_cont = false;

@@ -35,7 +35,7 @@
                     login
                 </span> -->
 
-                <button type="button" class="btn btn-primary" @click='login'>Login</button>
+                <button type="button" class="btn btn-primary"></button>
 
 
                 <!-- <button
@@ -104,8 +104,6 @@ export default {
 
                 // Redirect to home page after successful login
                 // this.$router.push({ name: 'home' });
-
-                this.$emit('login_success');
 
 
             } catch (error) {

@@ -39,7 +39,7 @@ export default {
                 {
                     label: 'Main',
                     items: [
-                        { label: 'Home', icon: 'pi pi-home', shortcut: 'Shift+N', class_name: 'HOME' },
+                        { label: 'Home', icon: 'pi pi-home', class_name: 'HOME' },
                         { label: 'Charts', icon: 'pi pi-table', class_name: 'Chart' },
                         { label: 'Live_pos', icon: 'pi pi-chart-line', class_name: 'live_pos' },
                     ]
@@ -81,9 +81,9 @@ export default {
         handleShortcut(event) {
             if (event.shiftKey) {
                 switch (event.key.toUpperCase()) {
-                    case 'N':
-                        this.HOME();
-                        break;
+                    // case 'N':
+                    //     this.HOME();
+                    //     break;
                     case 'S':
                         this.ANALYZE();
                         break;

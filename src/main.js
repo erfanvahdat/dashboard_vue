@@ -52,9 +52,9 @@ import login from './components/login.vue';
 import order_button_sub from './sub_component/order_button.vue';
 import input_sub from './sub_component/input.vue';
 import Alert from './sub_component/alert.vue';
-import login_icon from './sub_component/login.vue';
+import login_icon from './sub_component/login_icon.vue';
 import reg from './components/registration.vue';
-import login_form from './sub_component/login_form.vue';
+// import login_form from './sub_component/login_form.vue';
 
 // Chart import modules
 import VueApexCharts from "vue3-apexcharts";
@@ -121,7 +121,7 @@ const globalComponents = {
   'Alert': Alert,
   "login": login,
   "login_icon":login_icon,
-  "login_form":login_form,
+  
 };
 
 // Create Vue app instance

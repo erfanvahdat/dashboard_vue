@@ -24,24 +24,17 @@
                         <input class="mr-2 w-4 h-4" id="remember" name="remember" type="checkbox" />
                         <span class="text-slate-500">Remember me </span>
                     </div>
-                    <!-- <a class="text-blue-500 font-medium hover:underline" href="#">Forgot Password</a> -->
+
                 </div>
 
-
-
-                <!-- <button class="border-1 border-blue-500 text-black" @click="login">Login</button> -->
-
-                <!-- <span class=" rounded-sm bg-indigo-600 py-2 font-bold duration-300 hover:bg-indigo-400">
-                    login
-                </span> -->
 
                 <button type="button" class="btn btn-primary" @click='login'>Login</button>
 
 
-                <!-- <button
-                class="w-full justify-center py-1 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 rounded-md text-white ring-2">
-                login
-                </button> -->
+                <span class='text-black' v-if="response_error">
+                    - Something went wrong please try again
+                </span>
+
 
                 <p class="flex justify-center space-x-1">
                     <span class="text-slate-700"> Have an account? </span>
@@ -54,7 +47,6 @@
 
 
 </template>
-
 
 
 <script>
@@ -70,6 +62,7 @@ export default {
             responseStatus: '',
             token: '',
             refresh: '',
+            response_error: false,
 
         };
     },
@@ -88,34 +81,43 @@ export default {
                 // Accessing the response body
                 this.responseMessage = 'Login successful: ' + response.data.username;
 
-                this.token = response.data.token;
+                this.token = response.data.access;
                 this.refresh = response.data.refresh;
+
                 this.responseStatus = response.status;
 
+                console.log(this.responseStatus);
+                console.log(this.responseMessage);
 
-
-                console.log(this.responseStatus)
-                console.log(this.responseMessage)
+                console.log(response.data.access);
 
                 // Save token to local storage
-                localStorage.setItem('Token', this.token);
-                localStorage.setItem('Refresh', this.refresh);
+                localStorage.setItem('access', this.token);
+                localStorage.setItem('refresh', this.refresh);
 
-
-                // Redirect to home page after successful login
-                // this.$router.push({ name: 'home' });
-
+                // Emit login success event
                 this.$emit('login_success');
 
 
             } catch (error) {
-                if (error.response) {
-                    // Show error if login fails
-                    this.responseMessage = 'Login failed: ' + error.response.data.username;
-                    this.responseStatus = error.response.status;
-                } else {
-                    this.responseMessage = 'Login failed. Please try again.';
-                }
+
+                console.log(error.response);
+
+
+                this.response_error = true;
+
+                setTimeout(() => {
+                    this.response_error = false;
+                }, 2000);
+
+                // if (error.response && error.response.data && error.response.data.username) {
+                // Show specific error message from the response
+                //     this.responseMessage = 'Login failed: ' + error.response.data.username;
+                // } else {
+                //     // Fallback error message
+                //     this.responseMessage = 'Login failed. Please try again.';
+                // }
+                // console.error('Error response:', error.response);
             }
         }
     }
