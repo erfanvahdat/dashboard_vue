@@ -2,7 +2,18 @@
     <!-- component -->
     <main class="mx-auto flex min-h-screen w-full items-center justify-center bg-gray-900 text-white">
         <section class="flex w-[30rem] flex-col space-y-10">
-            <div class="text-center text-4xl font-medium">Sign Up</div>
+
+            <div class="flex flex-row justify-between  space-x-5">
+
+
+
+                <span class="text-center text-4xl font-medium">Sign Up</span>
+                <login_icon @click='login_direction'></login_icon>
+
+
+            </div>
+
+
 
             <!-- Email or Username input -->
             <div class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500">
@@ -26,6 +37,7 @@
             <div v-if="responseMessage" class="text-center text-lg mt-4">
                 <p>{{ responseMessage }} _ Status: {{ responseStatus }}</p>
 
+                
                 <!-- Show success message for status code 201 -->
                 <div v-if="responseStatus === 201 && display_status_cont"
                     class="mt-2 bg-teal-500 text-sm text-white rounded-lg p-4" role="alert" tabindex="-1"
@@ -48,10 +60,10 @@
             <a href="#" class="transform text-center font-semibold text-gray-500 duration-300 hover:text-gray-300">
                 FORGOT PASSWORD?</a>
 
-            <p class="text-center text-lg">
+            <!-- <p class="text-center text-lg">
                 No account?
                 <a href="#" class="font-medium text-indigo-500 underline-offset-4 hover:underline">Create One</a>
-            </p>
+            </p> -->
         </section>
     </main>
 </template>
@@ -67,38 +79,45 @@ export default {
             password: '',
             responseMessage: '',
             responseStatus: '',
-            token: ''
+
         };
     },
     methods: {
+
+
+        login_direction() {
+            this.$emit('reg_success');
+
+        },
         async register() {
             try {
-                const response = await axios.post('http://192.168.1.104:8000/api/v1/register/', {
-                    user: this.user,
-                    password: this.password
+                const response = await axios.post('http://192.168.1.104:7000/api/v1/register/', {
+                    username: this.user,
+                    password: parseInt(this.password)  // Keep the password as string, no need to convert it into an integer
                 });
 
                 // Accessing the response body
-                this.responseMessage = 'Registration successful: ' + response.data.message; // Update based on your backend response structure
-                this.token = response.data.token;
+                this.responseMessage = 'Registration successful: ' + response.data.username;
+                // this.token = response.data.token;
                 this.responseStatus = response.status;
 
-                // Save token to local storage
-                localStorage.setItem('authToken', response.data.token);
-
-
                 this.display_status_cont = true;
-                
+
+                // // Save token to local storage
+                // localStorage.setItem('authToken', response.data.token);
+
+                // Emit an event to redirect to login
+                this.$emit('reg_success');
+
+                console.log(this.responseStatus)
+                console.log(this.responseMessage)
+
                 setTimeout(() => {
                     this.display_status_cont = false;
                 }, 2000);
 
-                // Redirect to home page or another page after successful registration
-                this.$router.push({ name: 'home' });
-
             } catch (error) {
                 if (error.response) {
-                    // Handle error response
                     this.responseMessage = 'Registration failed: ' + error.response.data.message;
                     this.responseStatus = error.response.status;
                 } else {
@@ -107,5 +126,6 @@ export default {
             }
         }
     }
+
 };
 </script>

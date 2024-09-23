@@ -1,6 +1,8 @@
 <template>
     <div class="card flex">
         <Menu :model="items" class="w-full md:w-60">
+
+
             <template #start>
                 <span class="inline-flex items-center gap-1 px-2 py-2">
                     <!-- Custom content here -->
@@ -35,7 +37,7 @@ export default {
             items: [
                 { separator: true },
                 {
-                    label: 'HOME',
+                    label: 'Main',
                     items: [
                         { label: 'Home', icon: 'pi pi-home', shortcut: 'Shift+N', class_name: 'HOME' },
                         { label: 'Charts', icon: 'pi pi-table', class_name: 'Chart' },
@@ -43,7 +45,7 @@ export default {
                     ]
                 },
                 {
-                    label: 'Profile',
+                    label: 'Other',
                     items: [
                         { label: 'Settings', icon: 'pi pi-cog', class_name: 'SETTING' },
                         { label: 'Messages', icon: 'pi pi-inbox', badge: 2 },
@@ -53,8 +55,12 @@ export default {
                 {
                     label: 'LAB',
                     items: [
-                        { label: 'Analyzing', icon: 'pi pi-chart-line', shortcut: 'Shift+S', class_name: 'ANALYZE' }
+                        { label: 'Analyzing', icon: 'pi pi-chart-line', shortcut: 'Shift+S', class_name: 'ANALYZE' },
+                        { label: 'Registration', icon: 'pi pi-user-plus', shortcut: 'Shift+S', class_name: 'REG' }
                     ]
+
+
+
                 },
                 { separator: true }
             ]
@@ -107,7 +113,10 @@ export default {
         },
         emitLogout() {
             this.$emit('showLogout');
-        }
+        },
+        REG() {
+            this.$emit('registration');
+        },
     }
 };
 </script>

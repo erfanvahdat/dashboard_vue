@@ -10,9 +10,14 @@
       </div>
 
 
-      <div class=" w-full p-2 mt-2 mr-5 overflow-hidden border-1 border-blue-300 rounded bg-gray-700">
+      <div class=" w-full h-fit p-2 mt-2 mr-5 overflow-hidden border-1 border-blue-300 rounded bg-gray-700">
 
-        chart section
+        <div class='w-full
+        '>
+          <apexchart type="line" height="300" width="1500" :options="chartOptions" :series="series">
+          </apexchart>
+        </div>
+
 
       </div>
 
@@ -190,8 +195,6 @@
 
 
 
-    
-
   </div>
 </template>
 
@@ -204,6 +207,92 @@ export default {
 
   data() {
     return {
+
+
+      series: [{
+        name: 'Price',
+        data: [
+          { x: new Date(1538778600000), y: 6633.33 },
+          { x: new Date(1538780400000), y: 6630.11 },
+          { x: new Date(1538782200000), y: 6635.65 },
+          { x: new Date(1538784000000), y: 6638.24 },
+          { x: new Date(1538785800000), y: 6624.47 },
+          { x: new Date(1538787600000), y: 6624.31 },
+          { x: new Date(1538789400000), y: 6626.02 },
+          { x: new Date(1538791200000), y: 6603.02 },
+          { x: new Date(1538793000000), y: 6604.01 },
+          { x: new Date(1538794800000), y: 6608.02 },
+        ],
+      }],
+      chartOptions: {
+        chart: {
+          type: 'line',
+          toolbar: {
+            show: true,
+            tools: {
+              download: true,
+              selection: true,
+            },
+            style: {
+              background: '#333', // Set the toolbar background color
+            },
+          },
+        },
+        title: {
+          text: 'Line Chart',
+          align: 'left',
+          style: {
+            color: '#FFFFFF', // Set title color to white
+          },
+        },
+        xaxis: {
+          type: 'datetime',
+          title: {
+            text: 'Date',
+            style: {
+              color: '#FFFFFF', // Set x-axis title color to white
+            },
+          },
+          labels: {
+            style: {
+              colors: ['#FFFFFF'], // Set x-axis label color to white
+            },
+          },
+        },
+        yaxis: {
+          title: {
+            text: 'Price',
+            style: {
+              color: '#FFFFFF', // Set y-axis title color to white
+            },
+          },
+          labels: {
+            formatter: function (val) {
+              return val.toFixed(2);
+            },
+            style: {
+              colors: ['#FFFFFF'], // Set y-axis label color to white
+            },
+          },
+        },
+        stroke: {
+          width: 1,
+        },
+        tooltip: {
+          theme: 'dark',
+          style: {
+            fontSize: '12px',
+            background: '#000',
+            color: '#fff',
+          },
+        },
+        grid: {
+          borderColor: '#555', // Change grid color for better visibility
+          style: {
+            background: '#222', // Set grid background color
+          },
+        },
+      },
       token: token,
       order_pulse: false, // Contring the pulse container display
       pending_pulse: false, // Contring the pulse container display

@@ -3,7 +3,8 @@
     position: relative;
     /* width: 180px; */
     /* margin: 5px 5px; */
-    --accent-color: #a3e583;
+    /* --accent-color: #a3e583; */
+    --accent-color: #83a9e5;
   }
   
   .textInputWrapper:before {

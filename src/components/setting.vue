@@ -1,89 +1,54 @@
 <template>
 
 
-
-    <!-- <order_button_sub :buttonText="'Sumbit'" @click="submit" /> -->
-
-
+    <button @click="get_ticker"
+        class="transform rounded-sm bg-indigo-600 py-2 font-bold duration-300 hover:bg-indigo-400">
+        Register
+    </button>
 
     <div>
-
-        <button @click="submit">
-            click here
-        </button>
+        <h1>Crypto List</h1>
+        <ul>
+            <li v-for="crypto in cryptoList" :key="crypto.ticker">
+                {{ crypto.symbol }} - {{ crypto.ticker }}
+            </li>
+        </ul>
     </div>
 
 
-    <div v-if="on">
-    <div class="fixed inset-x-0 top-0 flex items-end justify-right px-4 py-6 justify-end">
+    <login_icon>    </login_icon>
 
 
-
-
-
-        <div
-            class="max-w-sm w-full shadow-lg rounded px-4 py-3 rounded relative bg-green-400 border-l-4 border-green-700 text-white">
-            <div class="p-2">
-                <div class="flex items-start">
-                    <div class="ml-3 w-0 flex-1 pt-0.5">
-                        <p class="text-sm leading-5 font-medium">
-                            Success
-                        </p>
-                    </div>
-
-                    <div class="ml-4 flex-shrink-0 flex">
-                        <button class="inline-flex text-white transition ease-in-out duration-150"
-                            onclick="return this.parentNode.parentNode.parentNode.parentNode.remove()">
-                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-    
-
-</div>
-<button class="hamburger">gello</button>
-
+    <button>hello</button>
 </template>
 
-
 <script>
+
+import axios from 'axios';
 
 export default {
     data() {
         return {
-
-            on: false,
-
-        }
+            cryptoList: [],
+        };
     },
-
     methods: {
-        submit() {
-
-            this.on= true
-            setTimeout(() => {
-                this.on = false;
-                
-            }, "1000");
-
-        }
+        async get_ticker() {
+            try {
+                const response = await axios.get('http://169.254.153.105:7000/api/v1/cryptoList/');
+                // Assuming the data you want is in response.data.data
+                this.cryptoList = response.data.data; // Access the data array
+            } catch (error) {
+                console.error('Error fetching crypto list:', error);
+            }
+        },
     },
-}
-
+    // created() {
+    //     this.fetchCryptoList();
+    // },
+};
 </script>
 
-
-<style>
-
-@import '../style/hover_icon.scss'
+<style scoped>
+/* Add any relevant styles here */
 </style>
