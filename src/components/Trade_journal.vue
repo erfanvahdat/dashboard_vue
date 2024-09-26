@@ -30,7 +30,7 @@
                         <Badge value="" size="small" severity="success">Market</Badge>
                         {{ item.Market }}
                     </div>
-             
+
                     <!-- Add more data as needed -->
                 </div>
             </div>
@@ -44,7 +44,10 @@ export default {
 
     data() {
 
+
+
         return {
+            last_record: [1, 7, 14, 30, 365],
             data_api: [
                 { Img: 'img', Type: 'short', Profit: '1', Ticker: 'SAND', Market: 'NY', Reason: 'why not', },
                 { Img: 'img', Type: 'long', Profit: '5', Ticker: 'SAND', Market: 'NY', Reason: 'why not', },

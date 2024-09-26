@@ -27,8 +27,6 @@
                     </div>
 
 
-
-
                     <!-- Type Toggle_button -->
 
                     <div class="flex  ml-3 mt-3 h-[60px]  justify-center ">

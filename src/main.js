@@ -33,6 +33,9 @@ import MultiSelect from 'primevue/multiselect';
 import ripple from 'primevue/ripple';
 import Badge from 'primevue/badge';
 
+import TreeSelect from 'primevue/treeselect';
+
+
 
 // Import Main components
 import Sidebar from './components/Sidebar.vue';
@@ -127,6 +130,7 @@ const globalComponents = {
   "login_icon":login_icon,
   "Trade_journal":trade_journal,
   "Badge":Badge,
+  "TreeSelect":TreeSelect,
   
 };
 
