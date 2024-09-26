@@ -4,7 +4,7 @@
     <div class="flex w-[250px]" v-if="isLoggedIn">
       <Sidebar @showHome="showhome" @showAnalyze="showAnalyze" @showCharts="toggleChartVisibility"
         @showRanking="showRanking" @showSettings="showSettings" @showHistory="showTradeHistory"
-        @live_pos="show_live_pos" @registration="showreg" />
+        @live_pos="show_live_pos" @registration="showreg" @trade_journal="showjournal" />
     </div>
 
     <!-- Main-content -->
@@ -16,7 +16,10 @@
       <Analyzing v-if="showAnalyzeComponent" />
       <Setting v-if="showSettingsComponent" />
       <Registration v-if="reg" @reg_success="goToLogin" />
+      
       <login @login_success="goToHome" @sign_up='signup' v-if="!isLoggedIn" />
+
+      <Trade_journal v-if="journal" />
     </div>
   </div>
 </template>
@@ -35,6 +38,7 @@ export default {
       showSettingsComponent: false,
       showTradeHistoryComponent: false,
       isLoggedIn: false, // Track login state
+      journal:false,
     };
   },
   mounted() {
@@ -46,7 +50,7 @@ export default {
       const access = localStorage.getItem('access');
       const refresh = localStorage.getItem('refresh');
 
-      
+
       if (access && refresh) {
 
         console.log(access)
@@ -59,7 +63,7 @@ export default {
           localStorage.removeItem('refresh');
 
           this.isLoggedIn = false; // Set login state to false
-          
+
         } else {
           this.isLoggedIn = true; // User is logged in
           this.showhome(); // Optionally show the home component
@@ -97,10 +101,12 @@ export default {
       this.showCharts = false;
       this.live_position = false;
       this.reg = false;
+      this.jounral= false;
       this.showAnalyzeComponent = false;
       this.showRankingComponent = false;
       this.showSettingsComponent = false;
       this.showTradeHistoryComponent = false;
+      this.journal=false;
     },
     showhome() {
       this.resetComponents();
@@ -147,6 +153,11 @@ export default {
       this.resetComponents();
       this.showTradeHistoryComponent = true;
     },
+    showjournal(){
+      this.resetComponents();
+      this.journal = true;
+    }
+
   },
 };
 </script>

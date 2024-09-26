@@ -1,18 +1,33 @@
 <template>
     <div class="h-full overflow-hidden bg-gray-700">
-        <div class="flex flex-row p-2 space-y m-3 gap-5 border-1  border-blue-500 justify-start">
+        <div class="flex flex-row p-2 space-y m-3 gap-5  justify-start">
 
             <!-- Trade Section 1️⃣-->
-            <div
-                class="flex flex-row rounded-3  gap-3 bg-gray-800 w-110 h-[400px]  w-[800px]  border-1  border-blue-500 ">
+            <div class="flex flex-row rounded-3  gap-3 bg-gray-800 w-110 h-[400px]  w-[800px]   ">
 
                 <!-- input_limit_section -->
                 <div class=" flex flex-col space-y-0 ml-2   ">
                     <span class="text-sm font-bold font-serif mt-2 ml-1">Limit_order</span>
-                    <div class="card flex mr-5 w-full ">
-                        <Select v-model="selectedTickers" :options="availableSymbols" optionLabel="label"
-                            placeholder="Select Ticker" class="w-full" @change="updateChart('chart')"></Select>
+
+
+                    <div class="card flex w-fit ml-2 mt-2">
+                        <Select v-model="selectedTickers" :options="availableSymbols" filter optionLabel="label"
+                            placeholder="Select a Crypto" class="w-full md:w-56">
+
+                            <!-- Template for selected value -->
+                            <template #value="slotProps">
+                                <div v-if="slotProps.value" class="flex items-center">
+                                    <div>{{ slotProps.value.label }}</div> <!-- Display ticker -->
+                                </div>
+                                <span v-else>
+                                    {{ slotProps.placeholder }}
+                                </span>
+                            </template>
+                        </Select>
                     </div>
+
+
+
 
                     <!-- Type Toggle_button -->
 
@@ -44,13 +59,15 @@
                         <div>
                             <span class="font-serif text-xm text-[10px] mb-0 underline decoration-dashed	 "> TP: </span>
                             <input_sub :value="'TP Price'" v-model="tp" @input="tp = parseInt($event.target.value)"
-                                accentColor="#72ee17"></input_sub>
+                                accentColor="#72ee17">
+                            </input_sub>
 
                         </div>
                         <div>
                             <span class="font-serif text-xm text-[10px] mb-0 underline decoration-dashed"> SL: </span>
                             <input_sub :value="'TP Price'" v-model="sl" @input="sl = parseInt($event.target.value)"
-                                accentColor="#e53621 "></input_sub>
+                                accentColor="#e53621 ">
+                            </input_sub>
 
                         </div>
 
@@ -65,7 +82,7 @@
 
                         <div v-if="alert" class="flex">
 
-                            <Alert :isDanger="false" /> 
+                            <Alert :isDanger="false" />
 
                         </div>
 
@@ -85,7 +102,7 @@
             </div>
 
             <!-- Pending Section 2️⃣-->
-            <div class="flex  border-1 border-blue-500  rounded p-2 overflow-hidden w-[990px]">
+            <div class="flex    rounded p-2 overflow-hidden w-[990px]">
 
                 <div class="relative w-full h-full ">
                     <!-- Table with Pulse animation -->

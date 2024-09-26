@@ -31,6 +31,8 @@ import RadioButton from 'primevue/radiobutton';
 import ConfirmDialog from 'primevue/confirmdialog';
 import MultiSelect from 'primevue/multiselect';
 import ripple from 'primevue/ripple';
+import Badge from 'primevue/badge';
+
 
 // Import Main components
 import Sidebar from './components/Sidebar.vue';
@@ -46,6 +48,8 @@ import Analyzing from './components/Analyzing.vue';
 import Setting from './components/setting.vue';
 import Live_pos from './components/Live_position.vue';
 import login from './components/login.vue';
+import trade_journal from './components/Trade_journal.vue';
+
 
 
 // Import sub_component
@@ -121,6 +125,8 @@ const globalComponents = {
   'Alert': Alert,
   "login": login,
   "login_icon":login_icon,
+  "Trade_journal":trade_journal,
+  "Badge":Badge,
   
 };
 

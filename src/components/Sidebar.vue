@@ -1,6 +1,6 @@
 <template>
-    <div class="card flex">
-        <Menu :model="items" class="w-full md:w-60">
+    <div class="card flex overflow-hidden   ">
+        <Menu :model="items" class="w-full md:w-60  overflow-hidden">
 
 
             <template #start>
@@ -55,8 +55,10 @@ export default {
                 {
                     label: 'LAB',
                     items: [
-                        { label: 'Analyzing', icon: 'pi pi-chart-line', shortcut: 'Shift+S', class_name: 'ANALYZE' },
-                        { label: 'Registration', icon: 'pi pi-user-plus', shortcut: 'Shift+S', class_name: 'REG' }
+                        { label: 'Analyzing', icon: 'pi pi-chart-line', shortcut: '', class_name: 'ANALYZE' },
+                        { label: 'Registration', icon: 'pi pi-user-plus', shortcut: '', class_name: 'REG' },
+                        {label: 'trade_journal', icon: 'pi pi-book',  class_name: 'journal'}
+
                     ]
 
 
@@ -84,15 +86,15 @@ export default {
                     // case 'N':
                     //     this.HOME();
                     //     break;
-                    case 'S':
-                        this.ANALYZE();
-                        break;
-                    case 'O':
-                        this.emitSettings();
-                        break;
-                    case 'Q':
-                        this.emitLogout();
-                        break;
+                    // case 'S':
+                    //     this.ANALYZE();
+                    //     break;
+                    // case 'O':
+                    //     this.emitSettings();
+                    //     break;
+                    // case 'Q':
+                    //     this.emitLogout();
+                    //     break;
                 }
             }
         },
@@ -117,6 +119,10 @@ export default {
         REG() {
             this.$emit('registration');
         },
+        journal() {
+            this.$emit('trade_journal');
+        },
+
     }
 };
 </script>
