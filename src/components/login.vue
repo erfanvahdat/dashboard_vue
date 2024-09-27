@@ -73,10 +73,12 @@ export default {
         },
         async login() {
             try {
-                const response = await axios.post('http://192.168.1.104:7000/api/v1/login/', {
+                
+                const response = await axios.post('http://localhost:7000/api/v1/login/', {
                     username: this.user,
-                    password: parseInt(this.password)
+                    password: this.password // Do not convert the password to an integer, keep it as a string
                 });
+
 
                 // Accessing the response body
                 this.responseMessage = 'Login successful: ' + response.data.username;

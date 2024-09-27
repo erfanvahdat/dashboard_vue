@@ -16,7 +16,7 @@
       <Analyzing v-if="showAnalyzeComponent" />
       <Setting v-if="showSettingsComponent" />
       <Registration v-if="reg" @reg_success="goToLogin" />
-      
+
       <login @login_success="goToHome" @sign_up='signup' v-if="!isLoggedIn" />
 
       <Trade_journal v-if="journal" />
@@ -38,7 +38,7 @@ export default {
       showSettingsComponent: false,
       showTradeHistoryComponent: false,
       isLoggedIn: false, // Track login state
-      journal:false,
+      journal: false,
     };
   },
   mounted() {
@@ -101,12 +101,12 @@ export default {
       this.showCharts = false;
       this.live_position = false;
       this.reg = false;
-      this.jounral= false;
+      this.jounral = false;
       this.showAnalyzeComponent = false;
       this.showRankingComponent = false;
       this.showSettingsComponent = false;
       this.showTradeHistoryComponent = false;
-      this.journal=false;
+      this.journal = false;
     },
     showhome() {
       this.resetComponents();
@@ -153,7 +153,7 @@ export default {
       this.resetComponents();
       this.showTradeHistoryComponent = true;
     },
-    showjournal(){
+    showjournal() {
       this.resetComponents();
       this.journal = true;
     }

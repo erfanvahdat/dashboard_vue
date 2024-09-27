@@ -89,11 +89,14 @@ export default {
         },
         async register() {
             try {
-                const response = await axios.post('http://192.168.1.104:7000/api/v1/register/', {
+
+                const response = await axios.post('http://localhost:7000/api/v1/register/', {
                     username: this.user,
-                    password: parseInt(this.password)  // Keep the password as string, no need to convert it into an integer
+                    password: this.password // Do not convert the password to an integer, keep it as a string
                 });
 
+
+                console.log(response)
                 // Accessing the response body
                 this.responseMessage = 'Registration successful: ' + response.data.username;
                 // this.token = response.data.token;
@@ -107,8 +110,8 @@ export default {
                 // Emit an event to redirect to login
                 this.$emit('reg_success');
 
-                console.log(this.responseStatus)
-                console.log(this.responseMessage)
+                // console.log(this.responseStatus)
+                // console.log(this.responseMessage)
 
 
                 setTimeout(() => {
