@@ -1,7 +1,7 @@
 <template>
 
 
-<!-- Trade_journal -->
+    <!-- Trade_journal -->
     <button @click="get_ticker"
         class="transform rounded-sm bg-indigo-600 py-2 font-bold duration-300 hover:bg-indigo-400">
         Register
@@ -11,7 +11,6 @@
         <h1>Crypto List</h1>
 
 
-
         <div class="card flex w-fit">
             <TreeSelect v-model="selectedValue" :options="sample" selectionMode="checkbox" placeholder="Select Item"
                 class="md:w-80 w-full" />
@@ -19,19 +18,17 @@
 
 
 
-
-        <div class='flex  mt-[200px]'>
-
-            <div>
-                <p>the value is : {{ this.selectedValue }}</p>
-                <p>Selected Timeframe: {{ timeframe }}</p>
-                <p>Selected type: {{ type }}</p>
-                <p>Selected Interval: {{ interval }}</p>
-
-                <p>Selected profit_status: {{ profit_status }}</p>
-            </div>
-
+        <div>
+            <label for="customRange" class="mb-2 ml-2 inline-block text-neutral-700 dark:text-neutral-200">
+                Example range
+            </label>
+            <input type="range" id="customRange" min="0" max="100" v-model="rangeValue"
+                class="transparent h-1.5 w-full cursor-pointer appearance-none rounded-lg border-transparent bg-neutral-200"
+                @input="updateValue" />
+            <span class="ml-2">{{ rangeValue }}</span> <!-- Display the current range value -->
         </div>
+
+
 
 
 
@@ -53,6 +50,8 @@ import axios from 'axios';
 export default {
     data() {
         return {
+            rangeValue: 50, // Initialize with a default value
+
             select_ticker: null,
 
 
@@ -154,6 +153,10 @@ export default {
 
 
     methods: {
+        updateValue(event) {
+            this.rangeValue = event.target.value; // Update the value manually (optional with v-model)
+        },
+
 
         setTimeframe(value) {
             this.timeframe = value;

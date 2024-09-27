@@ -54,7 +54,7 @@
     </div>
 
     <!-- Order Table -->
-    <div class="rounded mx-3 border-1">
+    <div class="rounded mx-3 border-1 h-[calc(100vh-150px)]">
       <div class="flex flex-row gap-2">
         <div class="mt-2">
           <span class="font-b font-serif ml-2  text-white">Orders</span>
@@ -121,7 +121,7 @@
 
 
     <!-- Pending Order -->
-    <div class="rounded mx-3 border-1">
+    <div class="rounded mx-3 border-1 h-[calc(100vh-150px)]">
       <div class="flex flex-row gap-2">
         <div class="mt-2">
           <span class="font-b font-serif ml-2 text-white">Pending_order</span>
@@ -200,7 +200,7 @@
 
 <script>
 
-const token = localStorage.getItem('authToken');
+const token = localStorage.getItem('access');
 
 export default {
 

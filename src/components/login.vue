@@ -73,7 +73,7 @@ export default {
         },
         async login() {
             try {
-                
+
                 const response = await axios.post('http://localhost:7000/api/v1/login/', {
                     username: this.user,
                     password: this.password // Do not convert the password to an integer, keep it as a string
@@ -91,11 +91,14 @@ export default {
                 console.log(this.responseStatus);
                 console.log(this.responseMessage);
 
-                console.log(response.data.access);
+
 
                 // Save token to local storage
                 localStorage.setItem('access', this.token);
                 localStorage.setItem('refresh', this.refresh);
+
+
+                console.log("access is : "+  localStorage.getItem('access'));
 
                 // Emit login success event
                 this.$emit('login_success');
