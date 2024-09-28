@@ -7,39 +7,40 @@
         Register
     </button>
 
+    <div>
+        <h1>Crypto List</h1>
 
 
-    <!-- <div class="card flex w-fit h-fit">
-        <div class="w-56">
-            <InputText v-model.number="value" class="w-full mb-4" />
-            <Slider v-model="value" class="w-full" :min=2 :max=5  :step=0.2/>
+        <div class="card flex w-fit">
+            <TreeSelect v-model="selectedValue" :options="sample" selectionMode="checkbox" placeholder="Select Item"
+                class="md:w-80 w-full" />
         </div>
-    </div> -->
 
-    <div :class="alertClass" class="max-w-sm w-fit shadow-lg rounded relative border-l-4 text-white ml-2">
-        <div class="p-2 justify-start ml-0">
-            <div class="flex">
-                <div class="w-full flex-1 pt-0.5">
-                    <p class="text-sm leading-5 font-medium font-serif ">
-                        {{ isWarning ? 'Trade was not send! ❌' : 'Limit is send 👍' }}
-                    </p>
-                </div>
-                
-                <div class="ml-36 flex-shrink-0 flex justify-start">
-                    <button class="inline-flex text-white transition ease-in-out duration-150" @click="closeAlert">
-                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                clip-rule="evenodd" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
+
+        <div>
+            <label for="customRange" class="mb-2 ml-2 inline-block text-neutral-700 dark:text-neutral-200">
+                Example range
+            </label>
+            <input type="range" id="customRange" min="0" max="100" v-model="rangeValue"
+                class="transparent h-1.5 w-full cursor-pointer appearance-none rounded-lg border-transparent bg-neutral-200"
+                @input="updateValue" />
+            <span class="ml-2">{{ rangeValue }}</span> <!-- Display the current range value -->
         </div>
+
+
+
+            
+
     </div>
 
 
 
+    <div>
+        <p>{{ type }}</p>
+        <p>{{ profit_status }}</p>
+    </div>
+    
+    
 </template>
 
 <script>
@@ -55,8 +56,6 @@ export default {
 
             select_ticker: null,
 
-            value: 50,
-
 
             cryptoList: [],
             timeframe: '',  // Holds the current timeframe
@@ -65,8 +64,6 @@ export default {
             type: null,
             interval: null,
             profit_status: null,
-
-            gggValue: import.meta.env.VITE_var,
 
 
             sample: [
@@ -112,20 +109,13 @@ export default {
 
         }
     },
-    props: {
-        isWarning: {
-            type: Boolean,
-            default: true
-        },
-        accentColor: {
-            type: String,
-            default: ''
-        }
-    },
 
     watch: {
 
         selectedValue(newValue) {
+
+
+
 
             this.type = (newValue['timeframe_short'] && newValue['timeframe_long']) ? "both" :
                 newValue['timeframe_short'] ? "SHORT" :
@@ -150,17 +140,8 @@ export default {
 
     },
 
-    computed: {
-        alertClass() {
-            return this.isWarning
 
-                ? 'bg-red-400 border-red-700' : "bg-green-400 border-green-700";
-        }
-    },
     methods: {
-        closeAlert() {
-            this.$emit('close');
-        },
         updateValue(event) {
             this.rangeValue = event.target.value; // Update the value manually (optional with v-model)
         },
@@ -188,7 +169,6 @@ export default {
 
 
     },
-
 
 
 }
