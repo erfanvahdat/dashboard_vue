@@ -6,9 +6,11 @@
 
       <!-- status bar -->
       <div>
-        <status></status>
-      </div>
+        <status :balance="balance" :equity="equity" :unProfit="unProfit" :dailyProfit="dailyProfit"
+          :dailyProfitPercent="dailyProfitPercent" />
 
+
+      </div>
 
       <div class=" w-full h-fit p-2 mt-2 mr-5 overflow-hidden border-1 border-blue-300 rounded bg-gray-700">
 
@@ -25,171 +27,46 @@
     </div>
 
 
-    <div>
 
-      <div>
-        <!-- Collapsible div with an arrow -->
-        <div
-          class="p-2 m-2 overflow-hidden rounded bg-gray-300 hover:bg-gray-700 flex items-center justify-between cursor-pointer"
-          @click="toggleCollapse">
-          <span>Collapsible</span>
-          <!-- Arrow Icon (rotates when clicked) -->
-          <svg xmlns="http://www.w3.org/2000/svg" :class="isOpen ? 'rotate-90' : 'rotate-0'"
-            class="w-6 h-6 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </div>
-
-        <!-- Collapsible content -->
-        <div v-show="isOpen"
-          class="p-2 m-2 overflow-hidden rounded bg-gray-300 hover:bg-gray-700 flex items-center justify-between cursor-pointer">
+    <div class="flex flex-col border-1 border-blue-500 h-full">
 
 
-          Lorem ipsum dolor text....
-        </div>
+      <!-- Testing api balance -->
+      <div class="flex">
+
+
+        <button class="btn btn-primary btn-sm " role="button" @click='Get_Balance()'>show_access_token
+        </button>
+
+
       </div>
 
+      <div class="flex mt-2">
+        <p>{{ this.responseMessage }}</p>
+
+
+
+        <button class="btn btn-primary btn-sm bg-slate-600 " role="button" @click='get_token()'>show_access tokne
+        </button>
+
+        <!-- {{ this.access }} -->
+
+      </div>
+
+
+      <div v-if="balance !== null" class="">
+        <h3>Account Balance Information</h3>
+        <p><strong>Balance:</strong> {{ balance }}</p>
+        <p><strong>Equity:</strong> {{ equity }}</p>
+        <p><strong>Unrealized Profit:</strong> {{ unProfit }}</p>
+        <p><strong>Realized Profit:</strong> {{ reProfit }}</p>
+        <p><strong>Available Margin:</strong> {{ avlMargin }}</p>
+        <p><strong>Used Margin:</strong> {{ usedMargin }}</p>
+      </div>
 
 
     </div>
 
-    <!-- Order Table -->
-    <div class="rounded mx-3 border-1 h-[calc(100vh-150px)]">
-      <div class="flex flex-row gap-2">
-        <div class="mt-2">
-          <span class="font-b font-serif ml-2  text-white">Orders</span>
-        </div>
-
-        <div class="mt-1">
-          <button
-            class="relative px-2 py-1 bg-blue-500 text-white rounded-[20px] flex items-center justify-center space-x-2"
-            @click="order_reloading">
-            <span class="text-sm">reload</span>
-            <div v-if="order_pulse"
-              class="w-3 h-3 border-4 border-solid border-current border-t-transparent rounded-full animate-spin"
-              role="status">
-            </div>
-          </button>
-        </div>
-      </div>
-
-      <div class="relative">
-        <!-- Table with Pulse animation -->
-        <table v-if="!order_pulse" class="table rounded-lg border border-gray-300 overflow-hidden">
-          <thead>
-            <tr>
-              <th></th>
-              <th v-for="(key, index) in objectKeys" :key="index">{{ key }}</th>
-              <th>Trigger</th>
-              <th>Cancel</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(person, index) in peopleData" :key="index" class="bg-black text-white">
-              <th>{{ index + 1 }}</th>
-              <td>{{ person.name }}</td>
-              <td>{{ person.job }}</td>
-              <td>{{ person.favorit_color }}</td>
-              <td><button class="btn btn-accent">Accent</button></td>
-              <td><button class="btn btn-error">Error</button></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Loading state with spinning icon and text -->
-      <div v-if="order_pulse" class="text-center">
-        <div class="border border-blue-300 shadow rounded-md p-4 w-full mx-auto">
-          <div class="animate-pulse flex space-x-4">
-            <div class="rounded-full bg-slate-700 h-10 w-10"></div>
-            <div class="flex-1 space-y-6 py-1">
-              <div class="h-2 bg-slate-700 rounded"></div>
-              <div class="space-y-3">
-                <div class="grid grid-cols-3 gap-4">
-                  <div class="h-2 bg-slate-700 rounded col-span-2"></div>
-                  <div class="h-2 bg-slate-700 rounded col-span-1"></div>
-                </div>
-                <div class="h-2 bg-slate-700 rounded"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-
-
-    <!-- Pending Order -->
-    <div class="rounded mx-3 border-1 h-[calc(100vh-150px)]">
-      <div class="flex flex-row gap-2">
-        <div class="mt-2">
-          <span class="font-b font-serif ml-2 text-white">Pending_order</span>
-        </div>
-
-        <div class="mt-1">
-          <button
-            class="relative px-2 py-1 bg-blue-500 text-white rounded-[20px] flex items-center justify-center space-x-2"
-            @click="pending_reloading">
-            <span class="text-sm">reload</span>
-            <div v-if="pending_pulse"
-              class="w-3 h-3 border-4 border-solid border-current border-t-transparent rounded-full animate-spin"
-              role="status">
-            </div>
-          </button>
-        </div>
-      </div>
-
-      <div class="relative">
-        <!-- Table with Pulse animation -->
-        <table v-if="!pending_pulse" class="table rounded-lg border border-gray-300 overflow-hidden">
-          <thead>
-            <tr>
-              <th></th>
-              <th v-for="(key, index) in objectKeys" :key="index">{{ key }}</th>
-              <th>Trigger</th>
-              <th>Cancel</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(person, index) in peopleData" :key="index" class="bg-black text-white">
-              <th>{{ index + 1 }}</th>
-              <td>{{ person.name }}</td>
-              <td>{{ person.job }}</td>
-              <td>{{ person.favorit_color }}</td>
-              <td><button class="btn btn-accent">Accent</button></td>
-              <td><button class="btn btn-error">Error</button></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Loading state with spinning icon and text -->
-      <div v-if="pending_pulse" class="text-center">
-        <div class="border border-blue-300 shadow rounded-md p-4 w-full mx-auto">
-          <div class="animate-pulse flex space-x-4">
-            <div class="rounded-full bg-slate-700 h-10 w-10"></div>
-            <div class="flex-1 space-y-6 py-1">
-              <div class="h-2 bg-slate-700 rounded"></div>
-              <div class="space-y-3">
-                <div class="grid grid-cols-3 gap-4">
-                  <div class="h-2 bg-slate-700 rounded col-span-2"></div>
-                  <div class="h-2 bg-slate-700 rounded col-span-1"></div>
-                </div>
-                <div class="h-2 bg-slate-700 rounded"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Toggle button -->
-    <div class="flex ">
-      <!-- Toggle button content here -->
-      <h1>token is here:{{ token }}</h1>
-    </div>
 
 
 
@@ -199,15 +76,11 @@
 </template>
 
 <script>
-
-const token = localStorage.getItem('access');
-
+import axios from 'axios';
 export default {
-
 
   data() {
     return {
-
 
       series: [{
         name: 'Price',
@@ -293,10 +166,23 @@ export default {
           },
         },
       },
-      token: token,
+      access: null,
       order_pulse: false, // Contring the pulse container display
       pending_pulse: false, // Contring the pulse container display
+
+      balance: null,
+      equity: null,
+      unProfit: null,
+      reProfit: null,
+      avlMargin: null,
+      usedMargin: null,
+      dailyProfitPercent: null,
+      cryptosBalance: [], // Since it's an array
+      responseMessage: '',
+      responseStatus: '',
+
       isOpen: false,
+
       objectKeys: [],
       peopleData: [
         { name: "erfan", job: "programmer", favorit_color: "green" },
@@ -309,47 +195,89 @@ export default {
   mounted() {
 
 
-    if (this.peopleData.length > 0) {
-      this.objectKeys = Object.keys(this.peopleData[0]);
-    }
+    // if (this.peopleData.length > 0) {
+    //   this.objectKeys = Object.keys(this.peopleData[0]);
+    // }
+
+    this.get_token();
+
+
+
   },
 
   methods: {
+    get_token() {
+
+      const Access = localStorage.getItem('access');
+      this.access = Access;
+
+    },
     toggleCollapse() {
       this.isOpen = !this.isOpen; // Toggle collapse
     },
-    async get_token() {
-      const token = localStorage.getItem('authToken');
-      return token
-    },
 
+    async Get_Balance() {
+      try {
+        const access = localStorage.getItem('access');
 
-    order_reloading() {
-      this.order_pulse = true;
+        // Ensure that access token is available
+        if (!access) {
+          this.responseMessage = 'Access token not found. Please log in.';
+          this.responseStatus = '401';  // Set status to 401 (Unauthorized)
+          return;
+        }
 
-      setTimeout(() => {
-        this.order_pulse = false;
-      }, 2000);
-    },
-    pending_reloading() {
-      this.pending_pulse = true;
+        // Send GET request to fetch balance
+        const response = await axios.get(`${import.meta.env.VITE_BALANCE}`, {
+          headers: {
+            'Authorization': `Bearer ${access}`,
+            'Content-Type': 'application/json'
+          }
+        });
 
-      setTimeout(() => {
-        this.pending_pulse = false;
-      }, 2000);
+        // Extracting the first item from the response data (since it's an array of objects)
+        const balanceData = response.data[0];
+
+        // Mapping the response data to the Vue component's state
+        this.balance = balanceData.balance;
+        this.equity = balanceData.equity;
+        this.unProfit = balanceData.unProfit;
+        this.reProfit = balanceData.reProfit;
+        this.avlMargin = balanceData.avlMargin;
+        this.usedMargin = balanceData.usedMargin;
+        this.cryptosBalance = balanceData.cryptosBalance;  // Assuming this is an array
+
+        this.responseMessage = 'Balance retrieved successfully';
+        this.responseStatus = response.status.toString(); // Set status based on response status
+
+      } catch (error) {
+        // Error handling
+        if (error.response) {
+          if (error.response.status === 400) {
+            const errorMessage = error.response.data.error
+              ? error.response.data.error[0]
+              : 'Unknown error occurred';
+            this.responseMessage = `Failed to retrieve balance: ${errorMessage}`;
+            this.responseStatus = '400';  // Set status to 400 (Bad Request)
+          } else if (error.response.status === 401) {
+            this.responseMessage = 'Unauthorized. Please try agian.';
+            this.responseStatus = '401';  // Unauthorized access
+          } else {
+            this.responseMessage = `Error: ${error.response.status} - ${error.response.data.message || 'An error occurred'}`;
+            this.responseStatus = error.response.status.toString();
+          }
+        } else if (error.request) {
+          this.responseMessage = 'No response received from the server. Please try again later.';
+          this.responseStatus = '503';  // Service Unavailable
+        } else {
+          this.responseMessage = `Request error: ${error.message}`;
+          this.responseStatus = '500';  // Generic error status
+        }
+      }
     }
   },
 
 
-
-
-};
-</script>
-
-<style scoped>
-/* Custom styles for table */
-.table {
-  border-radius: 0.5rem;
-  /* Roundness for the table */
 }
-</style>
+
+</script>

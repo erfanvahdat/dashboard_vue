@@ -1,40 +1,99 @@
 <template>
-    <button
-        class="flex items-center justify-start w-12 h-12 bg-indigo-300 rounded-full cursor-pointer relative overflow-hidden transition-all duration-300 shadow-md hover:w-32 hover:rounded-3xl active:translate-x-0.5 active:translate-y-0.5">
 
-        <!-- Icon/Sign -->
-        <div class="flex items-center justify-center w-full transition-all duration-300 sign">
-            <svg viewBox="0 0 512 512" class="w-4">
-                <path fill="white"
-                    d="M217.9 105.9L340.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L217.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1L32 320c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM352 416l64 0c17.7 0 32-14.3 32-32l0-256c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32s14.3-32 32-32l64 0c53 0 96 43 96 96l0 256c0 53-43 96-96 96l-64 0c-17.7 0-32-14.3-32-32s14.3-32 32-32z" />
-            </svg>
-        </div>
+    <button class="Btn">
 
-        <!-- Text -->
-        <div class="absolute right-0 opacity-0 text-white font-semibold text-lg transition-all duration-300 text">
-            Login
-        </div>
+        <div class="sign"><svg viewBox="0 0 512 512">
+                <path
+                    d="M217.9 105.9L340.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L217.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1L32 320c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM352 416l64 0c17.7 0 32-14.3 32-32l0-256c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32s14.3-32 32-32l64 0c53 0 96 43 96 96l0 256c0 53-43 96-96 96l-64 0c-17.7 0-32-14.3-32-32s14.3-32 32-32z">
+                </path>
+            </svg></div>
+
+        <div class="text ">Login</div>
+
     </button>
+
+
+
 </template>
 
-<script>
-export default {
-    name: 'CustomButton',
-};
-</script>
 
-<style scoped>
-/* Hover Effect */
-button:hover .sign {
-    width: 30%;
-    padding-left: 1.25rem;
-    /* Tailwind padding for pl-5 */
+
+
+
+<style>
+/* From Uiverse.io by vinodjangid07 */
+.Btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 45px;
+    height: 45px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition-duration: .3s;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+    background-color: rgb(163, 142, 255);
 }
 
-button:hover .text {
+/* plus sign */
+.sign {
+    width: 100%;
+    transition-duration: .3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sign svg {
+    width: 17px;
+}
+
+.sign svg path {
+    fill: white;
+}
+
+.text {
+    position: absolute;
+    right: 0%;
+    width: 0%;
+    opacity: 0;
+    color: rgb(235, 230, 230) !important;
+    /* Ensure the text color is set to black */
+
+    font-size: 1em;
+    /* Set a more reasonable font size */
+    font-weight: 500;
+    transition-duration: .3s;
+    font-family: "sans-serif";
+}
+
+/* hover effect on button width */
+.Btn:hover {
+    width: 125px;
+    border-radius: 40px;
+    transition-duration: .3s;
+}
+
+.Btn:hover .sign {
+    width: 30%;
+    transition-duration: .3s;
+    padding-left: 20px;
+}
+
+/* hover effect button's text */
+
+.Btn:hover .text {
     opacity: 1;
     width: 70%;
-    padding-right: 0.75rem;
-    /* Tailwind padding for pr-3 */
+    transition-duration: .3s;
+    padding-right: 10px;
+}
+
+/* button click effect*/
+.Btn:active {
+    transform: translate(2px, 2px);
 }
 </style>

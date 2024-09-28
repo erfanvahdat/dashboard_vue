@@ -1,13 +1,14 @@
 <template>
     <div :class="alertClass" class="max-w-sm w-fit shadow-lg rounded relative border-l-4 text-white ml-2">
         <div class="p-2 justify-start ml-0">
-            <div class="flex">
-                <div class="w-0 flex-1 pt-0.5">
-                    <p class="text-sm leading-5 font-medium">
-                        {{ isDanger ? 'Error' : 'Success' }}
+            <div class="flex  h-fit">
+                <div class=" flex pt-0.5 w-[300px]">
+                    <p class="text-sm leading-5 font-medium font-serif ">
+                        {{ isWarning ? 'Trade was not send! ❌' : 'Limit is send 👍' }}
                     </p>
                 </div>
-                <div class="ml-36 flex-shrink-0 flex justify-start">
+
+                <div class=" flex-shrink-0 flex ">
                     <button class="inline-flex text-white transition ease-in-out duration-150" @click="closeAlert">
                         <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd"
@@ -24,7 +25,7 @@
 <script>
 export default {
     props: {
-        isDanger: {
+        isWarning: {
             type: Boolean,
             default: false
         },
@@ -35,9 +36,9 @@ export default {
     },
     computed: {
         alertClass() {
-            return this.isDanger
+            return this.isWarning
 
-                ?  'bg-red-400 border-red-700' :  "bg-green-400 border-green-700";
+                ? 'bg-red-400 border-red-700' : "bg-green-400 border-green-700";
         }
     },
     methods: {

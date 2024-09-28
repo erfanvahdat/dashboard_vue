@@ -1,132 +1,96 @@
 <template>
+  <main class="mx-auto flex min-h-screen w-full items-center justify-center bg-gray-900 text-white">
+    <section class="flex w-[30rem] flex-col space-y-10">
+      <div class="flex flex-row justify-between  space-x-5">
+        <span class=" w-full text-center justify-center text-4xl font-medium  ">Login</span>
+        <!-- <login_icon @click="Signup"></login_icon> -->
+      </div>
 
+      <!-- Username input -->
+      <div class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500">
+        <input v-model="user" type="text" placeholder="Username"
+          class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none" />
+      </div>
 
-    <div class="flex min-h-screen items-center justify-center bg-gray-700">
+      <!-- Password input -->
+      <div class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500">
+        <input v-model="password" type="password" placeholder="Password"
+          class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none" />
+      </div>
 
-        <div class="w-80 rounded-lg shadow h-auto p-6 bg-white relative overflow-hidden">
-            <div class="flex flex-col justify-center items-center space-y-2">
-                <h2 class="text-2xl font-medium text-slate-700">Login</h2>
-                <p class="text-slate-500">Enter details below.</p>
-            </div>
-            <form class="w-full mt-4 space-y-3">
-                <div>
-                    <input v-model='user'
-                        class="outline-none border-2 rounded-md px-2 py-1 text-slate-500 w-full focus:border-blue-300"
-                        placeholder="Username" id="username" name="username" type="text" />
-                </div>
-                <div>
-                    <input v-model='password'
-                        class="outline-none border-2 rounded-md px-2 py-1 text-slate-500 w-full focus:border-blue-300"
-                        placeholder="Password" id="password" name="password" type="password" />
-                </div>
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <input class="mr-2 w-4 h-4" id="remember" name="remember" type="checkbox" />
-                        <span class="text-slate-500">Remember me </span>
-                    </div>
+      <!-- Login button -->
+      <button @click="login"
+        class="transform rounded-sm bg-indigo-600 py-2 font-bold duration-300 hover:bg-indigo-400 rounded-2">
+        Login
+      </button>
 
-                </div>
+      <!-- Loading spinner -->
+      <div v-if="spin_loader">
+        <loading_spin></loading_spin>
+      </div>
 
-
-                <button type="button" class="btn btn-primary" @click='login'>Login</button>
-
-
-                <span class='text-black' v-if="response_error">
-                    - Something went wrong please try again
-                </span>
-
-
-                <p class="flex justify-center space-x-1">
-                    <span class="text-slate-700"> Have an account? </span>
-                    <span class="text-blue-500 hover:underline" @click="Signup">Sign Up</span>
-                </p>
-            </form>
-        </div>
-    </div>
-
-
-
+      <!-- Error message -->
+      <span v-if="response_error" class="text-center text-red-500">
+        Something went wrong. Please try again.
+      </span>
+      <p class="flex justify-center space-x-1">
+        <!-- <span class="text-slate-700"> Have an account? </span> -->
+        <button class="text-blue-500 hover:underline " @click="Signup">Sign Up</button>
+      </p>
+    </section>
+  </main>
 </template>
 
-
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
-    data() {
-        return {
-            display_status_cont: false,
-            user: '',
-            password: '',
-            responseMessage: '',
-            responseStatus: '',
-            token: '',
-            refresh: '',
-            response_error: false,
-
-        };
+  data() {
+    return {
+      user: "",
+      password: "",
+      responseMessage: "",
+      spin_loader: false,
+      response_error: false,
+    };
+  },
+  methods: {
+    Signup() {
+      this.$emit("sign_up");
     },
-    methods: {
-        Signup() {
-            this.$emit('sign_up');
+    async login() {
+      // Show spinner while the login request is in progress
+      this.spin_loader = true;
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_LOGIN}`,
+          {
+            username: this.user,
+            password: this.password,
+          }
+        );
 
-        },
-        async login() {
-            try {
+        // Handle login success
+        this.responseMessage = "Login successful: " + response.data.username;
+        localStorage.setItem("access", response.data.access);
+        localStorage.setItem("refresh", response.data.refresh);
 
-                const response = await axios.post('http://localhost:7000/api/v1/login/', {
-                    username: this.user,
-                    password: this.password // Do not convert the password to an integer, keep it as a string
-                });
+        console.log(response.data.access)
 
-
-                // Accessing the response body
-                this.responseMessage = 'Login successful: ' + response.data.username;
-
-                this.token = response.data.access;
-                this.refresh = response.data.refresh;
-
-                this.responseStatus = response.status;
-
-                console.log(this.responseStatus);
-                console.log(this.responseMessage);
-
-
-
-                // Save token to local storage
-                localStorage.setItem('access', this.token);
-                localStorage.setItem('refresh', this.refresh);
-
-
-                console.log("access is : "+  localStorage.getItem('access'));
-
-                // Emit login success event
-                this.$emit('login_success');
-
-
-            } catch (error) {
-
-                console.log(error.response);
-
-
-                this.response_error = true;
-
-                setTimeout(() => {
-                    this.response_error = false;
-                }, 2000);
-
-                // if (error.response && error.response.data && error.response.data.username) {
-                // Show specific error message from the response
-                //     this.responseMessage = 'Login failed: ' + error.response.data.username;
-                // } else {
-                //     // Fallback error message
-                //     this.responseMessage = 'Login failed. Please try again.';
-                // }
-                // console.error('Error response:', error.response);
-            }
-        }
-    }
-
-
+        // Hide the loading spinner after 2 seconds
+        setTimeout(() => {
+          this.spin_loader = false;
+          this.$emit("login_success");
+        }, 2000);
+      } catch (error) {
+        // Handle login failure
+        this.spin_loader = false;
+        this.response_error = true;
+        setTimeout(() => {
+          this.response_error = false;
+        }, 2000);
+      }
+    },
+  },
 };
 </script>

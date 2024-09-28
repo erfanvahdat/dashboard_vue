@@ -3,7 +3,7 @@
         <div class="flex flex-row p-2 space-y m-3 gap-5  justify-start">
 
             <!-- Trade Section 1️⃣-->
-            <div class="flex md:flex-row rounded-3 overflow-hidden  gap-3 bg-gray-800 w-110 h-[400px]   w-full">
+            <div class="flex md:flex-row rounded-3 overflow-hidden  gap-3 bg-gray-800 w-110 h-[460px]   w-full">
 
                 <!-- input_limit_section -->
                 <div class=" flex flex-col space-y-0 ml-2   ">
@@ -11,13 +11,13 @@
 
 
                     <div class="card flex w-fit ml-2 mt-2">
-                        <Select v-model="Ticker" :options="cryptoList" filter optionLabel="ticker"
-                            placeholder="Select a Crypto" class="w-full md:w-56">
+                        <Select v-model="Ticker" :options="cryptoList" filter optionLabel="symbol"
+                            @change="updateChart('chart')" placeholder="Select a Crypto" class="w-full md:w-56">
 
                             <!-- Template for selected value -->
                             <template #value="slotProps">
                                 <div v-if="slotProps.value" class="flex items-center">
-                                    <div>{{ slotProps.value.ticker }}</div> <!-- Display ticker -->
+                                    <div>{{ slotProps.value.symbol }}</div> <!-- Display ticker -->
                                 </div>
                                 <span v-else>
                                     {{ slotProps.placeholder }}
@@ -26,10 +26,12 @@
                         </Select>
                     </div>
 
+
+
                     <!-- Toggle Type -->
                     <div class="flex  ml-3 mt-3 h-[60px]  justify-center ">
                         <button @click="toggleValue" class="btn rounded-1 btn-sm w-36 my-2 hover:border-gray-600 "
-                            type="button" :class="[type_toggle]" >
+                            type="button" :class="[type_toggle]">
                             <span class='text-sm font-bold font-serif'>{{ isLong ? 'LONG' : 'SHORT' }}</span>
                         </button>
                     </div>
@@ -43,7 +45,7 @@
                         <span class="font-serif  text-xm text-[10px] mb-0 underline decoration-dashed "> Limit: </span>
                         <div>
                             <input_sub :value="'limit_price'" v-model="limit_price"
-                                @input="limit_price = parseInt($event.target.value)" accentColor="#FFFFFF">
+                                @input="limit_price = $event.target.value" accentColor="#FFFFFF">
 
                             </input_sub>
                         </div>
@@ -54,31 +56,35 @@
                     <div class="flex flex-row gap-2">
                         <div>
                             <span class="font-serif text-xm text-[10px] mb-0 underline decoration-dashed	 "> TP: </span>
-                            <input_sub :value="'tp_price'" v-model="tp_price"
-                                @input="tp_price = parseInt($event.target.value)" accentColor="#72ee17">
+                            <input_sub :value="'tp_price'" v-model="tp_price" @input="tp_price = $event.target.value"
+                                accentColor="#72ee17">
                             </input_sub>
 
                         </div>
                         <div>
                             <span class="font-serif text-xm text-[10px] mb-0 underline decoration-dashed"> SL: </span>
-                            <input_sub :value="'sl_price'" v-model="sl_price"
-                                @input="sl_price = parseInt($event.target.value)" accentColor="#e53621 ">
+                            <input_sub :value="'sl_price'" v-model="sl_price" @input="sl_price = $event.target.value"
+                                accentColor="#e53621 ">
                             </input_sub>
-
                         </div>
-
                     </div>
+
+                    <!-- Risk Range -->
+                    <div class=" flex w-fit h-fit mt-3 justify-center">
+                        <div class="flex flex-col w-52 ml-12 ">
+                            <InputText v-model.number="risk" class="w-full mb-3 justify-center " />
+                            <Slider v-model="risk" class="flex w-full justify-center" :min=0.2 :max=2 :step=0.1 />
+                        </div>
+                    </div>
+
 
                     <!-- Submit Button -->
                     <div class="flex my-3  justify-center">
                         <order_button_sub :buttonText="'Sumbit'" @click="submit" />
 
-
-
-
                         <div v-if="alert" class="flex">
 
-                            <Alert :isDanger="false" />
+                            <Alert :isWarning='isWarning' />
 
                         </div>
 
@@ -169,6 +175,7 @@
 
 
                 <div>
+                    <p>Ticker : {{ this.Ticker }}</p>
                     <p>limit : {{ this.limit_price }}</p>
                     <p> type_pos : {{ this.type_pos }}</p>
                     <p>TP: {{ tp_price }}</p>
@@ -178,7 +185,7 @@
 
 
 
-                    <a class="btn btn-primary btn-sm " role="button" @click='fetchCryptoData()'>Link</a>
+                    <a class="btn btn-primary btn-sm " role="button" @click='Remove_cash()'>Link</a>
 
                 </div>
 
@@ -194,19 +201,24 @@
 import axios from 'axios';
 
 export default {
+
+
     data() {
         return {
 
 
             Ticker: null,
-            type_pos: null,
+            type_pos: 'long',
             limit_price: null,
             sl_price: null,
             tp_price: null,
             type: 'limit',
             risk: null,
+            value: 1,
 
+            isWarning: null,
             isLong: true,
+            alert_status: false,
 
             cryptoList: [],
             access: localStorage.getItem('access'),
@@ -266,8 +278,13 @@ export default {
                 { label: 'USD_JPY', value: 'OANDA:USDJPY' },
                 { label: 'USD_CAD', value: 'OANDA:USDCAD' }
             ],
+
+
+
         };
     },
+
+
 
     methods: {
 
@@ -281,9 +298,8 @@ export default {
 
         async get_ticker() {
             try {
-                const response = await axios.get('localhost:7000/api/v1/cryptoList/');
+                const response = await axios.get(`${import.meta.env.VITE_CRYPTO_LIST}`);
 
-                // Assuming response.data.data is an array of objects like [{ symbol: 'BTC', ticker: 'Bitcoin' }, ...]
                 this.cryptoList = response.data.data.map(crypto => ({
                     symbol: crypto.symbol,
                     ticker: crypto.ticker
@@ -297,63 +313,32 @@ export default {
             }
         },
 
-        async fetchCryptoData() {
-            try {
-                const token = this.show_access();  // Get the access token
+        async Remove_cash() {
 
-                if (!token) {
-                    throw new Error('Access token not found');
-                }
-
-                console.log(token)
-                // Make the GET request to the Crypto API
-                const response = await axios.get('http://localhost:7000/api/v1/Crypto/', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                // Handle the successful response
-                this.cryptoData = response.data;
-                console.log('Crypto data:', this.cryptoData);
-
-            } catch (error) {
-
-
-                // Handle any errors, like failed authentication or network issues
-                this.errorMessage = 'Failed to fetch crypto data: ' + (error.response?.data || error.message);
-                console.error(this.errorMessage);
-                console.error(this.cryptoData);
-
-            }
+            localStorage.removeItem('access');
+            localStorage.removeItem('refresh');
         },
 
         async postLiveTrade() {
             try {
-                const token = this.show_access();  // Get the access token
 
-                if (!token) {
-                    throw new Error('Access token not found');
-                }
+                const token = this.show_access();  // Get the access token
 
                 // Prepare the data for the POST request based on your provided model
                 const postData = {
-                    ticker: this.formData.ticker,
-                    positionSide: this.formData.positionSide,
-                    limitPrice: this.formData.limitPrice,
-                    slPrice: this.formData.slPrice,
-                    tpPrice: this.formData.tpPrice,
-                    type: this.formData.type,
-                    risk: this.formData.risk,
-                    balance: this.formData.balance,
-                    news: this.formData.news,
-                    liveTradesCrypto: this.formData.liveTradesCrypto
+                    "ticker": `${this.Ticker['symbol']}-USDT`.toUpperCase(),
+                    "positionSide": this.type_pos,
+                    "limitPrice": this.limit_price.toString(),
+                    "slPrice": this.sl_price.toString(),
+                    "tpPrice": this.tp_price.toString(),
+                    "type": this.type.toUpperCase(),
+                    "risk": this.risk.toString()
                 };
 
-                // Make the POST request to the /api/v1/Crypto/ endpoint
-                const response = await axios.post('http://localhost:7000/api/v1/Crypto/', postData, {
+                // Make the POST request to the / api / v1 / Crypto / endpoint
+                const response = await axios.post(`${import.meta.env.VITE_TRADE}`, postData, {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
+                        'Authorization': `Token  ${token}`,
                         'Content-Type': 'application/json'
                     }
                 });
@@ -362,11 +347,40 @@ export default {
                 this.successMessage = 'Live trade posted successfully!';
                 console.log('Response:', response.data);
 
+                this.alert = true;
+                this.isWarning = false;
+
+
+                setTimeout(() => {
+                    this.alert = false;
+
+                }, 10000);
+
+
             } catch (error) {
                 // Handle any errors
-                this.errorMessage = 'Failed to post live trade: ' + (error.response?.data || error.message);
+                this.errorMessage = 'Failed to post live trade: ';
+
+                // Check if the error has a response object with data
+                if (error.response && error.response.data) {
+                    this.errorMessage += error.response.data.error || 'Unknown error occurred';
+                } else {
+                    this.errorMessage += error.message;
+                }
+
+
+                this.alert = true;
+                this.isWarning = true;
+
+                setTimeout(() => {
+                    this.alert = false;
+
+                }, 2000);
+
                 console.error(this.errorMessage);
+                console.error(error); // Log the complete error for debugging
             }
+
         },
 
 
@@ -391,18 +405,18 @@ export default {
         },
 
         updateChart(index) {
-            this.createChart(index, this.selectedTickers.value, "1", "Dark");
+
+            const symbol = `BINANCE:${this.Ticker['symbol']}USDT.P`
+            this.createChart(index, symbol, "1", "Dark");
         },
         toggleValue() {
             this.isLong = !this.isLong;
 
             if (this.isLong) {
-                this.type_pos = 'LONG';
+                this.type_pos = 'long';
             } else {
-                this.type_pos = 'SHORT';
+                this.type_pos = 'short';
             }
-
-            
 
             console.log(this.isLong)
             console.log(this.isLong ? 'LONG' : 'SHORT');
@@ -411,36 +425,21 @@ export default {
 
 
         submit() {
-            this.errorMessage = null; // Reset error message before validation
 
-            this.alert = true;
 
-            setTimeout(() => {
+            this.postLiveTrade()
 
-                this.alert = false
 
-            }, "2000");
 
-            // Validate TP, SL, and Limit values
-            if (this.tp <= 0) {
-                this.errorMessage = 'Error: TP, SL, and Limit must be greater than zero.';
-                console.error(this.errorMessage)
 
-            } else {
-
-                // Log TP, SL, and Limit values
-                console.log('TP:', this.tp, 'SL:', typeof parseInt(this.sl), 'Limit:', this.limit)
-            }
-
-            // Additional submit logic for order placement
         },
     },
 
     mounted() {
 
 
-        this.get_ticker();
 
+        this.get_ticker()
         if (this.peopleData.length > 0) {
             this.objectKeys = Object.keys(this.peopleData[0]);
         }
@@ -457,10 +456,3 @@ export default {
     }
 };
 </script>
-
-<style>
-/* Radio button background */
-.p-radiobutton {
-    transition: background-color 0.3s ease;
-}
-</style>

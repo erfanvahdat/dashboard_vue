@@ -32,7 +32,7 @@ import ConfirmDialog from 'primevue/confirmdialog';
 import MultiSelect from 'primevue/multiselect';
 import ripple from 'primevue/ripple';
 import Badge from 'primevue/badge';
-
+import Slider from 'primevue/slider';
 import TreeSelect from 'primevue/treeselect';
 
 
@@ -49,9 +49,10 @@ import Rank from './components/Rank.vue';
 import Trade_history from './components/Trade_history.vue';
 import Analyzing from './components/Analyzing.vue';
 import Setting from './components/setting.vue';
-import Live_pos from './components/Live_position.vue';
+import Live_pos from './components/Trade.vue';
 import login from './components/login.vue';
 import trade_journal from './components/Trade_journal.vue';
+import reg from './components/registration.vue';
 
 
 
@@ -60,8 +61,7 @@ import order_button_sub from './sub_component/order_button.vue';
 import input_sub from './sub_component/input.vue';
 import Alert from './sub_component/alert.vue';
 import login_icon from './sub_component/login_icon.vue';
-import reg from './components/registration.vue';
-// import login_form from './sub_component/login_form.vue';
+import loading_spin from './sub_component/loading_spin.vue';
 
 // Chart import modules
 import VueApexCharts from "vue3-apexcharts";
@@ -124,13 +124,15 @@ const globalComponents = {
   'FloatLabel': FloatLabel,
   'RadioButton': RadioButton,
   'ripple': ripple,
-  'ConfirmDialog': ConfirmDialog,
+  // 'ConfirmDialog': ConfirmDialoEg,
   'Alert': Alert,
   "login": login,
   "login_icon":login_icon,
   "Trade_journal":trade_journal,
   "Badge":Badge,
   "TreeSelect":TreeSelect,
+  "loading_spin":loading_spin,
+  "Slider":Slider,
   
 };
 

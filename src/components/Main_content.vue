@@ -17,12 +17,16 @@
       <Setting v-if="showSettingsComponent" />
       <Registration v-if="reg" @reg_success="goToLogin" />
 
-      <login @login_success="goToHome" @sign_up='signup' v-if="!isLoggedIn" />
+      <!-- Hide login form if in registration mode -->
+      <login @login_success="goToHome" @sign_up='signup' v-if="!isLoggedIn && !reg" />
 
       <Trade_journal v-if="journal" />
     </div>
   </div>
+
 </template>
+
+
 
 <script>
 export default {
@@ -32,6 +36,7 @@ export default {
       sidebar: false,
       showCharts: false,
       reg: false,
+      show_login: false,
       live_position: false,
       showAnalyzeComponent: false,
       showRankingComponent: false,
@@ -50,49 +55,31 @@ export default {
       const access = localStorage.getItem('access');
       const refresh = localStorage.getItem('refresh');
 
-
       if (access && refresh) {
-
-        console.log(access)
-        console.log(refresh)
 
         if (this.isRefreshTokenExpired(access)) {
           console.log('Refresh token is expired. Please log in again.');
           // Optionally clear tokens and redirect to login
           localStorage.removeItem('access');
           localStorage.removeItem('refresh');
-
           this.isLoggedIn = false; // Set login state to false
+
 
         } else {
           this.isLoggedIn = true; // User is logged in
+
           this.showhome(); // Optionally show the home component
         }
       } else {
         this.isLoggedIn = false; // User is not logged in
       }
+
     },
     isRefreshTokenExpired(value) {
       if (!value) return true; // If no token, consider it expired
 
       const payload = JSON.parse(atob(value.split('.')[1])); // Decode JWT payload
       const now = Math.floor(Date.now() / 1000); // Current time in seconds
-
-      const exp = payload.exp
-      var time_left = 0
-
-      if (exp > now) {
-
-        const timeLeftInSeconds = exp - now;
-        time_left = Math.floor(timeLeftInSeconds / 3600);
-
-      } else {
-
-        // time_left = 0
-        return true
-      }
-      console.log(time_left);
-      console.log(now)
 
       return payload.exp < now; // Check if the token has expired
     },
@@ -101,12 +88,11 @@ export default {
       this.showCharts = false;
       this.live_position = false;
       this.reg = false;
-      this.jounral = false;
+      this.journal = false;
       this.showAnalyzeComponent = false;
       this.showRankingComponent = false;
       this.showSettingsComponent = false;
       this.showTradeHistoryComponent = false;
-      this.journal = false;
     },
     showhome() {
       this.resetComponents();
@@ -124,13 +110,23 @@ export default {
       this.resetComponents();
       this.reg = true;
     },
+    // Update this method to go directly to the home page after registration
     goToLogin() {
       this.resetComponents();
-      this.isLoggedIn = false; // Show login after registration
+      this.isLoggedIn = true; // Set login state to true
+      // this.home = true; // Directly go to the homepage
     },
     signup() {
       this.resetComponents();
-      this.reg = true; // Show registration component
+      this.isLoggedIn = false; // Ensure login form is hidden
+      this.reg = true; // Show the registration form
+    },
+
+
+    goToLogin() {
+      this.resetComponents();
+      this.isLoggedIn = true; // Ensure the login form shows again
+      // this.show_login = true; // Optionally display the login form
     },
     goToHome() {
       this.resetComponents();
