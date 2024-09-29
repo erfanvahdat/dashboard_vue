@@ -79,7 +79,7 @@
 
 
                     <!-- Submit Button -->
-                    <div class="flex my-3  justify-center">
+                    <!-- <div class="flex my-3  justify-center">
                         <order_button_sub :buttonText="'Sumbit'" @click="submit" />
 
                         <div v-if="alert" class="flex">
@@ -88,6 +88,13 @@
 
                         </div>
 
+                    </div> -->
+
+            <!-- Submit Order -->
+                    <Toast />
+                    <ConfirmPopup></ConfirmPopup>
+                    <div class="flex flex-wrap gap-2 justify-center mt-3">
+                        <Button @click="confirm1($event)" label="Save" outlined></Button>
                     </div>
 
                 </div>
@@ -288,6 +295,29 @@ export default {
 
     methods: {
 
+
+        confirm1(event) {
+            this.$confirm.require({
+                target: event.currentTarget,
+                message: 'Are you sure you want to proceed?',
+                icon: 'pi pi-exclamation-triangle',
+                rejectProps: {
+                    label: 'Cancel',
+                    severity: 'secondary',
+                    outlined: true
+                },
+                acceptProps: {
+                    label: 'Save'
+                },
+                accept: () => {
+                    this.postLiveTrade();
+
+                },
+                reject: () => {
+                    this.$toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+                }
+            });
+        },
         show_access() {
             const access = localStorage.getItem('access');
             return access;
@@ -321,66 +351,69 @@ export default {
 
         async postLiveTrade() {
             try {
+                const token = this.show_access(); // Get the access token
 
-                const token = this.show_access();  // Get the access token
+                // Prepare the data for the POST request
+                // const postData = {
+                //     "ticker": `${this.Ticker['symbol']}-USDT`.toUpperCase(),
+                //     "positionSide": this.type_pos,
+                //     "limitPrice": this.limit_price.toString(),
+                //     "slPrice": this.sl_price.toString(),
+                //     "tpPrice": this.tp_price.toString(),
+                //     "type": this.type.toUpperCase(),
+                //     "risk": this.risk.toString()
+                // };
 
-                // Prepare the data for the POST request based on your provided model
+
+
                 const postData = {
-                    "ticker": `${this.Ticker['symbol']}-USDT`.toUpperCase(),
-                    "positionSide": this.type_pos,
-                    "limitPrice": this.limit_price.toString(),
-                    "slPrice": this.sl_price.toString(),
-                    "tpPrice": this.tp_price.toString(),
-                    "type": this.type.toUpperCase(),
-                    "risk": this.risk.toString()
-                };
+                    "ticker": "SAND-USDT",
+                    "positionSide": "long",
+                    "limitPrice": "0.285516615535685",
+                    "slPrice": "0.282032795952060",
+                    "tpPrice": "0.294984407580596",
+                    "type": "LIMIT",
+                    "risk": "1"
+                }
 
-                // Make the POST request to the / api / v1 / Crypto / endpoint
+                // Make the POST request to the API
                 const response = await axios.post(`${import.meta.env.VITE_TRADE}`, postData, {
                     headers: {
-                        'Authorization': `Token  ${token}`,
+                        'Authorization': `Token ${token}`,
                         'Content-Type': 'application/json'
                     }
                 });
 
-                // Handle the successful response
-                this.successMessage = 'Live trade posted successfully!';
-                console.log('Response:', response.data);
-
-                this.alert = true;
-                this.isWarning = false;
-
-
-                setTimeout(() => {
-                    this.alert = false;
-
-                }, 10000);
-
-
-            } catch (error) {
-                // Handle any errors
-                this.errorMessage = 'Failed to post live trade: ';
-
-                // Check if the error has a response object with data
-                if (error.response && error.response.data) {
-                    this.errorMessage += error.response.data.error || 'Unknown error occurred';
-                } else {
-                    this.errorMessage += error.message;
+                // Handle successful response (status 201)
+                if (response.status == 201) {
+                    
+                    this.$toast.add({
+                        severity: 'success',
+                        summary: 'Success',
+                        detail: 'Live trade posted successfully!',
+                        life: 3000
+                    });
                 }
 
+            } catch (error) {
+                // Handle error responses (e.g., 400 status or network issues)
+                let errorMessage = 'Failed to post live trade: ';
 
-                this.alert = true;
-                this.isWarning = true;
+                if (error.response && error.response.data) {
+                    errorMessage += error.response.data.error || 'Unknown error occurred';
+                } else {
+                    errorMessage += error.message;
+                }
 
-                setTimeout(() => {
-                    this.alert = false;
+                this.$toast.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: errorMessage,
+                    life: 3000
+                });
 
-                }, 2000);
-
-                console.error(this.errorMessage);
-                console.error(error); // Log the complete error for debugging
+                console.error(errorMessage);
             }
-
         },
 
 

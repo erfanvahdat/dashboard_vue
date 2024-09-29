@@ -26,6 +26,8 @@ import Button from 'primevue/button';
 import tarea from 'primevue/textarea';
 import FileUpload from 'primevue/fileupload';
 import Toast from 'primevue/toast';
+import ToastService from 'primevue/toastservice';  
+
 import FloatLabel from 'primevue/floatlabel';
 import RadioButton from 'primevue/radiobutton';
 import ConfirmDialog from 'primevue/confirmdialog';
@@ -34,6 +36,10 @@ import ripple from 'primevue/ripple';
 import Badge from 'primevue/badge';
 import Slider from 'primevue/slider';
 import TreeSelect from 'primevue/treeselect';
+import ConfirmPopup from 'primevue/confirmpopup';
+
+
+
 
 
 
@@ -133,6 +139,8 @@ const globalComponents = {
   "TreeSelect":TreeSelect,
   "loading_spin":loading_spin,
   "Slider":Slider,
+  "ConfirmPopup":ConfirmPopup,
+  "Toast":Toast,
   
 };
 
@@ -150,6 +158,8 @@ app.use(PrimeVue, {
 });
 app.use(ConfirmationService);
 app.use(VueApexCharts);
+app.use(ToastService);    
+
 
 
 // Register global components
