@@ -3,22 +3,22 @@
     <!-- Sidebar -->
     <div class="flex w-[250px]" v-if="isLoggedIn">
       <Sidebar @showHome="showhome" @showAnalyze="showAnalyze" @showCharts="toggleChartVisibility"
-        @showRanking="showRanking" @showSettings="showSettings" @showHistory="showTradeHistory"
-        @live_pos="show_live_pos" @registration="showreg" @trade_journal="showjournal" />
+        @showRanking="showRanking" @showSettings="showSettings" @showHistory="showTradeHistory" @Trade="Trade"
+        @registration="showreg" @trade_journal="showjournal" />
     </div>
 
     <!-- Main-content -->
     <div class="flex flex-col w-full ml-fit">
       <Home v-if="home" />
-      <Trade_pl v-if="showCharts" />
+      <Charts v-if="showCharts" />
       <Live_pos v-if="live_position" />
       <Trade_history v-if="showTradeHistoryComponent" />
       <Analyzing v-if="showAnalyzeComponent" />
       <Setting v-if="showSettingsComponent" />
-      <Registration v-if="reg" @reg_success="goToLogin" />
+      <Registration v-if="reg" @go_login="goToLogin" @reg_success="goToHome" />
 
       <!-- Hide login form if in registration mode -->
-      <login @login_success="goToHome" @sign_up='signup' v-if="!isLoggedIn && !reg" />
+      <login @login_success="goToHome" @sign_up='signup' v-if="isLoggedIn == false && !reg" />
 
       <Trade_journal v-if="journal" />
     </div>
@@ -64,7 +64,6 @@ export default {
           localStorage.removeItem('refresh');
           this.isLoggedIn = false; // Set login state to false
 
-
         } else {
           this.isLoggedIn = true; // User is logged in
 
@@ -102,7 +101,7 @@ export default {
       this.resetComponents();
       this.showCharts = true;
     },
-    show_live_pos() {
+    Trade() {
       this.resetComponents();
       this.live_position = true;
     },
@@ -110,23 +109,18 @@ export default {
       this.resetComponents();
       this.reg = true;
     },
-    // Update this method to go directly to the home page after registration
-    goToLogin() {
-      this.resetComponents();
-      this.isLoggedIn = true; // Set login state to true
-      // this.home = true; // Directly go to the homepage
-    },
     signup() {
       this.resetComponents();
-      this.isLoggedIn = false; // Ensure login form is hidden
+      // this.isLoggedIn = false; // Ensure login form is hidden
       this.reg = true; // Show the registration form
     },
 
 
     goToLogin() {
       this.resetComponents();
-      this.isLoggedIn = true; // Ensure the login form shows again
-      // this.show_login = true; // Optionally display the login form
+      // this.isLoggedIn = false; // Ensure login form is hidden
+      // this.isLoggedIn = true; // Ensure the login form shows again
+      this.show_login = true; // Optionally display the login form
     },
     goToHome() {
       this.resetComponents();

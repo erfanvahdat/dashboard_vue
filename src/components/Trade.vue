@@ -12,7 +12,7 @@
 
                     <div class="card flex w-fit ml-2 mt-2">
                         <Select v-model="Ticker" :options="cryptoList" filter optionLabel="symbol"
-                            @change="updateChart('chart')" placeholder="Select a Crypto" class="w-full md:w-56">
+                            @change="updateChart('chart')" placeholder="Select a Crypto" class="w-full md:w-72">
 
                             <!-- Template for selected value -->
                             <template #value="slotProps">
@@ -30,7 +30,8 @@
 
                     <!-- Toggle Type -->
                     <div class="flex  ml-3 mt-3 h-[60px]  justify-center ">
-                        <button @click="toggleValue" class="btn rounded-1 btn-sm w-36 my-2 hover:border-gray-600 "
+                        <button @click="toggleValue"
+                            class="btn rounded-1 btn-sm w-36 my-2 hover:border-gray-200 hover:bg-gray-800 "
                             type="button" :class="[type_toggle]">
                             <span class='text-sm font-bold font-serif'>{{ isLong ? 'LONG' : 'SHORT' }}</span>
                         </button>
@@ -70,31 +71,22 @@
                     </div>
 
                     <!-- Risk Range -->
-                    <div class=" flex w-fit h-fit mt-3 justify-center">
+
+                    <span class="flex font-serif text-xm text-[10px] mb-0 underline decoration-dashed	mt-2  ml-14">
+                        Risk: </span>
+                    <div class=" flex w-fit h-fit mt-1 justify-center">
                         <div class="flex flex-col w-52 ml-12 ">
                             <InputText v-model.number="risk" class="w-full mb-3 justify-center " />
                             <Slider v-model="risk" class="flex w-full justify-center" :min=0.2 :max=2 :step=0.1 />
                         </div>
                     </div>
 
-
-                    <!-- Submit Button -->
-                    <!-- <div class="flex my-3  justify-center">
-                        <order_button_sub :buttonText="'Sumbit'" @click="submit" />
-
-                        <div v-if="alert" class="flex">
-
-                            <Alert :isWarning='isWarning' />
-
-                        </div>
-
-                    </div> -->
-
-            <!-- Submit Order -->
+                    <!-- Submit Order -->
                     <Toast />
                     <ConfirmPopup></ConfirmPopup>
                     <div class="flex flex-wrap gap-2 justify-center mt-3">
-                        <Button @click="confirm1($event)" label="Save" outlined></Button>
+                        <Button @click="confirm1($event)" label="Save" outlined
+                            class='w-[200px] hover:bg-blue-500'></Button>
                     </div>
 
                 </div>
@@ -204,9 +196,7 @@
 </template>
 
 <script>
-
 import axios from 'axios';
-
 export default {
 
 
@@ -339,7 +329,10 @@ export default {
 
             } catch (error) {
 
+                this.$toast.add({ severity: 'warn', summary: 'Rejected', detail: 'Crypto_list API got error!', life: 3000 });
+
                 console.error('Error fetching crypto list:', error);
+
             }
         },
 
@@ -354,27 +347,35 @@ export default {
                 const token = this.show_access(); // Get the access token
 
                 // Prepare the data for the POST request
-                // const postData = {
-                //     "ticker": `${this.Ticker['symbol']}-USDT`.toUpperCase(),
-                //     "positionSide": this.type_pos,
-                //     "limitPrice": this.limit_price.toString(),
-                //     "slPrice": this.sl_price.toString(),
-                //     "tpPrice": this.tp_price.toString(),
-                //     "type": this.type.toUpperCase(),
-                //     "risk": this.risk.toString()
-                // };
-
-
-
                 const postData = {
-                    "ticker": "SAND-USDT",
-                    "positionSide": "long",
-                    "limitPrice": "0.285516615535685",
-                    "slPrice": "0.282032795952060",
-                    "tpPrice": "0.294984407580596",
-                    "type": "LIMIT",
-                    "risk": "1"
-                }
+                    "ticker": `${this.Ticker['symbol']}-USDT`.toUpperCase(),
+                    "positionSide": this.type_pos.EtoLowerCase(),
+                    "limitPrice": this.limit_price.toString(),
+                    "slPrice": this.sl_price.toString(),
+                    "tpPrice": this.tp_price.toString(),
+                    "type": this.type.toUpperCase(),
+                    "risk": this.risk.toString(),
+                };
+
+                // console.log("Ticker:", `${this.Ticker['symbol']}-USDT`.toUpperCase());
+                // console.log("Position Side:", this.type_pos);
+                // console.log("Limit Price:", this.limit_price.toString());
+                // console.log("Stop Loss Price (SL):", this.sl_price.toString());
+                // console.log("Take Profit Price (TP):", this.tp_price.toString());
+                // console.log("Order Type:", this.type.toUpperCase());
+                // console.log("Risk:", this.risk.toString());
+
+
+
+                // const postData = {
+                //     "ticker": "SAND-USDT",
+                //     "positionSide": "long",
+                //     "limitPrice": "0.285516615535685",
+                //     "slPrice": "0.282032795952060",
+                //     "tpPrice": "0.294984407580596",
+                //     "type": "LIMIT",
+                //     "risk": "1"
+                // }
 
                 // Make the POST request to the API
                 const response = await axios.post(`${import.meta.env.VITE_TRADE}`, postData, {
@@ -386,13 +387,13 @@ export default {
 
                 // Handle successful response (status 201)
                 if (response.status == 201) {
-                    
+
                     this.$toast.add({
                         severity: 'success',
                         summary: 'Success',
                         detail: 'Live trade posted successfully!',
                         life: 3000
-                    });
+                    })
                 }
 
             } catch (error) {
@@ -451,8 +452,8 @@ export default {
                 this.type_pos = 'short';
             }
 
-            console.log(this.isLong)
-            console.log(this.isLong ? 'LONG' : 'SHORT');
+            // console.log(this.isLong)
+            // console.log(this.isLong ? 'LONG' : 'SHORT');
         },
 
 
@@ -482,6 +483,7 @@ export default {
     },
 
     computed: {
+
         type_toggle() {
             return this.isLong ? 'bg-green-500' : 'bg-red-500';
         },

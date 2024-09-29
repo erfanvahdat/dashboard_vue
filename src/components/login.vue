@@ -1,26 +1,38 @@
 <template>
   <main class="mx-auto flex min-h-screen w-full items-center justify-center bg-gray-900 text-white">
     <section class="flex w-[30rem] flex-col space-y-10">
-      <div class="flex flex-row justify-between  space-x-5">
-        <span class=" w-full text-center justify-center text-4xl font-medium  ">Login</span>
+      <div class="flex flex-row justify-between space-x-5">
+        <span class="w-full text-center justify-center text-4xl font-medium">Login</span>
         <!-- <login_icon @click="Signup"></login_icon> -->
       </div>
 
       <!-- Username input -->
       <div class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500">
-        <input v-model="user" type="text" placeholder="Username"
-          class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none" />
+        <input
+          v-model="user"
+          type="text"
+          placeholder="Username"
+          @keyup.enter="login" 
+          class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
+        />
       </div>
 
       <!-- Password input -->
       <div class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500">
-        <input v-model="password" type="password" placeholder="Password"
-          class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none" />
+        <input
+          v-model="password"
+          type="password"
+          placeholder="Password"
+          @keyup.enter="login" 
+          class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
+        />
       </div>
 
       <!-- Login button -->
-      <button @click="login"
-        class="transform rounded-sm bg-indigo-600 py-2 font-bold duration-300 hover:bg-indigo-400 rounded-2">
+      <button
+        @click="login"
+        class="transform rounded-sm bg-indigo-600 py-2 font-bold duration-300 hover:bg-indigo-400 rounded-2"
+      >
         Login
       </button>
 
@@ -33,9 +45,10 @@
       <span v-if="response_error" class="text-center text-red-500">
         Something went wrong. Please try again.
       </span>
+
       <p class="flex justify-center space-x-1">
         <!-- <span class="text-slate-700"> Have an account? </span> -->
-        <button class="text-blue-500 hover:underline " @click="Signup">Sign Up</button>
+        <button class="text-blue-500 hover:underline" @click="Signup">Sign Up</button>
       </p>
     </section>
   </main>
@@ -62,20 +75,17 @@ export default {
       // Show spinner while the login request is in progress
       this.spin_loader = true;
       try {
-        const response = await axios.post(
-          `${import.meta.env.VITE_LOGIN}`,
-          {
-            username: this.user,
-            password: this.password,
-          }
-        );
+        const response = await axios.post(`${import.meta.env.VITE_LOGIN}`, {
+          username: this.user,
+          password: this.password,
+        });
 
         // Handle login success
         this.responseMessage = "Login successful: " + response.data.username;
         localStorage.setItem("access", response.data.access);
         localStorage.setItem("refresh", response.data.refresh);
 
-        console.log(response.data.access)
+        console.log(response.data.access);
 
         // Hide the loading spinner after 2 seconds
         setTimeout(() => {

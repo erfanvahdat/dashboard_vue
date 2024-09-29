@@ -40,8 +40,8 @@ export default {
                     label: 'Main',
                     items: [
                         { label: 'Home', icon: 'pi pi-home', class_name: 'HOME' },
-                        { label: 'Charts', icon: 'pi pi-table', class_name: 'Chart' },
-                        { label: 'Live_pos', icon: 'pi pi-chart-line', class_name: 'live_pos' },
+                        { label: 'Charts', icon: 'pi pi-table', class_name: 'Charts' },
+                        { label: 'Trade', icon: 'pi pi-chart-line', class_name: 'Trade' },
                     ]
                 },
                 {
@@ -57,7 +57,7 @@ export default {
                     items: [
                         { label: 'Analyzing', icon: 'pi pi-chart-line', shortcut: '', class_name: 'ANALYZE' },
                         { label: 'Registration', icon: 'pi pi-user-plus', shortcut: '', class_name: 'REG' },
-                        {label: 'trade_journal', icon: 'pi pi-book',  class_name: 'journal'}
+                        { label: 'trade_journal', icon: 'pi pi-book', class_name: 'journal' }
 
                     ]
 
@@ -101,11 +101,11 @@ export default {
         HOME() {
             this.$emit('showHome');
         },
-        Chart() {
+        Charts() {
             this.$emit('showCharts');
         },
-        live_pos() {
-            this.$emit('live_pos')
+        Trade() {
+            this.$emit('Trade')
         },
         ANALYZE() {
             this.$emit('showAnalyze');

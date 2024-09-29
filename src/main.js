@@ -32,7 +32,7 @@ import FloatLabel from 'primevue/floatlabel';
 import RadioButton from 'primevue/radiobutton';
 import ConfirmDialog from 'primevue/confirmdialog';
 import MultiSelect from 'primevue/multiselect';
-import ripple from 'primevue/ripple';
+// import ripple from 'primevue/ripple';
 import Badge from 'primevue/badge';
 import Slider from 'primevue/slider';
 import TreeSelect from 'primevue/treeselect';
@@ -48,10 +48,9 @@ import Sidebar from './components/Sidebar.vue';
 import Header from './components/header.vue';
 import Status from './components/Status.vue';
 import Home from './components/Home.vue';
-import Trade_PL from './components/Trade_platform.vue';
 import Main from './components/Main_content.vue';
 import Rank from './components/Rank.vue';
-
+import Charts from './components/Charts.vue';
 import Trade_history from './components/Trade_history.vue';
 import Analyzing from './components/Analyzing.vue';
 import Setting from './components/setting.vue';
@@ -96,15 +95,15 @@ import { Bar, Line } from 'vue-chartjs';
 
 // Register components globally
 const globalComponents = {
-  'apexchart': VueApexCharts,
+  // 'apexchart': VueApexCharts,
   'Line': Line,
   'Head': Header,
   'Sidebar': Sidebar,
   'Status': Status,
   'Home': Home,
-  'Trade_pl': Trade_PL,
   'Main': Main,
   'Rank': Rank,
+  "Charts":Charts,
   'Registration': reg,
   'Trade_history': Trade_history,
   'Analyzing': Analyzing,
@@ -129,7 +128,7 @@ const globalComponents = {
   'MultiSelect': MultiSelect,
   'FloatLabel': FloatLabel,
   'RadioButton': RadioButton,
-  'ripple': ripple,
+  // 'ripple': ripple,
   // 'ConfirmDialog': ConfirmDialoEg,
   'Alert': Alert,
   "login": login,

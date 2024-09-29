@@ -170,13 +170,14 @@ export default {
       order_pulse: false, // Contring the pulse container display
       pending_pulse: false, // Contring the pulse container display
 
-      balance: null,
-      equity: null,
-      unProfit: null,
-      reProfit: null,
-      avlMargin: null,
-      usedMargin: null,
-      dailyProfitPercent: null,
+      balance: 0.00,
+      equity: 0.00,
+      unProfit: 0.00,
+      reProfit: 0.00,
+      avlMargin: 0.00,
+      usedMargin: 0.00,
+      dailyProfit: 0.00,
+      dailyProfitPercent: 0.00,
       cryptosBalance: [], // Since it's an array
       responseMessage: '',
       responseStatus: '',

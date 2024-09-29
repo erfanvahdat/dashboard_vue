@@ -1,22 +1,25 @@
 <template>
   <div class="flex flex-col h-full overflow-hidden">
     <!-- Setting section -->
-    <div class="rounded-md bg-blue-500 m-2 h-[70px]">
+    <div class="rounded-md bg-blue-500 mx-2 mt-1 h-[70px]">
       <span class="font-serif text-xs ml-2 rounded w-fit text-gray-700">chart_setting</span>
 
+      <!-- Header=> Boxes  -->
       <div class="flex flex-row space-x-2">
         <div>
           <Select :options="box_number" v-model="box_select" @change="changeChartCount(box_select)" placeholder="Boxes"
             class="w-[115px] h-[35px] m-2"></Select>
         </div>
 
+        <!-- header=> Timeframe -->
         <div>
           <Select :options="timeframe" v-model="main_select_timeframe" @change="changeChartCount(box_select)"
-            placeholder="Boxes" class="w-[115px] h-[35px] m-2"></Select>
+            placeholder="Timeframe" class="w-[115px] h-[35px] m-2"></Select>
         </div>
 
+        <!-- Header=> Theme  -->
         <div>
-          <label class="relative inline-flex cursor-pointer mt-[12px]">
+          <label class="relative inline-flex cursor-pointer mt-[18px]">
             <input id="switch-3" type="checkbox" class="peer sr-only" v-model="isLightTheme" @change="toggleTheme" />
             <label for="switch-3" class="hidden"></label>
             <div
@@ -29,7 +32,7 @@
     </div>
 
     <!-- Chart section -->
-    <div :class="gridClass" class="grid gap-1 ml-0 mr-2 h-full">
+    <div :class="gridClass" class="grid gap-1 ml-1 mr-1 h-full">
       <div v-for="(symbol, index) in all_symbol.slice(0, chartCount)" :key="index"
         class="flex flex-col items-center m-1 h-full">
         <!-- Header section with dynamic ticker label -->
@@ -41,14 +44,26 @@
           <!-- Primevue Timeframe -->
           <div class="text-sm">
             <SelectButton v-model="select_timeframe" :options="timeframe" aria-labelledby="basic" size="small"
-              class="w-[170px] h-[40px] m-2 text-sm p-1 text-sm" @change="changeTimeframe(index, select_timeframe)" />
+              class="w-[170px] h-[40px] m-2 text-sm p-1 " @change="changeTimeframe(index, select_timeframe)" />
           </div>
 
+
           <!-- Select Ticker -->
-          <div class="card flex mr-5">
-            <Select v-model="selectedTickers[index]" :options="availableSymbols" optionLabel="label"
-              placeholder="Select Ticker" class="w-full h-[34px]"
-              @change="updateChart(index, selectedTickers[index].value, selectedTickers[index].label)" />
+          <div class="card flex w-fit ml-2  mr-5 ">
+            <Select v-model="selectedTickers[index]" :options="cryptoList" filter optionLabel="symbol"
+              @change="updateChart(index, selectedTickers[index].symbol, selectedTickers[index].ticker)"
+              placeholder="Select a Crypto" class="w-full md:w-30  h-[30px]   space-y-0">
+
+              <!-- Template for selected value -->
+              <template #value="slotProps">
+                <div v-if="slotProps.value" class="flex ">
+                  <div>{{ slotProps.value.symbol }}</div> <!-- Display ticker -->
+                </div>
+                <span v-else>
+                  {{ slotProps.placeholder }}
+                </span>
+              </template>
+            </Select>
           </div>
         </div>
 
@@ -60,6 +75,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   data() {
     return {
@@ -73,7 +89,8 @@ export default {
       select_timeframe: null,
       box_select: null,
 
-      selectedTickers: [], // Array to store selected tickers for each chart
+      selectedTickers: Array(12).fill(null), // Array to hold selected ticker for each chart
+      cryptoList: [],
 
       all_symbol: [
         "BINANCE:GALAUSDT.P", "BINANCE:FILUSDT.P", "BINANCE:DOTUSDT.P",
@@ -87,23 +104,6 @@ export default {
       ],
       box_number: [1, 3, 6, 9, 12],
       timeframe: ['1', '5'],
-
-      availableSymbols: [
-        { label: 'Gala', value: 'BINANCE:GALAUSDT.P' },
-        { label: 'DOT', value: 'BINANCE:DOTUSDT.P' },
-        { label: 'FIL', value: 'BINANCE:FILUSDT.P' },
-        { label: 'BTC', value: 'BINANCE:BTCUSD.P' },
-        { label: 'WIF', value: 'BINANCE:WIFUSDT.P' },
-        { label: 'LINK', value: 'BINANCE:LINKUSDT.P' },
-        { label: 'DOGE', value: 'BINANCE:DOGEUSDT.P' },
-        { label: 'SUI', value: 'BINANCE:SUIUSDT.P' },
-        { label: 'FTM', value: 'BINANCE:FTMUSDT.P' },
-        { label: 'EUR_USD', value: 'OANDA:EURUSD' },
-        { label: 'GBP_USD', value: 'OANDA:GBPUSD' },
-        { label: 'AUD_USD', value: 'OANDA:AUDUSD' },
-        { label: 'USD_JPY', value: 'OANDA:USDJPY' },
-        { label: 'USD_CAD', value: 'OANDA:USDCAD' }
-      ],
       timeframes: ['1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'], // Default to 1 minute for each chart
     };
   },
@@ -121,6 +121,20 @@ export default {
     }
   },
   methods: {
+    async get_ticker() {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_CRYPTO_LIST}`);
+        this.cryptoList = response.data.data.map(crypto => ({
+          symbol: crypto.symbol,
+          ticker: crypto.ticker,
+        }));
+        console.log("Getting data is complete...");
+      } catch (error) {
+        this.$toast.add({ severity: 'warn', summary: 'Rejected', detail: 'Crypto_list API error!', life: 3000 });
+        console.error('Error fetching crypto list:', error);
+      }
+    },
+
     toggleTheme() {
       this.chart_theme = this.isLightTheme ? "Light" : "Dark";
       this.all_symbol.forEach((symbol, index) => {
@@ -165,19 +179,21 @@ export default {
     },
 
     updateChart(index, newSymbol, newLabel) {
-      this.all_symbol[index] = newSymbol;
+      // Update the specific chart's symbol and label
+      this.all_symbol[index] = `BINANCE:${newSymbol}USDT.P`;
       this.all_label[index] = newLabel;
-      this.createChart(`chart-all-${index}`, newSymbol, this.timeframes[index], this.chart_theme);
+
+      this.createChart(`chart-all-${index}`, this.all_symbol[index], this.timeframes[index], this.chart_theme);
     },
 
     initCharts() {
-
       this.all_symbol.slice(0, this.chartCount).forEach((symbol, index) => {
         this.createChart(`chart-all-${index}`, symbol, this.main_select_timeframe, this.chart_theme);
       });
     }
   },
   mounted() {
+    this.get_ticker();
     this.initCharts();
   }
 };

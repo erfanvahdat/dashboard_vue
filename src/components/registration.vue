@@ -14,13 +14,13 @@
 
             <!-- Email or Username input -->
             <div class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500">
-                <input v-model="user" type="text" placeholder="Username"
+                <input v-model="user" type="text" placeholder="Username" @keyup.enter="register"
                     class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none " />
             </div>
 
             <!-- Password input -->
             <div class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500">
-                <input v-model="password" type="password" placeholder="Password"
+                <input v-model="password" type="password" placeholder="Password" @keyup.enter="register"
                     class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none" />
             </div>
 
@@ -87,7 +87,7 @@ export default {
     },
     methods: {
         login_direction() {
-            this.$emit('reg_success');
+            this.$emit('go_login');
         },
         async register() {
             // Show the loading spinner while making the request
@@ -112,34 +112,34 @@ export default {
                     this.$emit('reg_success');
 
                 }, 500);
-                
+
 
             } catch (error) {
-        // Error: registration failed
-        if (error.response && error.response.status === 400) {
-          // Extract error details
-          const errorMessage = error.response.data.error
-            ? error.response.data.error[0]
-            : 'Unknown error';
+                // Error: registration failed
+                if (error.response && error.response.status === 400) {
+                    // Extract error details
+                    const errorMessage = error.response.data.error
+                        ? error.response.data.error[0]
+                        : 'Unknown error';
 
-          this.responseStatus = '400';  // Set status to 400 (Error)
-          this.responseMessage = `Registration failed: ${errorMessage}`;
-        } else {
-          this.responseMessage = 'An error occurred. Please try again.';
+                    this.responseStatus = '400';  // Set status to 400 (Error)
+                    this.responseMessage = `Registration failed: ${errorMessage}`;
+                } else {
+                    this.responseMessage = 'An error occurred. Please try again.';
+                }
+
+                // Stop the spinner and show error after a short delay
+                setTimeout(() => {
+                    this.spin_loader = false;  // Stop the loading spinner
+                    this.displayStatus = true;  // Show the error message
+
+                    // Hide the message after 2 seconds
+                    setTimeout(() => {
+                        this.displayStatus = false;
+                    }, 3000);
+                }, 500);
+            }
         }
-
-        // Stop the spinner and show error after a short delay
-        setTimeout(() => {
-          this.spin_loader = false;  // Stop the loading spinner
-          this.displayStatus = true;  // Show the error message
-
-          // Hide the message after 2 seconds
-          setTimeout(() => {
-            this.displayStatus = false;
-          }, 3000);
-        }, 500);
-      }
     }
-  }
 };
 </script>
