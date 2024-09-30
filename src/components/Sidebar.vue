@@ -48,8 +48,8 @@ export default {
                     label: 'Other',
                     items: [
                         { label: 'Settings', icon: 'pi pi-cog', class_name: 'SETTING' },
-                        { label: 'Messages', icon: 'pi pi-inbox', badge: 2 },
-                        { label: 'Logout', icon: 'pi pi-sign-out', shortcut: 'Shift+Q' }
+                        // { label: 'Messages', icon: 'pi pi-inbox', badge: 2 },
+                        // { label: 'Logout', icon: 'pi pi-sign-out', shortcut: 'Shift+Q' }
                     ]
                 },
                 {

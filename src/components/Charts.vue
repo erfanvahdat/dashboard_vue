@@ -161,21 +161,49 @@ export default {
 
     createChart(containerId, symbol, timeframe = "1", theme = "Dark") {
       new TradingView.widget({
-        autosize: true,
-        symbol: symbol,
-        interval: timeframe,
-        timezone: "Africa/Tehran",
-        theme: theme,
-        style: "1",
-        locale: "en",
-        toolbar_bg: "#f1f3f6",
-        enable_publishing: false,
-        hide_top_toolbar: true,
-        hide_side_toolbar: false,
-        allow_symbol_change: false,
-        hideideas: true,
-        container_id: containerId,
-      });
+                "autosize": true,
+                "symbol": symbol,
+                "interval": timeframe,
+                "toolbar_bg": "#E9DCC9",
+                "timezone": "Asia/Tehran",
+                "theme": theme,
+                "style": "1",
+                "locale": "en",
+                "gridColor": "rgba(0, 0, 0, 0.06)",
+                "withdateranges": true,
+                // "range": "1D",
+                "toolbar_bg": "#f1f3f6",
+                "enable_publishing": false,
+                "hide_top_toolbar": true,
+                "hide_side_toolbar": false,
+                "allow_symbol_change": true,
+                "hideideas": false,
+                "save_image": false,
+
+                // "watchlist": [
+                //     "BINGX:SANDUSDT.P",
+                //     "BINGX:GALAUSDT.P",
+                //     "BINGX:FILUSDT.P",
+                //     "BINGX:LINKUSDT.P",
+                //     "BINGX:DOTUSDT.P",
+                //     "BINGX:BTCUSDT.P",
+                //     "BINGX:POLUSDT.P"
+                // ],
+                "calendar": true,
+
+                "studies": ['IchimokuCloud@tv-basicstudies',],
+                "container_id": containerId,
+
+                studies_overrides: {
+                    "paneProperties.background": "#ffffff",
+                    "allow_symbol_change": "true",
+                    "ichimoku cloud.base line periods": 30,
+                    "ichimoku cloud.conversion line periods": 20,
+                    "ichimoku cloud.leading span a line.color": "#FFFFF0",
+                    "ichimoku cloud.lagging span.display": 0,
+                },
+
+            });
     },
 
     updateChart(index, newSymbol, newLabel) {
