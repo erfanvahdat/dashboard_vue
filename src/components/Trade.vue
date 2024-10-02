@@ -45,10 +45,11 @@
                         <span class="text-sm font-bold font-mono text-[10px] mb-0 underline decoration-dashed "> Limit:
                         </span>
                         <div>
-                            <input_sub :value="'limit_price'" v-model="limit_price"
+                            <input_sub :value="limit_price" v-model="limit_price" placeholder="Enter limit price"
                                 @input="limit_price = $event.target.value" accentColor="#FFFFFF"
                                 @keyup.enter="confirm1($event)">
                             </input_sub>
+
                         </div>
 
                     </div>
@@ -58,15 +59,17 @@
                         <div>
                             <span class="text-sm font-bold font-mono text-[10px] mb-0 underline decoration-dashed"> SL:
                             </span>
-                            <input_sub :value="'sl_price'" v-model="sl_price" @input="sl_price = $event.target.value"
-                                accentColor="#e53621 " @keyup.enter="confirm1($event)">
+                            <input_sub :value="sl_price" v-model="sl_price" placeholder="Enter sl_price"
+                                @input="sl_price = $event.target.value" accentColor="#FFFFFF"
+                                @keyup.enter="confirm1($event)">
                             </input_sub>
                         </div>
                         <div>
                             <span class="text-sm font-bold font-mono text-[10px] mb-0 underline decoration-dashed	 ">
                                 TP: </span>
-                            <input_sub :value="'tp_price'" v-model="tp_price" @input="tp_price = $event.target.value"
-                                accentColor="#72ee17" @keyup.enter="confirm1($event)">
+                            <input_sub :value="tp_price" v-model="tp_price" placeholder="Enter tp_price"
+                                @input="tp_price = $event.target.value" accentColor="#FFFFFF"
+                                @keyup.enter="confirm1($event)">
                             </input_sub>
 
                         </div>
@@ -91,7 +94,7 @@
                     <div class="flex flex-wrap gap-2 justify-center mt-3">
                         <Toast />
 
-                        <Button label="Submit" severity="info" @click="postLiveTrade" />
+                        <Button label="Submit" severity="info" @click="OpenTrade" />
 
                         <!-- <Button @click="confirm1($event)" label="Save" outlined
                             class='w-[200px] hover:bg-blue-500'></Button> -->
@@ -108,10 +111,13 @@
             <div class="flex flex-col    h-[calc(100vh-150px    )]  w-[960px]  ml-2   ">
 
                 <div class="card">
-                    <DataTable :value="trades" tableStyle="min-width: 50rem">
+                    <DataTable :value="Trades" tableStyle="min-width: 50rem">
+
                         <Column field="symbol" header="Ticker"> <template #body="slotProps">
                                 <span style="text-decoration: underline; text-decoration-style: dashed;">
                                     {{ slotProps.data.symbol }}
+                                    {{ console.log(slotProps.data.symbol) }}
+
                                 </span>
                             </template></Column>
                         <Column field="side" header="Position Side">
@@ -133,22 +139,6 @@
                             </template>
                         </Column>
 
-                        <!-- <Column field="limitPrice" header="Limit Price">
-                            <template #body="slotProps">
-                                {{ formatNumber(slotProps.data.limitPrice) }}
-                            </template>
-
-                        </Column>
-                        <Column field="slPrice" header="Stop Loss Price">
-                            <template #body="slotProps">
-                                {{ formatNumber(slotProps.data.slPrice) }}
-                            </template>
-                        </Column>
-                        <Column field="tpPrice" header="Take Profit Price">
-                            <template #body="slotProps">
-                                {{ formatNumber(slotProps.data.tpPrice) }}
-                            </template>
-                        </Column> -->
                         <Column field="type" header="Status">
                             <template #body="slotProps">
 
@@ -164,10 +154,6 @@
                                 <Button label="Submit"
                                     @click='RemoveTrade(slotProps.data.orderId, slotProps.data.symbol)'></Button>
                             </template>
-
-
-
-
 
 
                         </Column>
@@ -215,6 +201,8 @@
                             <td>{{ trade.type }}</td>
                             <td>{{ formatNumber(trade.risk) }}</td>
 
+
+
                         </tr>
                     </tbody>
                 </table>
@@ -226,7 +214,7 @@
                 <div>
 
 
-                    <!-- <p>Ticker : {{ this.Ticker }}</p>
+                    <p>Ticker : {{ this.Ticker }}</p>
                     <p>limit : {{ this.limit_price }}</p>
                     <p> type_pos : {{ this.type_pos }}</p>
                     <p>TP: {{ tp_price }}</p>
@@ -234,12 +222,15 @@
                     <p>type: {{ type }}</p>
                     <p>Selected Interval: {{ risk }}</p>
 
-                    <Toast position="bottom-right" group="br" />
+
+
+
+                    <!-- <Toast position="bottom-right" group="br" />
                     <Button label="click here" @click="showBottomRight" /> -->
 
 
 
-                    {{ this.trades }}
+                    <!-- {{ this.trades }} -->
                     <div class="border-1 border-yellow-500 mt-2">
                         <!-- {{ this.trades[0][0] }} -->
 
@@ -250,17 +241,20 @@
                         </li> -->
 
                         <!-- .liveTradesCrypto -->
-                        <li v-for="(trade, index) in travis  " :key="index">
+                        <!-- <li v-for="(trade, index) in trades  " :key="index">
                             <p>Type: {{ trade.type }}</p>
                             <p>Symbol: {{ trade.symbol }}</p>
                             <p>Position Side: {{ trade.positionSide }}</p>
                             <p>Side: {{ trade.side }}</p>
                             <p>Order ID: {{ trade.orderId }}</p>
                             <p>Time: {{ trade.time }}</p>
-                        </li>
+                        </li> -->
+
+                        <div>{{ Merging_data() }}</div>
+                        <!-- <div>sl_id is here: {{ this.Trades["DOT-USDT"][''] }}</div> -->
+
 
                     </div>
-
 
                     <a class="btn btn-primary btn-sm mt-10 " role="button" @click='Remove_cash()'>Remove Access
                         token</a>
@@ -311,6 +305,8 @@ export default {
             alert: false,
 
 
+            Trades: [],
+
             last_col: [
                 { field: 'Delete', header: 'Submit' },
 
@@ -350,12 +346,6 @@ export default {
 
     methods: {
 
-
-        say_hello() {
-            console.log(
-                'helo'
-            )
-        },
         confirm1(event) {
             this.$confirm.require({
                 target: event.currentTarget,
@@ -370,7 +360,7 @@ export default {
                     label: 'Save'
                 },
                 accept: () => {
-                    this.postLiveTrade();
+                    this.OpenTrade();
 
                 },
                 reject: () => {
@@ -409,13 +399,13 @@ export default {
             localStorage.removeItem('refresh');
         },
 
-        async postLiveTrade() {
+        async OpenTrade() {
             try {
                 const token = this.show_access(); // Get the access token
 
                 // Prepare the data for the POST request
                 const postData = {
-                    "ticker": `${this.Ticker['symbol']}-USDT`.toUpperCase(),
+                    "symbol": `${this.Ticker['symbol']}-USDT`.toUpperCase(),
                     "positionSide": this.type_pos.toLowerCase(),
                     "limitPrice": this.limit_price.toString(),
                     "slPrice": this.sl_price.toString(),
@@ -424,8 +414,9 @@ export default {
                     "risk": this.risk.toString(),
                 };
 
+
                 // Make the POST request to the API
-                const response = await axios.post(`${import.meta.env.VITE_TRADE}`, postData, {
+                const response = await axios.post(`${import.meta.env.VITE_OPEN_TRADE}`, postData, {
                     headers: {
                         'Authorization': `Token ${token}`,
                         'Content-Type': 'application/json'
@@ -467,8 +458,8 @@ export default {
         },
         async Live_orders() {
             try {
-                // const token = this.show_access(); // Get the access token
-                const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI3NzI0MjgyLCJpYXQiOjE3Mjc3MDYyODIsImp0aSI6ImYwMTFlZmIxOTM5MTQ3MWFiZDllMTlmYjgwNzVjOWUzIiwidXNlcl9pZCI6NH0.zydXK9p-xtY9LGezs3nrsGYtppQji9LHy2S6PlJmotc"
+                const token = this.show_access(); // Get the access token
+
                 // Make the GET request to fetch the trade data
                 const response = await axios.get(`${import.meta.env.VITE_TRADE_LIST}`, {
                     headers: {
@@ -479,39 +470,39 @@ export default {
 
                 // Store the fetched trades data into the trades array
                 this.trades = response.data;
-                this.travis = response.data;
+
 
 
             } catch (error) {
+
                 let errorMessage = 'Failed to fetch trades: ';
+
+                this.Trades = null;
 
                 if (error.response && error.response.data) {
                     errorMessage += error.response.data.error || 'Unknown error occurred';
                 } else {
                     errorMessage += error.message;
                 }
-
-                // this.$toast.add({
-                //     severity: 'error',
-                //     summary: 'Error',
-                //     detail: errorMessage,
-                //     life: 3000
-                // });
-
                 console.error(errorMessage);
             }
         },
         async RemoveTrade(orderid, symbol) {
             try {
+
                 const token = this.show_access(); // Get the access token
 
 
                 const postData = {
-                    "orderid": orderid,
-                    'symbol': symbol,
-
-
+                    "orderid": orderid.toString(),
+                    'symbol': symbol.toString(),
                 };
+
+                // const postData = {
+                //     "orderId": "1841114423704424400",
+                //     "symbol": "DOT-USDT"
+                // };
+
                 // Make the GET request to fetch the trade data
                 const response = await axios.post(`${import.meta.env.VITE_DELETE_TRADE}`, postData, {
                     headers: {
@@ -521,20 +512,22 @@ export default {
                 });
 
 
-                // Handle successful response (status 201)
-                if (response.status == 201) {
 
-                    this.$toast.add({
-                        severity: 'success',
-                        summary: 'Success',
-                        detail: `Trade order is cancel with Ticker: ${symbol}!`,
-                        life: 3000
-                    })
-                }
+                // Handle successful response (status 201)
+                // if (response.status == 200) {
+
+                this.$toast.add({
+                    severity: 'success',
+                    summary: 'Success',
+                    detail: `Trade order is cancel with Ticker: ${symbol}!`,
+                    life: 3000
+                })
+                // }
 
             } catch (error) {
                 let errorMessage = 'Failed to fetch trades: ';
 
+                console.log(error.response.status)
                 if (error.response && error.response.data) {
                     errorMessage += error.response.data.error || 'Unknown error occurred';
                 } else {
@@ -607,7 +600,7 @@ export default {
 
 
         submit() {
-            this.postLiveTrade()
+            this.OpenTrade()
         },
         formatNumber(value) {
             if (!isNaN(value)) {
@@ -661,20 +654,60 @@ export default {
             return type;
         },
 
+
+        Merging_data() {
+
+
+            const data = this.trades; // Assume this.trades contains the input data
+
+            // An object to consolidate orders by symbol
+            const consolidatedTrades = {};
+
+            data.forEach(item => {
+                const symbol = item.symbol;
+
+                // If the symbol doesn't exist, initialize it in consolidatedTrades
+                if (!consolidatedTrades[symbol]) {
+                    consolidatedTrades[symbol] = {
+                        symbol: symbol,
+                        side: item.side,
+                        order_id_sl: null,
+                        order_id_tp: null,
+                        type: item.type
+                    };
+                }
+
+                // Assign STOP_MARKET or TAKE_PROFIT_MARKET based on the order type
+                if (item.type === "STOP_MARKET") {
+                    consolidatedTrades[symbol]["order_id_sl"] = item.orderId.toString();
+                }
+                if (item.type === "TAKE_PROFIT_MARKET") {
+                    consolidatedTrades[symbol]["order_id_tp"] = item.orderId.toString();
+                }
+
+                // Store other necessary details like side, symbol, etc.
+                consolidatedTrades[symbol]["side"] = item.side;
+                consolidatedTrades[symbol]["time"] = item.time;
+            });
+
+            // Convert consolidatedTrades from an object back to an array
+            this.Trades = Object.values(consolidatedTrades);
+            return this.Trades;
+        }
+
     },
 
     mounted() {
+
+        this.Merging_data()
         this.get_ticker() // get the ticker_list
         this.Live_orders() // get current live position
 
         // Set an interval to call Live_orders every X milliseconds (e.g., every 5 seconds)
-        this.liveOrdersInterval = setInterval(() => {
-            this.Live_orders();
-        }, 5000); // 5000 ms = 5 seconds
+        // this.liveOrdersInterval = setInterval(() => {
+        //     this.Live_orders();
+        // }, 5000); // 5000 ms = 5 seconds
 
-        if (this.peopleData.length > 0) {
-            this.objectKeys = Object.keys(this.peopleData[0]);
-        }
         // Load a default ticker when the component is mounted
         const default_ticker = "BINGX:BTCUSDT.P" // Set default ticker
         this.createChart("chart", default_ticker, "1", "Dark");
