@@ -96,6 +96,7 @@ export default {
     showhome() {
       this.resetComponents();
       this.home = true;
+      // this.s
     },
     toggleChartVisibility() {
       this.resetComponents();

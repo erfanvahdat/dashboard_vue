@@ -27,7 +27,6 @@
     </div>
 
 
-
     <div class="flex flex-col border-1 border-blue-500 h-full">
 
 

@@ -1,8 +1,6 @@
 <template>
-    <div class="card flex overflow-hidden   ">
-        <Menu :model="items" class="w-full md:w-60  overflow-hidden">
-
-
+    <div class="card flex overflow-hidden">
+        <Menu :model="items" class="w-full md:w-60 overflow-hidden">
             <template #start>
                 <span class="inline-flex items-center gap-1 px-2 py-2">
                     <!-- Custom content here -->
@@ -12,17 +10,20 @@
                 <span class="text-primary font-bold">{{ item.label }}</span>
             </template>
             <template #item="{ item, props }">
-                <a v-ripple class="flex items-center" v-bind="props.action" @click="handleClick(item.class_name)"
-                    :tabindex="item.inert ? -1 : 0" :inert="item.inert">
+                <a v-ripple class="flex items-center p-2" v-bind="props.action"
+                    @click="handleClick(item.class_name, item.color)" :tabindex="item.inert ? -1 : 0"
+                    :inert="item.inert" :class="{ 'bg-blue-500': selectedItem === item.class_name }">
+
                     <span :class="item.icon"></span>
                     <span>{{ item.label }}</span>
+                
                     <Badge v-if="item.class_name" class="ml-auto" :value="item.badge" />
                     <span v-if="item.shortcut"
-                        class="ml-auto border border-surface rounded bg-emphasis text-muted-color text-xs p-1">{{
-                            item.shortcut }}</span>
+                        class="ml-auto border border-surface rounded bg-emphasis text-muted-color text-xs p-1">
+                        {{ item.shortcut }}
+                    </span>
                 </a>
             </template>
-
             <template #end>
                 PHOENIX
             </template>
@@ -30,76 +31,56 @@
     </div>
 </template>
 
+
 <script>
+
 export default {
     data() {
         return {
+            var: null,
+            selectedItem: null,  // To track the selected item
             items: [
                 { separator: true },
                 {
                     label: 'Main',
                     items: [
-                        { label: 'Home', icon: 'pi pi-home', class_name: 'HOME' },
-                        { label: 'Charts', icon: 'pi pi-table', class_name: 'Charts' },
-                        { label: 'Trade', icon: 'pi pi-chart-line', class_name: 'Trade' },
+                        { label: 'Home', icon: 'pi pi-home', class_name: 'HOME', color: "bg-yellow-500" },
+                        { label: 'Charts', icon: 'pi pi-table', class_name: 'Charts', color: "bg-blue-500" },
+                        { label: 'Trade', icon: 'pi pi-chart-line', class_name: 'Trade', color: "bg-red-500" },
                     ]
                 },
                 {
                     label: 'Other',
                     items: [
-                        { label: 'Settings', icon: 'pi pi-cog', class_name: 'SETTING' },
-                        // { label: 'Messages', icon: 'pi pi-inbox', badge: 2 },
-                        // { label: 'Logout', icon: 'pi pi-sign-out', shortcut: 'Shift+Q' }
+                        { label: 'Settings', icon: 'pi pi-cog', class_name: 'SETTING', color: "bg-green-500" },
                     ]
                 },
                 {
                     label: 'LAB',
                     items: [
-                        { label: 'Analyzing', icon: 'pi pi-chart-line', shortcut: '', class_name: 'ANALYZE' },
-                        { label: 'Registration', icon: 'pi pi-user-plus', shortcut: '', class_name: 'REG' },
-                        { label: 'trade_journal', icon: 'pi pi-book', class_name: 'journal' }
-
+                        { label: 'Analyzing', icon: 'pi pi-chart-line', class_name: 'ANALYZE', color: "bg-purple-500" },
+                        { label: 'Registration', icon: 'pi pi-user-plus', class_name: 'REG', color: "bg-pink-500" },
+                        { label: 'trade_journal', icon: 'pi pi-book', class_name: 'journal', color: "bg-orange-500" }
                     ]
-
-
-
                 },
                 { separator: true }
             ]
         };
     },
-    mounted() {
-        window.addEventListener('keydown', this.handleShortcut);
-    },
-    beforeDestroy() {
-        window.removeEventListener('keydown', this.handleShortcut);
-    },
     methods: {
-        handleClick(className) {
+        handleClick(className, color) {
+            this.selectedItem = className;  // Set the clicked item as the selected one
+
+            console.log(this.var);
+
             if (this[className]) {
                 this[className]();
             }
         },
-        handleShortcut(event) {
-            if (event.shiftKey) {
-                switch (event.key.toUpperCase()) {
-                    // case 'N':
-                    //     this.HOME();
-                    //     break;
-                    // case 'S':
-                    //     this.ANALYZE();
-                    //     break;
-                    // case 'O':
-                    //     this.emitSettings();
-                    //     break;
-                    // case 'Q':
-                    //     this.emitLogout();
-                    //     break;
-                }
-            }
-        },
+
         HOME() {
             this.$emit('showHome');
+
         },
         Charts() {
             this.$emit('showCharts');
@@ -123,6 +104,8 @@ export default {
             this.$emit('trade_journal');
         },
 
+
+        // The rest of your methods...
     }
 };
 </script>

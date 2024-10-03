@@ -8,31 +8,19 @@
 
       <!-- Username input -->
       <div class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500">
-        <input
-          v-model="user"
-          type="text"
-          placeholder="Username"
-          @keyup.enter="login" 
-          class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
-        />
+        <input v-model="user" type="text" placeholder="Username" @keyup.enter="login"
+          class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none" />
       </div>
 
       <!-- Password input -->
       <div class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500">
-        <input
-          v-model="password"
-          type="password"
-          placeholder="Password"
-          @keyup.enter="login" 
-          class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
-        />
+        <input v-model="password" type="password" placeholder="Password" @keyup.enter="login"
+          class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none" />
       </div>
 
       <!-- Login button -->
-      <button
-        @click="login"
-        class="transform rounded-sm bg-indigo-600 py-2 font-bold duration-300 hover:bg-indigo-400 rounded-2"
-      >
+      <button @click="login"
+        class="transform rounded-sm bg-indigo-600 py-2 font-bold duration-300 hover:bg-indigo-400 rounded-2">
         Login
       </button>
 
@@ -72,34 +60,35 @@ export default {
       this.$emit("sign_up");
     },
     async login() {
+      this.$emit("login_success");
       // Show spinner while the login request is in progress
-      this.spin_loader = true;
-      try {
-        const response = await axios.post(`${import.meta.env.VITE_LOGIN}`, {
-          username: this.user,
-          password: this.password,
-        });
+      // this.spin_loader = true;
+      // try {
+      //   const response = await axios.post(`${import.meta.env.VITE_LOGIN}`, {
+      //     username: this.user,
+      //     password: this.password,
+      //   });
 
-        // Handle login success
-        this.responseMessage = "Login successful: " + response.data.username;
-        localStorage.setItem("access", response.data.access);
-        localStorage.setItem("refresh", response.data.refresh);
+      //   // Handle login success
+      //   this.responseMessage = "Login successful: " + response.data.username;
+      //   localStorage.setItem("access", response.data.access);
+      //   localStorage.setItem("refresh", response.data.refresh);
 
-        console.log(response.data.access);
+      //   console.log(response.data.access);
 
-        // Hide the loading spinner after 2 seconds
-        setTimeout(() => {
-          this.spin_loader = false;
-          this.$emit("login_success");
-        }, 2000);
-      } catch (error) {
-        // Handle login failure
-        this.spin_loader = false;
-        this.response_error = true;
-        setTimeout(() => {
-          this.response_error = false;
-        }, 2000);
-      }
+      //   // Hide the loading spinner after 2 seconds
+      //   setTimeout(() => {
+      //     this.spin_loader = false;
+      //     this.$emit("login_success");
+      //   }, 2000);
+      // } catch (error) {
+      //   // Handle login failure
+      //   this.spin_loader = false;
+      //   this.response_error = true;
+      //   setTimeout(() => {
+      //     this.response_error = false;
+      //   }, 2000);
+      // }
     },
   },
 };

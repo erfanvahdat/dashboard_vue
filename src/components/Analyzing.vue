@@ -5,6 +5,13 @@
 
         {{ this.trades }}
 
+
+
+
+
+
+
+
     </div>
 </template>
 
@@ -21,7 +28,7 @@ export default {
             try {
 
                 // const token = localStorage.getItem('access');
-                const  token= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI3NzI0MjgyLCJpYXQiOjE3Mjc3MDYyODIsImp0aSI6ImYwMTFlZmIxOTM5MTQ3MWFiZDllMTlmYjgwNzVjOWUzIiwidXNlcl9pZCI6NH0.zydXK9p-xtY9LGezs3nrsGYtppQji9LHy2S6PlJmotc"
+                const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI3NzI0MjgyLCJpYXQiOjE3Mjc3MDYyODIsImp0aSI6ImYwMTFlZmIxOTM5MTQ3MWFiZDllMTlmYjgwNzVjOWUzIiwidXNlcl9pZCI6NH0.zydXK9p-xtY9LGezs3nrsGYtppQji9LHy2S6PlJmotc"
 
 
                 // Make the GET request to fetch the trade data
