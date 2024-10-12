@@ -10,6 +10,7 @@ import Aura from '@primevue/themes/aura';
 import 'primeicons/primeicons.css';
 import ConfirmationService from 'primevue/confirmationservice';
 
+import cors from 'cors';
 // Import PrimeVue components
 import Menu from 'primevue/menu';
 import Select from 'primevue/select';
@@ -26,7 +27,7 @@ import Button from 'primevue/button';
 import tarea from 'primevue/textarea';
 import FileUpload from 'primevue/fileupload';
 import Toast from 'primevue/toast';
-import ToastService from 'primevue/toastservice';  
+import ToastService from 'primevue/toastservice';
 
 import FloatLabel from 'primevue/floatlabel';
 import RadioButton from 'primevue/radiobutton';
@@ -37,9 +38,6 @@ import Badge from 'primevue/badge';
 import Slider from 'primevue/slider';
 import TreeSelect from 'primevue/treeselect';
 import ConfirmPopup from 'primevue/confirmpopup';
-
-
-
 
 
 
@@ -103,7 +101,7 @@ const globalComponents = {
   'Home': Home,
   'Main': Main,
   'Rank': Rank,
-  "Charts":Charts,
+  "Charts": Charts,
   'Registration': reg,
   'Trade_history': Trade_history,
   'Analyzing': Analyzing,
@@ -132,15 +130,15 @@ const globalComponents = {
   // 'ConfirmDialog': ConfirmDialoEg,
   'Alert': Alert,
   "login": login,
-  "login_icon":login_icon,
-  "Trade_journal":trade_journal,
-  "Badge":Badge,
-  "TreeSelect":TreeSelect,
-  "loading_spin":loading_spin,
-  "Slider":Slider,
-  "ConfirmPopup":ConfirmPopup,
-  "Toast":Toast,
-  
+  "login_icon": login_icon,
+  "Trade_journal": trade_journal,
+  "Badge": Badge,
+  "TreeSelect": TreeSelect,
+  "loading_spin": loading_spin,
+  "Slider": Slider,
+  "ConfirmPopup": ConfirmPopup,
+  "Toast": Toast,
+
 };
 
 // Create Vue app instance
@@ -155,9 +153,11 @@ app.use(PrimeVue, {
     preset: Aura
   }
 });
+
+app.use(cors());
 app.use(ConfirmationService);
 app.use(VueApexCharts);
-app.use(ToastService);    
+app.use(ToastService);
 
 
 

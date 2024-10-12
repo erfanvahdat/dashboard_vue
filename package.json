@@ -20,6 +20,7 @@
     "axios": "^1.7.5",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.4",
+    "cors": "^2.8.5",
     "datatables.net-buttons": "^3.1.2",
     "datatables.net-dt": "^2.1.6",
     "echarts": "^5.5.1",

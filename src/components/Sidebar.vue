@@ -12,12 +12,13 @@
             <template #item="{ item, props }">
                 <a v-ripple class="flex items-center p-2" v-bind="props.action"
                     @click="handleClick(item.class_name, item.color)" :tabindex="item.inert ? -1 : 0"
-                    :inert="item.inert" :class="{ 'bg-blue-500': selectedItem === item.class_name }">
+                    :inert="item.inert" :class="selectedItem === item.class_name ? item.color : ''">
 
                     <span :class="item.icon"></span>
                     <span>{{ item.label }}</span>
-                
+
                     <Badge v-if="item.class_name" class="ml-auto" :value="item.badge" />
+                    
                     <span v-if="item.shortcut"
                         class="ml-auto border border-surface rounded bg-emphasis text-muted-color text-xs p-1">
                         {{ item.shortcut }}
@@ -44,23 +45,23 @@ export default {
                 {
                     label: 'Main',
                     items: [
-                        { label: 'Home', icon: 'pi pi-home', class_name: 'HOME', color: "bg-yellow-500" },
-                        { label: 'Charts', icon: 'pi pi-table', class_name: 'Charts', color: "bg-blue-500" },
-                        { label: 'Trade', icon: 'pi pi-chart-line', class_name: 'Trade', color: "bg-red-500" },
+                        { label: 'Home', icon: 'pi pi-home', class_name: 'HOME', color: "bg-blue-500  rounded-4" },
+                        { label: 'Charts', icon: 'pi pi-table', class_name: 'Charts', color: "bg-blue-500  rounded-4" },
+                        { label: 'Trade', icon: 'pi pi-chart-line', class_name: 'Trade', color: "bg-blue-500  rounded-4" },
                     ]
                 },
                 {
                     label: 'Other',
                     items: [
-                        { label: 'Settings', icon: 'pi pi-cog', class_name: 'SETTING', color: "bg-green-500" },
+                        { label: 'Settings', icon: 'pi pi-cog', class_name: 'SETTING', color: "bg-blue-500  rounded-4" },
                     ]
                 },
                 {
                     label: 'LAB',
                     items: [
-                        { label: 'Analyzing', icon: 'pi pi-chart-line', class_name: 'ANALYZE', color: "bg-purple-500" },
-                        { label: 'Registration', icon: 'pi pi-user-plus', class_name: 'REG', color: "bg-pink-500" },
-                        { label: 'trade_journal', icon: 'pi pi-book', class_name: 'journal', color: "bg-orange-500" }
+                        { label: 'Analyzing', icon: 'pi pi-chart-line', class_name: 'ANALYZE', color: "bg-blue-500  rounded-4" },
+                        { label: 'Registration', icon: 'pi pi-user-plus', class_name: 'REG', color: "bg-blue-500  rounded-4" },
+                        { label: 'trade_journal', icon: 'pi pi-book', class_name: 'journal', color: "bg-blue-500  rounded-4" }
                     ]
                 },
                 { separator: true }

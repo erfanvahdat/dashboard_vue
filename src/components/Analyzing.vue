@@ -1,76 +1,42 @@
 <template>
-    <div clas=' h-screen w-full border-1 border-blue-500'>
-
-
-
-        {{ this.trades }}
-
-
-
-
-
-
-
-
+    <div class="h-screen w-full border-1 border-blue-500">
+        <ul>
+            <li v-for="crypto in cryptoLists" :key="crypto">{{ crypto }}</li>
+        </ul>
     </div>
 </template>
 
 <script>
 import axios from 'axios'
+
 export default {
     data() {
         return {
-            trades: [],
+            cryptoLists: [], // To store the crypto symbols
         }
     },
     methods: {
-        async Live_orders() {
+        async get_ticker() {
             try {
+                // Fetch the data from the API
+                const response = await axios.get(`${import.meta.env.VITE_CRYPTO_LIST}`);
 
-                // const token = localStorage.getItem('access');
-                const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI3NzI0MjgyLCJpYXQiOjE3Mjc3MDYyODIsImp0aSI6ImYwMTFlZmIxOTM5MTQ3MWFiZDllMTlmYjgwNzVjOWUzIiwidXNlcl9pZCI6NH0.zydXK9p-xtY9LGezs3nrsGYtppQji9LHy2S6PlJmotc"
+                // Log the complete response
+                console.log("Response received:", response);
 
-
-                // Make the GET request to fetch the trade data
-                const response = await axios.get("http://192.168.1.104:7000/api/v1/liveTrade/", {
-                    headers: {
-                        'Authorization': `Token ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                // Store the fetched trades data into the trades array
-                this.trades = response.data;
-
-
-
+                // Assign only the data array to cryptoLists
+                this.cryptoLists = response;
+                console.log("Getting data is complete...");
             } catch (error) {
-                let errorMessage = 'Failed to fetch trades: ';
-
-                if (error.response && error.response.data) {
-                    errorMessage += error.response.data.error || 'Unknown error occurred';
-                } else {
-                    errorMessage += error.message;
-                }
-
-                // this.$toast.add({
-                //     severity: 'error',
-                //     summary: 'Error',
-                //     detail: errorMessage,
-                //     life: 3000
-                // });
-
-                console.error(errorMessage);
+                // Handle the error
+                this.$toast.add({ severity: 'warn', summary: 'Rejected', detail: 'Crypto_list API error!', life: 3000 });
+                console.error('Error fetching crypto list:', error);
             }
         },
     },
-
     mounted() {
-
-        this.Live_orders()
-
-
-
+        // Call the method when the component is mounted
+        this.get_ticker();
     }
 }
 </script>
