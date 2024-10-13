@@ -10,15 +10,14 @@
                 <div class=" flex flex-col space-y-0 ml-2   ">
                     <span class="text-sm font-bold font-serif mt-2 ml-1">Limit_order</span>
 
-
+                    <!-- Selecting TIcker -->
                     <div class="card flex w-fit ml-2 mt-2">
                         <Select v-model="Ticker" :options="cryptoList" filter optionLabel="symbol"
                             @change="updateChart('chart')" placeholder="Select a Crypto" class="w-full md:w-72">
 
-                            <!-- Template for selected value -->
                             <template #value="slotProps">
                                 <div v-if="slotProps.value" class="flex items-center">
-                                    <div>{{ slotProps.value.symbol }}</div> <!-- Display ticker -->
+                                    <div>{{ slotProps.value.symbol }}</div>
                                 </div>
                                 <span v-else>
                                     {{ slotProps.placeholder }}
@@ -26,7 +25,6 @@
                             </template>
                         </Select>
                     </div>
-
 
                     <!-- Toggle Type -->
                     <div class="flex  ml-3 mt-3 h-[60px]  justify-center ">
@@ -36,10 +34,10 @@
                             <span class='text-sm font-bold font-mono'>{{ isLong ? 'LONG' : 'SHORT' }}</span>
                         </button>
                     </div>
-                    <div>
 
-                    </div>
 
+
+                    <!-- Limit_price -->
                     <!-- Limit_price -->
                     <div class="m-1 mb-3">
                         <span class="text-sm font-bold font-mono text-[10px] mb-0 underline decoration-dashed "> Limit:
@@ -64,14 +62,14 @@
                                 @keyup.enter="confirm1($event)">
                             </input_sub>
                         </div>
-                        <div>
-                            <span class="text-sm font-bold font-mono text-[10px] mb-0 underline decoration-dashed	 ">
-                                TP: </span>
-                            <input_sub :value="tp_price" v-model="tp_price" placeholder="Enter tp_price"
-                                @input="tp_price = $event.target.value" accentColor="#FFFFFF"
-                                @keyup.enter="confirm1($event)">
-                            </input_sub>
 
+                        <div>
+                            <span class="text-sm font-bold font-mono text-[10px] mb-0 underline decoration-dashed">
+                                TP:
+                            </span>
+                            <input_sub v-model="tp_price" placeholder="Enter tp_price" accentColor="#FFFFFF"
+                                @input="tp_price = $event.target.value" @keyup.enter="confirm1($event)">
+                            </input_sub>
                         </div>
 
                     </div>
@@ -200,9 +198,6 @@
                             <td>{{ formatNumber(trade.tpPrice) }}</td>
                             <td>{{ trade.type }}</td>
                             <td>{{ formatNumber(trade.risk) }}</td>
-
-
-
                         </tr>
                     </tbody>
                 </table>
@@ -212,43 +207,16 @@
             <div class="mt-2 ml-2">
 
                 <div>
-
-
-                    <p>Ticker : {{ this.Ticker }}</p>
+                    <!-- <p>Ticker : {{ this.Ticker.symbol }}</p> -->
                     <p>limit : {{ this.limit_price }}</p>
                     <p> type_pos : {{ this.type_pos }}</p>
                     <p>TP: {{ tp_price }}</p>
                     <p>SL: {{ sl_price }}</p>
-                    <p>type: {{ type }}</p>
                     <p>Selected Interval: {{ risk }}</p>
+                    <p>full_order : {{ this.full_order }}</p>
 
-
-
-
-                    <!-- <Toast position="bottom-right" group="br" />
-                    <Button label="click here" @click="showBottomRight" /> -->
-
-
-
-                    <!-- {{ this.trades }} -->
                     <div class="border-1 border-yellow-500 mt-2">
-                        <!-- {{ this.trades[0][0] }} -->
 
-
-
-                        <!-- <li v-for="(key, index) in getTradeKeys" :key="index">
-                            {{ key }}
-                        </li> -->
-
-                        <!-- .liveTradesCrypto -->
-                        <!-- <li v-for="(trade, index) in trades  " :key="index">
-                            <p>Type: {{ trade.type }}</p>
-                            <p>Symbol: {{ trade.symbol }}</p>
-                            <p>Position Side: {{ trade.positionSide }}</p>
-                            <p>Side: {{ trade.side }}</p>
-                            <p>Order ID: {{ trade.orderId }}</p>
-                            <p>Time: {{ trade.time }}</p>
-                        </li> -->
 
                         <div>{{ Merging_data() }}</div>
                         <!-- <div>sl_id is here: {{ this.Trades["DOT-USDT"][''] }}</div> -->
@@ -261,12 +229,11 @@
 
                 </div>
 
-
-
             </div>
         </div>
     </div>
 </template>
+
 
 <script>
 import axios from 'axios';
@@ -278,11 +245,12 @@ export default {
 
 
             Ticker: null,
-            type_pos: 'long',
+            type_pos: 'LONG',
             limit_price: null,
             sl_price: null,
             tp_price: null,
-            type: 'limit',
+            full_order: [],
+
             risk: 1,
             value: 1,
             liveOrdersInterval: null, // Interval reference
@@ -342,8 +310,6 @@ export default {
         };
     },
 
-
-
     methods: {
 
         confirm1(event) {
@@ -372,24 +338,22 @@ export default {
             const access = localStorage.getItem('access');
             return access;
         },
-
         async get_ticker() {
+
             try {
+                // Fetch the data from the API
+                console.log(import.meta.env.VITE_CRYPTO_LIST)
+
                 const response = await axios.get(`${import.meta.env.VITE_CRYPTO_LIST}`);
 
-                this.cryptoList = response.data.data.map(crypto => ({
-                    symbol: crypto.symbol,
-                    ticker: crypto.ticker
-                }));
+                console.log(response)
+                // console.log(console.log(response.data.data))
+                this.cryptoList = response.data.data.map(symbol => ({ symbol }));
 
-                console.log("Getting data is compelete...")
-
+                console.log("Getting data is complete...");
             } catch (error) {
-
-                this.$toast.add({ severity: 'warn', summary: 'Rejected', detail: 'Crypto_list API got error!', life: 3000 });
-
+                this.$toast.add({ severity: 'warn', summary: 'Rejected', detail: 'Crypto_list API error!', life: 3000 });
                 console.error('Error fetching crypto list:', error);
-
             }
         },
 
@@ -401,51 +365,78 @@ export default {
 
         async OpenTrade() {
             try {
-                const token = this.show_access(); // Get the access token
+                // const token = this.show_access(); // Get the access token
 
-                // Prepare the data for the POST request
-                const postData = {
-                    "symbol": `${this.Ticker['symbol']}-USDT`.toUpperCase(),
-                    "positionSide": this.type_pos.toLowerCase(),
-                    "limitPrice": this.limit_price.toString(),
-                    "slPrice": this.sl_price.toString(),
-                    "tpPrice": this.tp_price.toString(),
-                    "type": this.type.toUpperCase(),
-                    "risk": this.risk.toString(),
+                console.log(import.meta.env.VITE_OPEN_TRADE)
+                console.log(this.Ticker.symbol)
+
+
+                const orderParams = {
+                    symbol: 'SAND-USDT',
+                    type: 'SHORT',
+                    risk: 1,
+                    limitprice: 0.265910933979571,
+                    slprice: 0.269166714752397,
+                    tpprice: 0.260753055012458,
+                    market: "trigger"
                 };
 
+                // Prepare the data for the POST request
+                // const orderParams = {
+                //     "symbol": `${this.Ticker.symbol}`.toUpperCase(),
+                //     "type": this.type_pos.toUpperCase(),
+                //     "risk": parseFloat(this.risk),
+                //     "limitprice": parseFloat(this.limit_price),
+                //     "slprice": parseFloat(this.sl_price),
+                //     "tpprice": parseFloat(this.tp_price),
+                //     "market": "trigger",
+                // };
 
                 // Make the POST request to the API
-                const response = await axios.post(`${import.meta.env.VITE_OPEN_TRADE}`, postData, {
-                    headers: {
-                        'Authorization': `Token ${token}`,
-                        'Content-Type': 'application/json'
-                    }
+                const response = await axios.post(`${import.meta.env.VITE_OPEN_TRADE}`, orderParams, {
+                    // headers: {
+                    //     'Authorization': `Token ${token}`,
+                    //     'Content-Type': 'application/json'
+                    // }
                 });
 
-                // Handle successful response (status 201)
-                if (response.status == 201) {
 
-                    this.$toast.add({
-                        severity: 'success',
-                        summary: 'Success',
-                        detail: 'Live trade posted successfully!',
-                        life: 3000
-                    })
-                }
+                const status = response.status;
+                console.log(status)
+
+
+
+                this.$toast.add({ severity: 'success', summary: 'Success Message', detail: 'Message Content', life: 3000 });
+
+
+
+                // this.$toast.add({
+                //     severity: 'success',
+                //     summary: 'Success',
+                //     detail: 'Live trade posted successfully!',
+                //     life: 3000
+                // })
+
+                // Handle successful response (status 201)
+                // if (status == 201) {
+
+                //     this.$toast.add({
+                //         severity: 'success',
+                //         summary: 'Success',
+                //         detail: 'Live trade posted successfully!',
+                //         life: 3000
+                //     })
+                // }
 
             } catch (error) {
                 // Handle error responses (e.g., 400 status or network issues)
                 let errorMessage = 'Failed to post live trade: ';
-
                 if (error.response && error.response.data) {
                     // errorMessage += error.response.data.error || 'Unknown error occurred';
                     errorMessage = error.response.data.limitPrice
-
                 } else {
                     errorMessage += error.message;
                 }
-
                 this.$toast.add({
                     severity: 'error',
                     summary: 'Error',
@@ -456,6 +447,38 @@ export default {
                 console.error(errorMessage);
             }
         },
+
+
+
+        async Full_orders() {
+            try {
+
+                console.log('getting_pending_orders')
+                // Make the GET request to fetch the trade data
+                const response = await axios.get(`${import.meta.env.VITE_ALL_PENDING_ORDER}`, {
+
+                });
+                console.log(response)
+                // Store the fetched trades data into the trades array
+                this.full_order = response;
+
+
+            } catch (error) {
+
+                let errorMessage = 'Failed to fetch trades: ';
+
+                this.Trades = null;
+
+                if (error.response && error.response.data) {
+                    errorMessage += error.response.data.error || 'Unknown error occurred';
+                } else {
+                    errorMessage += error.message;
+                }
+                console.error(errorMessage);
+            }
+        },
+
+
         async Live_orders() {
             try {
                 const token = this.show_access(); // Get the access token
@@ -585,23 +608,23 @@ export default {
 
         updateChart(index) {
 
-            const symbol = `BINANCE:${this.Ticker['symbol']}USDT.P`
+            let Ticker = this.Ticker['symbol'].split("-")[0]
+            const symbol = `BINANCE:${Ticker}USDT.P`
             this.createChart(index, symbol, "1", "Dark");
         },
         toggleValue() {
             this.isLong = !this.isLong;
-
             if (this.isLong) {
-                this.type_pos = 'long';
+                this.type_pos = 'LONG';
             } else {
-                this.type_pos = 'short';
+                this.type_pos = 'SHORT';
             }
         },
-
 
         submit() {
             this.OpenTrade()
         },
+
         formatNumber(value) {
             if (!isNaN(value)) {
                 return parseFloat(value).toFixed(2);
@@ -638,7 +661,7 @@ export default {
         },
         getStatusLabel(type) {
 
-            if (type == 'LIMIT') {
+            if (type == 'LIMIT' || type == 'TRIGGER_MARKET') {
                 return 'warn';
             } else if (type == 'TAKE_PROFIT_MARKET') {
                 return 'success';
@@ -646,19 +669,21 @@ export default {
             return 'null';
         },
         transformStatus(type) {
-            if (type == 'LIMIT') {
+            if (type == "LIMIT" || type == "TRIGGER_MARKET") {
                 return 'Pending';
             } else if (type == 'TAKE_PROFIT_MARKET') {
                 return 'Live';
+
             }
             return type;
         },
 
 
+
         Merging_data() {
 
 
-            const data = this.trades; // Assume this.trades contains the input data
+            const data = this.full_order;
 
             // An object to consolidate orders by symbol
             const consolidatedTrades = {};
@@ -699,9 +724,11 @@ export default {
 
     mounted() {
 
-        this.Merging_data()
+
         this.get_ticker() // get the ticker_list
-        this.Live_orders() // get current live position
+        this.Full_orders()
+        this.Merging_data()
+        // this.Live_orders() // get current live position
 
         // Set an interval to call Live_orders every X milliseconds (e.g., every 5 seconds)
         // this.liveOrdersInterval = setInterval(() => {
@@ -730,6 +757,6 @@ export default {
             return this.isLong ? 'bg-green-500' : 'bg-red-500';
         },
 
-    }
+    },
 };
 </script>

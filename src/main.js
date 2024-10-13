@@ -1,7 +1,7 @@
 // src/main.js
 import { createApp } from 'vue';
 import App from './App.vue';
-import router from './router/router';
+import router from './router/router.js';
 
 
 // PrimeVue and PrimeIcons
@@ -10,7 +10,6 @@ import Aura from '@primevue/themes/aura';
 import 'primeicons/primeicons.css';
 import ConfirmationService from 'primevue/confirmationservice';
 
-import cors from 'cors';
 // Import PrimeVue components
 import Menu from 'primevue/menu';
 import Select from 'primevue/select';
@@ -145,8 +144,6 @@ const globalComponents = {
 const app = createApp(App);
 
 
-
-
 // Use PrimeVue and other plugins
 app.use(PrimeVue, {
   theme: {
@@ -154,7 +151,6 @@ app.use(PrimeVue, {
   }
 });
 
-app.use(cors());
 app.use(ConfirmationService);
 app.use(VueApexCharts);
 app.use(ToastService);
@@ -166,5 +162,10 @@ Object.entries(globalComponents).forEach(([name, component]) => {
   app.component(name, component);
 });
 
+
+
+
 // Mount the app
 app.use(router).mount('#app');
+
+

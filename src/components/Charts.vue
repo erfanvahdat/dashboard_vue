@@ -123,11 +123,11 @@ export default {
   methods: {
     async get_ticker() {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_crypto_list}`);
-        this.cryptoList = response.data.data.map(crypto => ({
-          symbol: crypto.symbol,
-          ticker: crypto.ticker,
-        }));
+        // Fetch the data from the API
+        const response = await axios.get(`${import.meta.env.VITE_CRYPTO_LIST}`);
+
+        this.cryptoList = response.data.data.map(symbol => ({ symbol }));
+
         console.log("Getting data is complete...");
       } catch (error) {
         this.$toast.add({ severity: 'warn', summary: 'Rejected', detail: 'Crypto_list API error!', life: 3000 });
@@ -208,7 +208,10 @@ export default {
 
     updateChart(index, newSymbol, newLabel) {
       // Update the specific chart's symbol and label
-      this.all_symbol[index] = `BINANCE:${newSymbol}USDT.P`;
+
+      let ticker = newSymbol.split('-')[0]
+
+      this.all_symbol[index] = `BINANCE:${ticker}USDT.P`;
       this.all_label[index] = newLabel;
 
       this.createChart(`chart-all-${index}`, this.all_symbol[index], this.timeframes[index], this.chart_theme);
