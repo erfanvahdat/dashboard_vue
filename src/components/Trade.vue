@@ -85,17 +85,14 @@
                         </div>
                     </div>
 
-                    <!-- Submit Order -->
-                    <Toast />
-                    <ConfirmPopup></ConfirmPopup>
+
+
 
                     <div class="flex flex-wrap gap-2 justify-center mt-3">
-                        <Toast />
 
-                        <Button label="Submit" severity="info" @click="OpenTrade" />
+                        <Toast></Toast>
+                        <Button label="Success" severity="info" @click="OpenTrade" />
 
-                        <!-- <Button @click="confirm1($event)" label="Save" outlined
-                            class='w-[200px] hover:bg-blue-500'></Button> -->
                     </div>
 
                 </div>
@@ -126,7 +123,7 @@
 
                         <Column field="orderId" header="ID">
                             <template #body="slotProps">
-                                {{ slotProps.data.orderId }}
+                                {{ slotProps.data.order_pending_id }}
                             </template>
                         </Column>
 
@@ -149,8 +146,10 @@
 
                         <Column field="" header="Close">
                             <template #body="slotProps">
-                                <Button label="Submit"
-                                    @click='RemoveTrade(slotProps.data.orderId, slotProps.data.symbol)'></Button>
+
+                                <Toast></Toast>
+                                <Button label="Close order/position" severity="warn"
+                                    @click='RemoveTrade(slotProps.data.order_pending_id, slotProps.data.symbol)'></Button>
                             </template>
 
 
@@ -161,7 +160,6 @@
             </div>
 
         </div>
-
 
         <!-- Bottom Section=> orders table -->
         <div class="flex flex-col    h-[calc(100vh-150px)]     mr-5 ml-2  ">
@@ -214,13 +212,14 @@
                     <p>SL: {{ sl_price }}</p>
                     <p>Selected Interval: {{ risk }}</p>
                     <p>full_order : {{ this.full_order }}</p>
+                    <p>trade : {{ this.Trades }}</p>
 
+
+                    <p> cryptoList {{ this.cryptoList }}</p>
                     <div class="border-1 border-yellow-500 mt-2">
 
 
-                        <div>{{ Merging_data() }}</div>
-                        <!-- <div>sl_id is here: {{ this.Trades["DOT-USDT"][''] }}</div> -->
-
+                        <!-- <div>{{ Merging_data() }}</div> -->
 
                     </div>
 
@@ -338,17 +337,17 @@ export default {
             const access = localStorage.getItem('access');
             return access;
         },
+
         async get_ticker() {
-
             try {
+
                 // Fetch the data from the API
-                console.log(import.meta.env.VITE_CRYPTO_LIST)
+                const response = await axios.post(`${import.meta.env.VITE_CRYPTO_LIST}`);
 
-                const response = await axios.get(`${import.meta.env.VITE_CRYPTO_LIST}`);
+                // console.log("Data from DB:", response.data.data);
 
-                console.log(response)
-                // console.log(console.log(response.data.data))
-                this.cryptoList = response.data.data.map(symbol => ({ symbol }));
+                // Use map to extract the 'symbol' from each item in response data
+                this.cryptoList = response.data.data.map(item => ({ symbol: item.symbol }));
 
                 console.log("Getting data is complete...");
             } catch (error) {
@@ -357,11 +356,59 @@ export default {
             }
         },
 
-        async Remove_cash() {
 
-            localStorage.removeItem('access');
-            localStorage.removeItem('refresh');
-        },
+
+        // Merging_data() {
+        //     const data = this.cryptoList;
+        //     // An object to consolidate orders by symbol
+        //     const consolidatedTrades = {};
+
+        //     data.forEach(item => {
+        //         const symbol = item.symbol;
+
+
+        //         let ID = null;
+
+        //         if (item.type == 'TRIGGER_MARKET') {
+        //             ID = item.orderId
+        //         }
+
+        //         // If the symbol doesn't exist, initialize it in consolidatedTrades
+        //         if (!consolidatedTrades[symbol]) {
+        //             consolidatedTrades[symbol] = {
+        //                 symbol: symbol,
+        //                 side: item.side,
+        //                 order_id_sl: null,
+        //                 order_id_tp: null,
+        //                 order_pending_id: ID,
+        //                 order_position_id: ID,
+        //                 type: item.type
+        //             };
+        //         }
+
+        //         // Assign STOP_MARKET or TAKE_PROFIT_MARKET based on the order type
+        //         if (item.type === "STOP_MARKET") {
+        //             consolidatedTrades[symbol]["order_id_sl"] = item.orderId.toString();
+        //         }
+        //         if (item.type === "TAKE_PROFIT_MARKET") {
+        //             consolidatedTrades[symbol]["order_id_tp"] = item.orderId.toString();
+        //         }
+
+        //         // Store other necessary details like side, symbol, etc.
+        //         consolidatedTrades[symbol]["side"] = item.side;
+        //         consolidatedTrades[symbol]["time"] = item.time;
+        //     });
+
+        //     // Convert consolidatedTrades from an object back to an array
+        //     this.Trades = Object.values(consolidatedTrades);
+        //     return this.Trades;
+        // },
+
+        // async Remove_cash() {
+
+        //     localStorage.removeItem('access');
+        //     localStorage.removeItem('refresh');
+        // },
 
         async OpenTrade() {
             try {
@@ -404,31 +451,19 @@ export default {
                 const status = response.status;
                 console.log(status)
 
-
-
-                this.$toast.add({ severity: 'success', summary: 'Success Message', detail: 'Message Content', life: 3000 });
-
-
-
-                // this.$toast.add({
-                //     severity: 'success',
-                //     summary: 'Success',
-                //     detail: 'Live trade posted successfully!',
-                //     life: 3000
-                // })
-
                 // Handle successful response (status 201)
-                // if (status == 201) {
+                if (status == 201) {
 
-                //     this.$toast.add({
-                //         severity: 'success',
-                //         summary: 'Success',
-                //         detail: 'Live trade posted successfully!',
-                //         life: 3000
-                //     })
-                // }
+                    this.$toast.add({
+                        severity: 'success',
+                        summary: 'Success',
+                        detail: 'Live trade posted successfully!',
+                        life: 3000
+                    })
+                }
 
             } catch (error) {
+                this.$toast.add({ severity: 'success', summary: 'Success Message', detail: 'Message Content', life: 3000 });
                 // Handle error responses (e.g., 400 status or network issues)
                 let errorMessage = 'Failed to post live trade: ';
                 if (error.response && error.response.data) {
@@ -450,33 +485,31 @@ export default {
 
 
 
-        async Full_orders() {
-            try {
+        // async Full_orders() {
+        //     try {
 
-                console.log('getting_pending_orders')
-                // Make the GET request to fetch the trade data
-                const response = await axios.get(`${import.meta.env.VITE_ALL_PENDING_ORDER}`, {
+        //         console.log('getting_pending_orders')
+        //         // Make the GET request to fetch the trade data
+        //         const response = await axios.get(import.meta.env.VITE_ALL_PENDING_ORDER)
+        //         const resposne_filter = await response['data'].data;
 
-                });
-                console.log(response)
-                // Store the fetched trades data into the trades array
-                this.full_order = response;
+        //         // Store the fetched trades data into the trades array
+        //         this.full_order = resposne_filter;
 
+        //     } catch (error) {
 
-            } catch (error) {
+        //         let errorMessage = 'Failed to fetch trades: ';
 
-                let errorMessage = 'Failed to fetch trades: ';
+        //         this.Trades = null;
 
-                this.Trades = null;
-
-                if (error.response && error.response.data) {
-                    errorMessage += error.response.data.error || 'Unknown error occurred';
-                } else {
-                    errorMessage += error.message;
-                }
-                console.error(errorMessage);
-            }
-        },
+        //         if (error.response && error.response.data) {
+        //             errorMessage += error.response.data.error || 'Unknown error occurred';
+        //         } else {
+        //             errorMessage += error.message;
+        //         }
+        //         console.error(errorMessage);
+        //     }
+        // },
 
 
         async Live_orders() {
@@ -484,7 +517,7 @@ export default {
                 const token = this.show_access(); // Get the access token
 
                 // Make the GET request to fetch the trade data
-                const response = await axios.get(`${import.meta.env.VITE_TRADE_LIST}`, {
+                const response = await axios.get(`${import.meta.env.VITE_ALL_PENDING_ORDER}`, {
                     headers: {
                         'Authorization': `Token ${token}`,
                         'Content-Type': 'application/json'
@@ -493,8 +526,6 @@ export default {
 
                 // Store the fetched trades data into the trades array
                 this.trades = response.data;
-
-
 
             } catch (error) {
 
@@ -513,39 +544,24 @@ export default {
         async RemoveTrade(orderid, symbol) {
             try {
 
-                const token = this.show_access(); // Get the access token
-
-
-                const postData = {
-                    "orderid": orderid.toString(),
-                    'symbol': symbol.toString(),
+                const params = {
+                    orderId: orderid,
+                    // 'symbol': symbol.toString(),
                 };
-
-                // const postData = {
-                //     "orderId": "1841114423704424400",
-                //     "symbol": "DOT-USDT"
-                // };
-
                 // Make the GET request to fetch the trade data
-                const response = await axios.post(`${import.meta.env.VITE_DELETE_TRADE}`, postData, {
-                    headers: {
-                        'Authorization': `Token ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
+                const response = await axios.delete(`${import.meta.env.VITE_CLOSE_PENDING_ORDER}`, params);
 
-
-
+                console.log(response.status)
                 // Handle successful response (status 201)
-                // if (response.status == 200) {
+                if (response.status == 200) {
 
-                this.$toast.add({
-                    severity: 'success',
-                    summary: 'Success',
-                    detail: `Trade order is cancel with Ticker: ${symbol}!`,
-                    life: 3000
-                })
-                // }
+                    this.$toast.add({
+                        severity: 'success',
+                        summary: 'Success',
+                        detail: `Trade order is cancel with Ticker: ${symbol}!`,
+                        life: 3000
+                    })
+                }
 
             } catch (error) {
                 let errorMessage = 'Failed to fetch trades: ';
@@ -679,55 +695,13 @@ export default {
         },
 
 
-
-        Merging_data() {
-
-
-            const data = this.full_order;
-
-            // An object to consolidate orders by symbol
-            const consolidatedTrades = {};
-
-            data.forEach(item => {
-                const symbol = item.symbol;
-
-                // If the symbol doesn't exist, initialize it in consolidatedTrades
-                if (!consolidatedTrades[symbol]) {
-                    consolidatedTrades[symbol] = {
-                        symbol: symbol,
-                        side: item.side,
-                        order_id_sl: null,
-                        order_id_tp: null,
-                        type: item.type
-                    };
-                }
-
-                // Assign STOP_MARKET or TAKE_PROFIT_MARKET based on the order type
-                if (item.type === "STOP_MARKET") {
-                    consolidatedTrades[symbol]["order_id_sl"] = item.orderId.toString();
-                }
-                if (item.type === "TAKE_PROFIT_MARKET") {
-                    consolidatedTrades[symbol]["order_id_tp"] = item.orderId.toString();
-                }
-
-                // Store other necessary details like side, symbol, etc.
-                consolidatedTrades[symbol]["side"] = item.side;
-                consolidatedTrades[symbol]["time"] = item.time;
-            });
-
-            // Convert consolidatedTrades from an object back to an array
-            this.Trades = Object.values(consolidatedTrades);
-            return this.Trades;
-        }
-
     },
 
     mounted() {
 
-
         this.get_ticker() // get the ticker_list
-        this.Full_orders()
-        this.Merging_data()
+        // this.Full_orders()
+        // this.Merging_data()
         // this.Live_orders() // get current live position
 
         // Set an interval to call Live_orders every X milliseconds (e.g., every 5 seconds)
