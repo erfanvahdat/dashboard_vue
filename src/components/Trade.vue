@@ -1,5 +1,5 @@
 <template>
-    <div class="h-full overflow-hidden bg-gray-700 x-full">
+    <div class="h-100vh overflow-auto  bg-gray-700 x-full ">
         <div class="flex flex-row p-2 space-y gap-2  ">
 
             <!-- Trade Section 1️⃣-->
@@ -95,11 +95,11 @@
 
                 </div>
 
+
                 <!-- Chart section  1️⃣-->
                 <div id="chart" class="p-2 w-full"></div>
 
             </div>
-
             <!-- Pending Section 2️⃣-->
             <div class="flex flex-col    h-[calc(100vh-150px    )]  w-[960px]  ml-2   ">
 
@@ -109,29 +109,50 @@
                         <Column field="symbol" header="Ticker"> <template #body="slotProps">
                                 <span style="text-decoration: underline; text-decoration-style: dashed;">
                                     {{ slotProps.data.symbol }}
-                                    {{ console.log(slotProps.data.symbol) }}
 
                                 </span>
                             </template></Column>
                         <Column field="side" header="Position Side">
                             <template #body="slotProps">
-                                {{ slotProps.data.side }}
+                                <!-- {{ slotProps.data.side }} -->
+
+
+                                <Tag :value="slotProps.data.side" :severity="side_status(slotProps.data.side)" />
+
+
+
                             </template>
                         </Column>
 
                         <Column field="orderId" header="ID">
                             <template #body="slotProps">
-                                {{ slotProps.data.order_pending_id }}
-                            </template>
-                        </Column>
 
-                        <Column field="orderId" header="ID">
-                            <template #body="slotProps">
                                 {{ slotProps.data.orderId }}
+                                <!-- {{ console.log(slotProps.data.orderId ) }} -->
                             </template>
                         </Column>
 
-                        orderId
+
+                        <Column field="orderId" header="ID_pos">
+                            <template #body="slotProps">
+                                {{ slotProps.data.positionId }}
+
+                            </template>
+                        </Column>
+
+                        <!-- <Column field="orderId" header="sl_id">
+                            <template #body="slotProps">
+                                {{ slotProps.data.order_id_sl }}
+                            </template>
+                        </Column>
+
+
+                        <Column field="orderId" header="tp_id">
+                            <template #body="slotProps">
+                                {{ slotProps.data.order_id_tp }}
+                            </template>
+                        </Column> -->
+
 
                         <Column field="time" header="Time">
                             <template #body="slotProps">
@@ -145,24 +166,26 @@
 
                                 <Tag :value="transformStatus(slotProps.data.type)"
                                     :severity="getStatusLabel(slotProps.data.type)" />
-                                <!-- <Tag :value="slotProps.data.type" :severity="getStatusLabel(slotProps.data.type)" /> -->
+
 
                             </template>
                         </Column>
+
+
+
 
                         <Column field="" header="Close">
                             <template #body="slotProps">
 
                                 <Toast></Toast>
                                 <Button label="Close order/position" severity="warn"
-                                    @click='RemoveTrade(slotProps.data.order_pending_id, slotProps.data.symbol)'></Button>
+                                    @click='RemoveTrade(slotProps.data.orderId, slotProps.data.symbol)'></Button>
                             </template>
 
 
                         </Column>
                     </DataTable>
                 </div>
-
             </div>
 
         </div>
@@ -217,9 +240,16 @@
                     <p>TP: {{ tp_price }}</p>
                     <p>SL: {{ sl_price }}</p>
                     <p>Selected Interval: {{ risk }}</p>
+                    <br>
                     <p>full_order : {{ this.full_order }}</p>
+                    <br>
                     <p>trade : {{ this.Trades }}</p>
+                    <br>
+                    <p> Pending_order : {{ this.pending_order }}</p>
+                    <br>
                     <p>Open position : {{ this.open_position }}</p>
+
+
                     <!-- <p> cryptoList {{ this.cryptoList }}</p> -->
                     <div class="border-1 border-yellow-500 mt-2">
 
@@ -251,8 +281,12 @@ export default {
             sl_price: null,
             tp_price: null,
 
+
+            position_order: [],
+
             full_order: [],
             open_position: [],
+            pending_order: [],
 
             risk: 1,
             value: 1,
@@ -380,9 +414,9 @@ export default {
                     symbol: 'SAND-USDT',
                     type: 'LONG',
                     risk: 1,
-                    limitprice: 0.26866499410153,
-                    slprice: 0.265689369880128,
-                    tpprice: 0.272062360338565,
+                    limitprice: 0.263050415407308,
+                    slprice: 0.258852479193110,
+                    tpprice: 0.270874926959671,
                     market: "trigger"
                 };
 
@@ -435,85 +469,6 @@ export default {
                 console.error(errorMessage);
             }
         },
-
-        async Pending_position_status() {
-            try {
-                console.log('getting_pending_orders')
-                // Make the GET request to fetch the trade data
-                const response_pending = await axios.get(import.meta.env.VITE_ALL_PENDING_ORDER)
-                const response_position = await axios.get(import.meta.env.VITE_ALL_OPEN_POSITION)
-
-                // Extract responsive data
-                const pending_response = await response_pending['data'].data;
-                const position_response = await response_position['data'].data;
-
-                // console.log(pending_response[0])
-                // Store the fetched trades data into the trades array
-                this.full_order = pending_response;
-                this.open_position = await position_response;
-
-
-            } catch (error) {
-
-                let errorMessage = 'Failed to fetch trades: ';
-
-                this.Trades = null;
-
-                if (error.response && error.response.data) {
-                    errorMessage += error.response.data.error || 'Unknown error occurred';
-                } else {
-                    errorMessage += error.message;
-                }
-                console.error(errorMessage);
-            }
-        },
-        Merging_data() {
-
-            const data = this.full_order;
-            console.log('we are here on merginf data :', this.full_order)
-            // An object to consolidate orders by symbol
-            const consolidatedTrades = {};
-
-            data.forEach(item => {
-
-                const symbol = item.symbol;
-                let ID = null;
-
-                if (item.type == 'TRIGGER_MARKET') {
-                    ID = item.orderId
-                }
-
-                // If the symbol doesn't exist, initialize it in consolidatedTrades
-                if (!consolidatedTrades[symbol]) {
-                    consolidatedTrades[symbol] = {
-                        symbol: symbol,
-                        side: item.side,
-                        order_id_sl: null,
-                        order_id_tp: null,
-                        order_pending_id: ID,
-                        order_position_id: ID,
-                        type: item.type
-                    };
-                }
-
-                // Assign STOP_MARKET or TAKE_PROFIT_MARKET based on the order type
-                if (item.type === "STOP_MARKET") {
-                    consolidatedTrades[symbol]["order_id_sl"] = item.orderId.toString();
-                }
-                if (item.type === "TAKE_PROFIT_MARKET") {
-                    consolidatedTrades[symbol]["order_id_tp"] = item.orderId.toString();
-                }
-
-                // Store other necessary details like side, symbol, etc.
-                consolidatedTrades[symbol]["side"] = item.side;
-                consolidatedTrades[symbol]["time"] = item.time;
-            });
-
-            // Convert consolidatedTrades from an object back to an array
-            this.Trades = Object.values(consolidatedTrades);
-            return this.Trades;
-        },
-
         async RemoveTrade(orderid, symbol) {
             try {
 
@@ -522,8 +477,9 @@ export default {
                     orderId: orderid,
                     // 'symbol': symbol.toString(),
                 };
-                // Make the GET request to fetch the trade data
-                const response = await axios.delete(`${import.meta.env.VITE_CLOSE_PENDING_ORDER}`, params);
+
+                // Remove Pending/position orders
+                const response = await axios.delete(import.meta.env.VITE_CLOSE_PENDING_ORDER, { data: params });
 
                 console.log(response.status)
                 // Handle successful response (status 201)
@@ -558,7 +514,145 @@ export default {
             }
         },
 
+        async Trade_status() {
+            try {
+                console.log('Getting Available Orders')
 
+                // Make the GET request to fetch the trade data
+                const response_pending = await axios.get(import.meta.env.VITE_ALL_PENDING_ORDER)
+                const response_position = await axios.get(import.meta.env.VITE_ALL_OPEN_POSITION)
+
+
+                // Extract responsive data
+                const pending_response = await response_pending['data'].data;
+                const position_response = await response_position['data'].data;
+
+                // if (position_response.lenght !== 0) {
+                //     this.position_order_status[];
+                // }
+
+
+                this.position_order = position_response;
+                const All_Order = pending_response.concat(position_response);
+                // console.log(pending_response)
+                // console.log(position_response)
+
+                // if (pending_response.length == 0) {
+                //     console.log('we dont ahve any pedning Orders')
+                // }
+
+                // console.log('all', All_Order)
+                // Store the fetched trades data into the trades array
+
+                this.full_order = All_Order;
+                this.open_position = await position_response;
+                this.pending_order = await pending_response;
+
+
+
+
+            } catch (error) {
+
+                let errorMessage = 'Failed to fetch trades: ';
+
+                this.Trades = null;
+
+                if (error.response && error.response.data) {
+                    errorMessage += error.response.data.error || 'Unknown error occurred';
+                } else {
+                    errorMessage += error.message;
+                }
+                console.error(errorMessage);
+            }
+        },
+        Merging_data() {
+
+            const data = this.full_order;
+            // console.log('we are here on merginf data :', this.full_order)
+            // An object to consolidate orders by symbol
+            const consolidatedTrades = {};
+
+
+
+
+            data.forEach(item => {
+
+
+
+                console.log(item)
+            })
+
+
+            // console.log('************************************',JSON.parse(JSON.stringify(this.position_order)));
+
+
+            // this.position_order.forEach(order => {
+
+
+            //     if (order.positionId) {
+            //         console.log("Position ID:", order.positionId);
+            //     }
+            // });
+
+
+            // console.log(this.full_order)
+
+            // data.forEach(item => {
+
+            //     // const symbol = item.symbol;
+            //     // let ID = null;
+            //     // let ID_pos = null;
+            //     // if (item.type == 'TRIGGER_MARKET') {
+            //     //     ID = item.orderId
+            //     // }
+
+            //     // if (item.type == 'TAKE_PROFIT_MARKET') {
+            //     //     ID = item.orderId
+            //     // }
+
+            //     // if (item.type == 'STOP_MARKET') {
+            //     //     ID = item.orderId
+            //     // }
+
+            //     // if (item.positionId) {
+            //     //     ID_pos = item.positionId
+            //     // }
+
+            //     if (item.positionId) {
+            //         console.log("Position ID:", item.positionId);
+            //     }
+
+
+            //     // If the symbol doesn't exist, initialize it in consolidatedTrades
+            //     // if (!consolidatedTrades[symbol]) {
+            //     //     consolidatedTrades[symbol] = {
+            //     //         symbol: symbol,
+            //     //         side: item.side,
+            //     //         order_id_sl: null,
+            //     //         order_id_tp: null,
+            //     //         order_pending_id: ID,
+            //     //         order_position_id: item.positionId,
+            //     //         type: item.type
+            //     //     };
+            //     // }
+
+            //     // Assign STOP_MARKET or TAKE_PROFIT_MARKET based on the order type
+            //     // if (item.type === "STOP_MARKET") {
+            //     //     consolidatedTrades[symbol]["order_id_sl"] = item.orderId.toString();
+            //     // }
+            //     // if (item.type === "TAKE_PROFIT_MARKET") {
+            //     //     consolidatedTrades[symbol]["order_id_tp"] = item.orderId.toString();
+            //     // }
+
+            //     // Store other necessary details like side, symbol, etc.
+            //     // consolidatedTrades[symbol]["side"] = item.side;
+            //     // consolidatedTrades[symbol]["time"] = item.time;
+            // });
+
+            // Convert consolidatedTrades from an object back to an array
+            this.Trades = Object.values(consolidatedTrades);
+            return this.Trades;
+        },
 
         createChart(containerId, symbol, timeframe = "1", theme = "Dark") {
             new TradingView.widget({
@@ -639,18 +733,18 @@ export default {
             this.$toast.add({ severity: 'success', summary: 'Success Message', detail: 'Message Content', group: 'br', life: 3000 });
         },
 
-        getStatusLabel(status) {
-            switch (status) {
-                case 'LIMIT':
-                    return 'warn';
-                case 'TAKE_PROFIT_MARKET':
-                    return 'info';
-                default:
-                    return null;
-            }
-        },
-        getStatusLabel(type) {
+        side_status(type) {
 
+            if (type == 'SHORT' || type == 'SELL') {
+
+                return 'warn';
+            } else {
+                return 'success';
+            }
+
+        },
+
+        getStatusLabel(type) {
             if (type == 'LIMIT' || type == 'TRIGGER_MARKET') {
                 return 'warn';
             } else if (type == 'TAKE_PROFIT_MARKET') {
@@ -661,38 +755,45 @@ export default {
         transformStatus(type) {
             if (type == "LIMIT" || type == "TRIGGER_MARKET") {
                 return 'Pending';
-            } else if (type == 'TAKE_PROFIT_MARKET') {
-                return 'Live';
+            }
+            else if (type == 'TAKE_PROFIT_MARKET') {
+                return 'Take_profit';
+
+            }
+            else if (type == 'STOP_MARKET') {
+                return 'Stop_loss';
 
             }
             return type;
         },
-
-
     },
 
     mounted() {
 
         this.get_ticker() // get the ticker_list
-        this.Pending_position_status();  // Get current Live orders
+        this.Trade_status();  // Get current Live orders
         this.Merging_data();
 
-        // Set an interval to call Live_orders every X milliseconds (e.g., every 5 seconds)
-        // this.liveOrdersInterval = setInterval(() => {
-        //     this.Live_orders();
-        // }, 5000); // 5000 ms = 5 seconds
+        // setInterval(() => {
+
+        //     // this.get_ticker();
+        //     // this.Pending_position_status();
+        //     // this.Merging_data();
+        //     this.Merging_data();
+        // }, 10000);
+
 
         // Load a default ticker when the component is mounted
         const default_ticker = "BINGX:BTCUSDT.P" // Set default ticker
         this.createChart("chart", default_ticker, "1", "Dark");
     },
 
-    beforeUnmount() {
-        // Clear the interval when the component is destroyed to prevent memory leaks
-        if (this.liveOrdersInterval) {
-            clearInterval(this.liveOrdersInterval);
-        }
-    },
+    // beforeUnmount() {
+    //     // Clear the interval when the component is destroyed to prevent memory leaks
+    //     if (this.liveOrdersInterval) {
+    //         clearInterval(this.liveOrdersInterval);
+    //     }
+    // },
 
     computed: {
 
