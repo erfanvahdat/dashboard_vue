@@ -18,7 +18,7 @@
                     <span>{{ item.label }}</span>
 
                     <Badge v-if="item.class_name" class="ml-auto" :value="item.badge" />
-                    
+
                     <span v-if="item.shortcut"
                         class="ml-auto border border-surface rounded bg-emphasis text-muted-color text-xs p-1">
                         {{ item.shortcut }}
@@ -44,24 +44,25 @@ export default {
                 { separator: true },
                 {
                     label: 'Main',
+
                     items: [
-                        { label: 'Home', icon: 'pi pi-home', class_name: 'HOME', color: "bg-blue-500  rounded-4" },
-                        { label: 'Charts', icon: 'pi pi-table', class_name: 'Charts', color: "bg-blue-500  rounded-4" },
-                        { label: 'Trade', icon: 'pi pi-chart-line', class_name: 'Trade', color: "bg-blue-500  rounded-4" },
+                        { label: 'Home', icon: 'pi pi-home', class_name: 'HOME', color: "bg-blue-500  rounded-3" },
+                        { label: 'Charts', icon: 'pi pi-table', class_name: 'Charts', color: "bg-blue-500  rounded-3" },
+                        { label: 'Trade', icon: 'pi pi-chart-line', class_name: 'Trade', color: "bg-blue-500  rounded-3" },
                     ]
                 },
                 {
                     label: 'Other',
                     items: [
-                        { label: 'Settings', icon: 'pi pi-cog', class_name: 'SETTING', color: "bg-blue-500  rounded-4" },
+                        { label: 'Settings', icon: 'pi pi-cog', class_name: 'SETTING', color: "bg-blue-500  rounded-3" },
                     ]
                 },
                 {
                     label: 'LAB',
                     items: [
-                        { label: 'Analyzing', icon: 'pi pi-chart-line', class_name: 'ANALYZE', color: "bg-blue-500  rounded-4" },
-                        { label: 'Registration', icon: 'pi pi-user-plus', class_name: 'REG', color: "bg-blue-500  rounded-4" },
-                        { label: 'trade_journal', icon: 'pi pi-book', class_name: 'journal', color: "bg-blue-500  rounded-4" }
+                        { label: 'Analyzing', icon: 'pi pi-chart-line', class_name: 'ANALYZE', color: "bg-blue-500  rounded-3" },
+                        { label: 'Registration', icon: 'pi pi-user-plus', class_name: 'REG', color: "bg-blue-500  rounded-3" },
+                        { label: 'trade_journal', icon: 'pi pi-book', class_name: 'journal', color: "bg-blue-500  rounded-3" }
                     ]
                 },
                 { separator: true }

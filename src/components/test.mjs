@@ -1,119 +1,131 @@
-
-
-
-import axios from 'axios';
-import dotenv from 'dotenv';
-
-
-const VITE_CRYPTO_LIST = "http://localhost:3005/api/crypto_list"
-
-
-
-async function getLiveTradeData() {
-
-    const orderParams = {
-        "symbol": 'SAND-USDT',
-        "type": 'LONG',
-        "risk": 1,
-        "limitprice": 0.263515073983782,
-        "slprice": 0.260753055012458,
-        "tpprice": 0.269166714752397,
-        "market": "trigger"
-    };
-
-
-    try {
-
-        // const response = await axios.post(VITE_OPEN_TRADE, orderParams,);
-        const response = await axios.get(VITE_CRYPTO_LIST);
-
-        // const {data} = response.response
-        console.log("###################################")
-        console.log("###################################")
-        // console.log('ffff', Object.keys(response))
-        // console.log(response.data)
-        console.log(response.data.data)
-
-
-        console.log("###################################")
-        console.log("###################################")
-        console.log("###################################")
-        console.log("###################################")
-
-
-        // return response;
-        return 'hello'
-    } catch (err) {
-        // console.log('ffff', Obj.status)
-        console.log('ffff', err)
+let full_order = [
+    { 
+      "symbol": "SAND-USDT", 
+      "orderId": 1846216338172170200, 
+      "side": "BUY", 
+      "positionSide": "BOTH", 
+      "type": "STOP_MARKET", 
+      "origQty": "13", 
+      "price": "0", 
+      "executedQty": "0", 
+      "avgPrice": "0.2645", 
+      "cumQuote": "0", 
+      "stopPrice": "0.2802", 
+      "profit": "0.0", 
+      "commission": "0.0", 
+      "status": "NEW", 
+      "time": 1729007251000, 
+      "updateTime": 1729007251000, 
+      "clientOrderId": "", 
+      "leverage": "8X", 
+      "takeProfit": { 
+        "type": "", 
+        "quantity": 0, 
+        "stopPrice": 0, 
+        "price": 0, 
+        "workingType": "", 
+        "stopGuaranteed": "" 
+      }, 
+      "stopLoss": { 
+        "type": "", 
+        "quantity": 0, 
+        "stopPrice": 0, 
+        "price": 0, 
+        "workingType": "", 
+        "stopGuaranteed": "" 
+      }, 
+      "advanceAttr": 0, 
+      "positionID": 0, 
+      "takeProfitEntrustPrice": 0, 
+      "stopLossEntrustPrice": 0, 
+      "orderType": "", 
+      "workingType": "CONTRACT_PRICE", 
+      "onlyOnePosition": true, 
+      "reduceOnly": true, 
+      "postOnly": false, 
+      "stopGuaranteed": "false", 
+      "triggerOrderId": 0, 
+      "trailingStopRate": 0, 
+      "trailingStopDistance": 0 
+    }, 
+    { 
+      "symbol": "SAND-USDT", 
+      "orderId": 1846216329007616000, 
+      "side": "BUY", 
+      "positionSide": "BOTH", 
+      "type": "TAKE_PROFIT_MARKET", 
+      "origQty": "13", 
+      "price": "0", 
+      "executedQty": "0", 
+      "avgPrice": "0.0", 
+      "cumQuote": "0", 
+      "stopPrice": "0.2506", 
+      "profit": "0.0", 
+      "commission": "0.0", 
+      "status": "NEW", 
+      "time": 1729007249000, 
+      "updateTime": 1729007249000, 
+      "clientOrderId": "", 
+      "leverage": "8X", 
+      "takeProfit": { 
+        "type": "", 
+        "quantity": 0, 
+        "stopPrice": 0, 
+        "price": 0, 
+        "workingType": "", 
+        "stopGuaranteed": "" 
+      }, 
+      "stopLoss": { 
+        "type": "", 
+        "quantity": 0, 
+        "stopPrice": 0, 
+        "price": 0, 
+        "workingType": "", 
+        "stopGuaranteed": "" 
+      }, 
+      "advanceAttr": 0, 
+      "positionID": 0, 
+      "takeProfitEntrustPrice": 0, 
+      "stopLossEntrustPrice": 0, 
+      "orderType": "", 
+      "workingType": "CONTRACT_PRICE", 
+      "onlyOnePosition": true, 
+      "reduceOnly": true, 
+      "postOnly": false, 
+      "stopGuaranteed": "false", 
+      "triggerOrderId": 0, 
+      "trailingStopRate": 0, 
+      "trailingStopDistance": 0 
+    }, 
+    { 
+      "positionId": "1846204222094184448", 
+      "symbol": "SAND-USDT", 
+      "currency": "USDT", 
+      "positionAmt": "13", 
+      "availableAmt": "13", 
+      "positionSide": "SHORT", 
+      "isolated": true, 
+      "avgPrice": "0.2645", 
+      "initialMargin": "0.4298", 
+      "margin": "0.4181", 
+      "leverage": 8, 
+      "unrealizedProfit": "-0.0118", 
+      "realisedProfit": "-0.0017", 
+      "liquidationPrice": 0.2946, 
+      "pnlRatio": "-0.0273", 
+      "maxMarginReduction": "0.0000", 
+      "riskRate": "0.0825", 
+      "markPrice": "0.2654", 
+      "positionValue": "3.4503", 
+      "onlyOnePosition": true, 
+      "updateTime": 1729004362024 
     }
-
-
-    // const data = await response
-    // // console.log(data)
-    // console.log(Object.keys(data))
-    // // return response\
-
-    // return data
-
-
-}
-let a = await getLiveTradeData()
-
-
-// const a = getLiveTradeData()
-// console.log(a)
-
-
-// async function getLiveTradeData() {
-//     const url = 'http://192.168.1.104:7000/api/v1/open-orders/';
-//     const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI3ODI2OTMyLCJpYXQiOjE3Mjc4MDg5MzIsImp0aSI6ImMwYjYzNzdiMmQyMzQ2MDY4MTQ5Njk5OTMyMDE5Mjk0IiwidXNlcl9pZCI6NH0.Ewtsgst3CLWZlVz7mPcZKk0jhnMXa6yi7LQin7EOnMo';
-
-//     const headers = {
-//         'Authorization': `Token ${token}`,
-//         'Content-Type': 'application/json',
-//         // Optionally include User-Agent if necessary
-//         'User-Agent': 'Your User Agent Here'
-//     };
-
-//     try {
-//         const response = await axios.get(url, { headers: headers });
-
-//         // Log the full response to diagnose any issues
-//         console.log('Response Headers:', response.headers);
-//         console.log('Response Status:', response.status);
-
-//         // Check if the response is successful
-//         if (response.status !== 200) {
-//             throw new Error(`HTTP error! status: ${response.status}`);
-//         }
-
-//         // Parse the JSON data
-//         const data = response.data;
-//         console.log('Live trade data:', data);
-
-//         // Print the type of orderId for each item in the response
-//         data.forEach(order => {
-//             console.log(`Order ID: ${order.orderId}, Type: ${typeof order.orderId}`);
-//         });
-
-//         return data;
-
-//     } catch (error) {
-//         console.error('Error fetching live trade data:', error);
-//     }
-// }
-
-// // Call the function
-// getLiveTradeData();
-
-
-
-
-let v2 = {
-    name: 'ali',
-
-}
-
-
-
+  ];
+  
+  // Extract positionId using forEach
+  full_order.forEach(order => {
+    if (order.positionId) {
+      console.log("Position ID:", order.positionId);
+    }
+  });
+  
