@@ -146,7 +146,7 @@
 
                                 <Toast></Toast>
                                 <Button label="Close order/position" severity="warn"
-                                    @click='RemoveTrade(slotProps.data.order_id, slotProps.data.symbol, this.STATUS[slotProps.data.symbol] )'></Button>
+                                    @click='RemoveTrade(slotProps.data.order_id, slotProps.data.symbol, this.STATUS[slotProps.data.symbol])'></Button>
                             </template>
 
                         </Column>
@@ -360,8 +360,6 @@ export default {
             }
         },
 
-
-
         async Remove_cash() {
 
             localStorage.removeItem('access');
@@ -371,30 +369,26 @@ export default {
         async OpenTrade() {
             try {
                 // const token = this.show_access(); // Get the access token
-
-                console.log(import.meta.env.VITE_OPEN_TRADE)
-                console.log(this.Ticker.symbol)
-
-                const orderParams = {
-                    symbol: 'SAND-USDT',
-                    type: 'LONG',
-                    risk: 1,
-                    limitprice: 0.264902901931511,
-                    slprice: 0.262001651538042,
-                    tpprice: 0.273008111722808,
-                    market: "trigger"
-                };
+                // const orderParams = {
+                //     symbol: 'SAND-USDT',
+                //     type: 'LONG',
+                //     risk: 1,
+                //     limitprice: 0.264902901931511,
+                //     slprice: 0.262001651538042,
+                //     tpprice: 0.273008111722808,
+                //     market: "trigger"
+                // };
 
                 // Prepare the data for the POST request
-                // const orderParams = {
-                //     "symbol": `${this.Ticker.symbol}`.toUpperCase(),
-                //     "type": this.type_pos.toUpperCase(),
-                //     "risk": parseFloat(this.risk),
-                //     "limitprice": parseFloat(this.limit_price),
-                //     "slprice": parseFloat(this.sl_price),
-                //     "tpprice": parseFloat(this.tp_price),
-                //     "market": "trigger",
-                // };
+                const orderParams = {
+                    "symbol": `${this.Ticker.symbol}`.toUpperCase(),
+                    "type": this.type_pos.toUpperCase(),
+                    "risk": parseFloat(this.risk),
+                    "limitprice": parseFloat(this.limit_price),
+                    "slprice": parseFloat(this.sl_price),
+                    "tpprice": parseFloat(this.tp_price),
+                    "market": "trigger",
+                };
 
                 // Make the POST request to open_trade 
                 const response = await axios.post(`${import.meta.env.VITE_OPEN_TRADE}`, orderParams, {
@@ -409,7 +403,7 @@ export default {
                     this.$toast.add({
                         severity: 'success',
                         summary: 'Success',
-                        detail: 'Live trade posted successfully!',
+                        detail: 'Live trade posted successfully!', 
                         life: 3000
                     })
                 }
@@ -486,8 +480,6 @@ export default {
 
         async Trade_status() {
             try {
-                console.log('Getting Available Orders')
-
                 // Make the GET request to fetch the trade data
                 const response_pending = await axios.get(import.meta.env.VITE_ALL_PENDING_ORDER)
                 const response_position = await axios.get(import.meta.env.VITE_ALL_OPEN_POSITION)
@@ -544,9 +536,11 @@ export default {
                     };
                 });
 
-
-
+                // Asign the trade values to display it with tables
                 this.full_order = Trade_dict;
+
+                // Validation for the stop and take profit 
+
 
             } catch (error) {
 
