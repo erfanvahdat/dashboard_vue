@@ -112,46 +112,16 @@
 
                                 </span>
                             </template></Column>
-                        <Column field="side" header="Position Side">
-                            <template #body="slotProps">
-                                <!-- {{ slotProps.data.side }} -->
 
 
-                                <Tag :value="slotProps.data.side" :severity="side_status(slotProps.data.side)" />
-
-
-
-                            </template>
-                        </Column>
 
                         <Column field="orderId" header="ID">
                             <template #body="slotProps">
 
-                                {{ slotProps.data.orderId }}
+                                {{ slotProps.data.order_id }}
                                 <!-- {{ console.log(slotProps.data.orderId ) }} -->
                             </template>
                         </Column>
-
-
-                        <Column field="orderId" header="ID_pos">
-                            <template #body="slotProps">
-                                {{ slotProps.data.positionId }}
-
-                            </template>
-                        </Column>
-
-                        <!-- <Column field="orderId" header="sl_id">
-                            <template #body="slotProps">
-                                {{ slotProps.data.order_id_sl }}
-                            </template>
-                        </Column>
-
-
-                        <Column field="orderId" header="tp_id">
-                            <template #body="slotProps">
-                                {{ slotProps.data.order_id_tp }}
-                            </template>
-                        </Column> -->
 
 
                         <Column field="time" header="Time">
@@ -171,17 +141,13 @@
                             </template>
                         </Column>
 
-
-
-
                         <Column field="" header="Close">
                             <template #body="slotProps">
 
                                 <Toast></Toast>
                                 <Button label="Close order/position" severity="warn"
-                                    @click='RemoveTrade(slotProps.data.orderId, slotProps.data.symbol)'></Button>
+                                    @click='RemoveTrade(slotProps.data.order_id, slotProps.data.symbol, this.STATUS[slotProps.data.symbol] )'></Button>
                             </template>
-
 
                         </Column>
                     </DataTable>
@@ -248,6 +214,8 @@
                     <p> Pending_order : {{ this.pending_order }}</p>
                     <br>
                     <p>Open position : {{ this.open_position }}</p>
+                    <br>
+                    <p> position_id : {{ this.positon_id }}</p>
 
 
                     <!-- <p> cryptoList {{ this.cryptoList }}</p> -->
@@ -288,11 +256,11 @@ export default {
             open_position: [],
             pending_order: [],
 
+
+            STATUS: {},
             risk: 1,
             value: 1,
             liveOrdersInterval: null, // Interval reference
-
-
 
             num_header: 8,
             isWarning: null,
@@ -323,8 +291,6 @@ export default {
                 { field: 'category', header: 'Category' },
                 { field: 'quantity', header: 'Quantity' }
             ],
-
-
 
 
             product: [{
@@ -409,14 +375,13 @@ export default {
                 console.log(import.meta.env.VITE_OPEN_TRADE)
                 console.log(this.Ticker.symbol)
 
-
                 const orderParams = {
                     symbol: 'SAND-USDT',
                     type: 'LONG',
                     risk: 1,
-                    limitprice: 0.263050415407308,
-                    slprice: 0.258852479193110,
-                    tpprice: 0.270874926959671,
+                    limitprice: 0.264902901931511,
+                    slprice: 0.262001651538042,
+                    tpprice: 0.273008111722808,
                     market: "trigger"
                 };
 
@@ -469,17 +434,22 @@ export default {
                 console.error(errorMessage);
             }
         },
-        async RemoveTrade(orderid, symbol) {
+        async RemoveTrade(orderid, symbol, pending_status) {
             try {
 
-                console.log(orderid)
+                console.log(orderid, pending_status)
                 const params = {
                     orderId: orderid,
-                    // 'symbol': symbol.toString(),
+
                 };
 
                 // Remove Pending/position orders
-                const response = await axios.delete(import.meta.env.VITE_CLOSE_PENDING_ORDER, { data: params });
+                if (pending_status == true) {
+                    const response = await axios.delete(import.meta.env.VITE_CLOSE_PENDING_ORDER, { data: params });
+                }
+                else if (pending_status == false) {
+                    const response = await axios.delete(import.meta.env.VITE_CLOSE_POSITION_ORDER, { data: params });
+                }
 
                 console.log(response.status)
                 // Handle successful response (status 201)
@@ -522,34 +492,61 @@ export default {
                 const response_pending = await axios.get(import.meta.env.VITE_ALL_PENDING_ORDER)
                 const response_position = await axios.get(import.meta.env.VITE_ALL_OPEN_POSITION)
 
-
                 // Extract responsive data
                 const pending_response = await response_pending['data'].data;
                 const position_response = await response_position['data'].data;
 
-                // if (position_response.lenght !== 0) {
-                //     this.position_order_status[];
-                // }
+                let All_Order = pending_response.concat(position_response);
 
-
-                this.position_order = position_response;
-                const All_Order = pending_response.concat(position_response);
-                // console.log(pending_response)
-                // console.log(position_response)
-
-                // if (pending_response.length == 0) {
-                //     console.log('we dont ahve any pedning Orders')
-                // }
-
-                // console.log('all', All_Order)
-                // Store the fetched trades data into the trades array
-
-                this.full_order = All_Order;
+                // this.full_order = All_Order;
                 this.open_position = await position_response;
                 this.pending_order = await pending_response;
 
 
+                let Trade_dict = {};
 
+                // Get the unique symbols from the orders
+                const uniqueSymbols = [...new Set(All_Order.map(order => order.symbol))];
+
+                // Iterate over each unique symbol
+                uniqueSymbols.forEach(symbol => {
+                    // Filter the orders for the current symbol
+                    const Order_filter = All_Order.filter(element => element.symbol === symbol);
+
+                    console.log('look at here ******', Order_filter);
+
+                    let ID = null;
+                    let time = null;
+                    let type = null;
+
+                    Order_filter.forEach(order => {
+                        // Check if the order is of the types you're interested in and extract the values
+                        if (order.type === "TRIGGER_MARKET" || order.type === "TRIGGER_LIMIT" || order.type === "TAKE_PROFIT_MARKET" || order.type === "STOP_MARKET") {
+                            ID = order.orderId;
+                            time = order.time;
+                            type = order.type;
+                            this.STATUS[symbol] = true;
+                        } else {
+                            // Handle other order types
+                            ID = order.positionId;  // If it's a position, use positionId instead
+                            time = order.updateTime;
+                            type = "TAKE_PROFIT_MARKET";
+                            this.STATUS[symbol] = false;
+                        }
+                    });
+
+                    // Store the extracted data into Trade_dict
+                    Trade_dict[symbol] = {
+                        symbol: symbol,
+                        order_id: ID,
+                        time: time,
+                        type: type
+                    };
+                });
+
+
+
+                this.full_order = Trade_dict;
 
             } catch (error) {
 
@@ -572,82 +569,68 @@ export default {
             // An object to consolidate orders by symbol
             const consolidatedTrades = {};
 
+            this.position_order.forEach(order => {
 
 
+                if (order.positionId) {
+                    console.log("Position ID:", order.positionId);
+                }
+            });
+
+
+            console.log(this.full_order)
 
             data.forEach(item => {
 
+                const symbol = item.symbol;
+                let ID = null;
+                let ID_pos = null;
+                if (item.type == 'TRIGGER_MARKET') {
+                    ID = item.orderId
+                }
+
+                if (item.type == 'TAKE_PROFIT_MARKET') {
+                    ID = item.orderId
+                }
+
+                if (item.type == 'STOP_MARKET') {
+                    ID = item.orderId
+                }
+
+                if (item.positionId) {
+                    ID_pos = item.positionId
+                }
+
+                if (item.positionId) {
+                    console.log("Position ID:", item.positionId);
+                }
 
 
-                console.log(item)
-            })
+                // If the symbol doesn't exist, initialize it in consolidatedTrades
+                if (!consolidatedTrades[symbol]) {
+                    consolidatedTrades[symbol] = {
+                        symbol: symbol,
+                        side: item.side,
+                        order_id_sl: null,
+                        order_id_tp: null,
+                        order_pending_id: ID,
+                        order_position_id: item.positionId,
+                        type: item.type
+                    };
+                }
 
+                // Assign STOP_MARKET or TAKE_PROFIT_MARKET based on the order type
+                if (item.type === "STOP_MARKET") {
+                    consolidatedTrades[symbol]["order_id_sl"] = item.orderId.toString();
+                }
+                if (item.type === "TAKE_PROFIT_MARKET") {
+                    consolidatedTrades[symbol]["order_id_tp"] = item.orderId.toString();
+                }
 
-            // console.log('************************************',JSON.parse(JSON.stringify(this.position_order)));
-
-
-            // this.position_order.forEach(order => {
-
-
-            //     if (order.positionId) {
-            //         console.log("Position ID:", order.positionId);
-            //     }
-            // });
-
-
-            // console.log(this.full_order)
-
-            // data.forEach(item => {
-
-            //     // const symbol = item.symbol;
-            //     // let ID = null;
-            //     // let ID_pos = null;
-            //     // if (item.type == 'TRIGGER_MARKET') {
-            //     //     ID = item.orderId
-            //     // }
-
-            //     // if (item.type == 'TAKE_PROFIT_MARKET') {
-            //     //     ID = item.orderId
-            //     // }
-
-            //     // if (item.type == 'STOP_MARKET') {
-            //     //     ID = item.orderId
-            //     // }
-
-            //     // if (item.positionId) {
-            //     //     ID_pos = item.positionId
-            //     // }
-
-            //     if (item.positionId) {
-            //         console.log("Position ID:", item.positionId);
-            //     }
-
-
-            //     // If the symbol doesn't exist, initialize it in consolidatedTrades
-            //     // if (!consolidatedTrades[symbol]) {
-            //     //     consolidatedTrades[symbol] = {
-            //     //         symbol: symbol,
-            //     //         side: item.side,
-            //     //         order_id_sl: null,
-            //     //         order_id_tp: null,
-            //     //         order_pending_id: ID,
-            //     //         order_position_id: item.positionId,
-            //     //         type: item.type
-            //     //     };
-            //     // }
-
-            //     // Assign STOP_MARKET or TAKE_PROFIT_MARKET based on the order type
-            //     // if (item.type === "STOP_MARKET") {
-            //     //     consolidatedTrades[symbol]["order_id_sl"] = item.orderId.toString();
-            //     // }
-            //     // if (item.type === "TAKE_PROFIT_MARKET") {
-            //     //     consolidatedTrades[symbol]["order_id_tp"] = item.orderId.toString();
-            //     // }
-
-            //     // Store other necessary details like side, symbol, etc.
-            //     // consolidatedTrades[symbol]["side"] = item.side;
-            //     // consolidatedTrades[symbol]["time"] = item.time;
-            // });
+                // Store other necessary details like side, symbol, etc.
+                consolidatedTrades[symbol]["side"] = item.side;
+                consolidatedTrades[symbol]["time"] = item.time;
+            });
 
             // Convert consolidatedTrades from an object back to an array
             this.Trades = Object.values(consolidatedTrades);
@@ -757,11 +740,11 @@ export default {
                 return 'Pending';
             }
             else if (type == 'TAKE_PROFIT_MARKET') {
-                return 'Take_profit';
+                return 'Open';
 
             }
             else if (type == 'STOP_MARKET') {
-                return 'Stop_loss';
+                return 'Open';
 
             }
             return type;
