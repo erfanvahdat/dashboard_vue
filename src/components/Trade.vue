@@ -363,39 +363,78 @@ export default {
         async Remove_cash() {
 
             localStorage.removeItem('access');
-            localStorage.removeItem('refresh');
+            localStorage.removeItem('refresh ');
         },
 
         async OpenTrade() {
             try {
                 // const token = this.show_access(); // Get the access token
-                // const orderParams = {
-                //     symbol: 'SAND-USDT',
-                //     type: 'LONG',
-                //     risk: 1,
-                //     limitprice: 0.264902901931511,
-                //     slprice: 0.262001651538042,
-                //     tpprice: 0.273008111722808,
-                //     market: "trigger"
-                // };
+                const orderParams = {
+                    symbol: 'SAND-USDT',
+                    type: 'LONG',
+                    risk: 1,
+                    limitprice: 0.256795492457761,
+                    slprice: 0.252279361313897,
+                    tpprice: 0.262246917033786,
+                    market: "trigger"
+                };
 
                 // Prepare the data for the POST request
-                const orderParams = {
+                // const orderParams = {
+                //     "symbol": `${this.Ticker.symbol}`.toUpperCase(),
+                //     "type": this.type_pos.toUpperCase(),
+                //     "risk": parseFloat(this.risk),
+                //     "limitprice": parseFloat(this.limit_price),
+                //     "slprice": parseFloat(this.sl_price),
+                //     "tpprice": parseFloat(this.tp_price),
+                //     "market": "trigger",
+                // };
+
+                const trade_params = {
                     "symbol": `${this.Ticker.symbol}`.toUpperCase(),
-                    "type": this.type_pos.toUpperCase(),
-                    "risk": parseFloat(this.risk),
-                    "limitprice": parseFloat(this.limit_price),
-                    "slprice": parseFloat(this.sl_price),
-                    "tpprice": parseFloat(this.tp_price),
-                    "market": "trigger",
+                    "stop_loss": parseFloat(this.sl_price),
+                    "take_profit": parseFloat(this.tp_price)
                 };
+
+
 
                 // Make the POST request to open_trade 
                 const response = await axios.post(`${import.meta.env.VITE_OPEN_TRADE}`, orderParams, {
                 });
 
+                // Trade status
                 const status = response.status;
-                console.log(status)
+
+                // parse the opening trade response
+                const parse_res = JSON.parse(response.data.data);
+                const order = parse_res.data.order;
+
+
+
+                const symbol = order.symbol;
+                const side = order.side;
+                const type = order.type;
+                const positionSide = order.positionSide;
+                const quantity = order.quantity;
+                const stop_loss = orderParams.slprice;
+                const take_profit = orderParams.tpprice;
+
+
+                // meta dara params
+                const meta_data_trade = {
+                    "symbol": `${this.Ticker.symbol}`.toUpperCase(),
+                    "stop_loss": parseFloat(this.sl_price),
+                    "take_profit": parseFloat(this.tp_price),
+                    "limitprice": order.price,
+                    "quantity": order.quantity,
+                    "side": order.side,
+                }
+
+                // Saving meta data of trade in DB
+                const trade_meta_data_response = await axios.post(`${import.meta.env.VITE_STATUS_TRADE}`, meta_data_trade, {
+                });
+
+
 
                 // Handle successful response (status 201)
                 if (status == 201) {
@@ -403,7 +442,7 @@ export default {
                     this.$toast.add({
                         severity: 'success',
                         summary: 'Success',
-                        detail: 'Live trade posted successfully!', 
+                        detail: 'Live trade posted successfully!',
                         life: 3000
                     })
                 }
@@ -495,15 +534,56 @@ export default {
                 this.pending_order = await pending_response;
 
 
+
+                console.log('we are here ****************************************')
+
+                // Take appropriate action based on which one exists
+                // if (takeProfitMarket) {
+                //     console.log("TP Exist");
+                // } else {
+                //     console.log("TP does not exist ");
+                // }
+
+                // if (stopMarket) {
+                //     console.log("SL exist");
+
+                // } else {
+                //     console.log("SL does not exist ")
+                // }
+
+
+                // STOP_MARKET , TAKE_PROFIT_MARKET
+
+
                 let Trade_dict = {};
 
                 // Get the unique symbols from the orders
                 const uniqueSymbols = [...new Set(All_Order.map(order => order.symbol))];
 
                 // Iterate over each unique symbol
-                uniqueSymbols.forEach(symbol => {
+                uniqueSymbols.forEach(async symbol => {
                     // Filter the orders for the current symbol
                     const Order_filter = All_Order.filter(element => element.symbol === symbol);
+
+
+                    const takeProfitMarket = pending_response.find(item => item.type === 'TAKE_PROFIT_MARKET');
+
+                    // Check if there's an object with type 'STOP_MARKET'
+                    const stopMarket = pending_response.find(item => item.type === 'STOP_MARKET');
+
+                    //  set params
+
+
+                    if (!takeProfitMarket) {
+                        const set_tp_params = { symbol: symbol, status: "TP" };
+                        const set_tp = await axios.post(import.meta.env.VITE_SET_SL_TP, set_tp_params);
+
+                    }
+                    if (!stopMarket) {
+                        const set_sl_params = { symbol: symbol, status: "SL" };
+                        const set_sl = await axios.post(import.meta.env.VITE_SET_SL_TP, set_sl_params);
+                    }
+
 
                     console.log('look at here ******', Order_filter);
 
@@ -751,13 +831,14 @@ export default {
         this.Trade_status();  // Get current Live orders
         this.Merging_data();
 
-        // setInterval(() => {
+        setInterval(() => {
 
-        //     // this.get_ticker();
-        //     // this.Pending_position_status();
-        //     // this.Merging_data();
-        //     this.Merging_data();
-        // }, 10000);
+            // this.get_ticker();
+            // this.Pending_position_status();
+            // this.Merging_data();
+            this.Trade_status();  // Get current Live orders
+            // this.Merging_data();
+        }, 10000);
 
 
         // Load a default ticker when the component is mounted
