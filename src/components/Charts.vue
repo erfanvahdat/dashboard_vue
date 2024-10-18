@@ -118,15 +118,15 @@ export default {
       } else {
         return 'lg:grid-cols-3 lg:grid-rows-1';
       }
-    }
+      }
   },
   methods: {
     async get_ticker() {
       try {
         // Fetch the data from the API
-        const response = await axios.get(`${import.meta.env.VITE_CRYPTO_LIST}`);
+        const response = await axios.post(`${import.meta.env.VITE_CRYPTO_LIST}`);
 
-        this.cryptoList = response.data.data.map(symbol => ({ symbol }));
+        this.cryptoList = response.data.data.map(item => ({ symbol: item.symbol }));
 
         console.log("Getting data is complete...");
       } catch (error) {

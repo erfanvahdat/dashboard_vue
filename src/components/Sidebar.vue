@@ -17,8 +17,7 @@
                     <span :class="item.icon"></span>
                     <span>{{ item.label }}</span>
 
-                    <Badge v-if="item.class_name" class="ml-auto" :value="item.badge" />
-
+                    <!-- <Badge v-if="item.class_name" class="ml-auto" :value="item.badge" /> -->
                     <span v-if="item.shortcut"
                         class="ml-auto border border-surface rounded bg-emphasis text-muted-color text-xs p-1">
                         {{ item.shortcut }}
