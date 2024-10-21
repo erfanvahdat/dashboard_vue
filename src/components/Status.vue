@@ -1,11 +1,10 @@
 <template>
   <!-- Status Section -->
   <div
-    class="flex flex-col gap-2 p-3 mt-2 h-full w-[300px] overflow-hidden justify-between font-mono bg-gray-700 rounded">
+    class="flex flex-col gap-2 p-3 h-full  w-[300px] overflow-hidden justify-between font-mono bg-gray-700 rounded">
 
     <div class="flex flex-col justify-between h-full">
       <ul class="text-sm space-y-7 w-full p-1 ">
-
 
         <li class="flex justify-between">
           <div class="underline">Balance</div>
