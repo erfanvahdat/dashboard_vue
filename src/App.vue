@@ -32,6 +32,9 @@
 
 
 
+
+
+
   <!-- <Trade_chart></Trade_chart> -->
 
   <!-- <router-link to="/">Home</router-link>
