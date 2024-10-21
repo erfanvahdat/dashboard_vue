@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col p-2 gap-3 bg-gray-800 h-[100vh] overflow-hidden">
 
-    <!-- Status Component -->
+    <!-- Status Component with first chart -->
     <div class=" flex flex-row rounded w-full mx-3 gap-2  mr-10 ">
 
       <!-- status bar -->
@@ -11,27 +11,26 @@
 
       </div>
 
-      <div class=" w-full h-fit p-2 mt-2 mr-5 overflow-hidden border-1 border-blue-300 rounded bg-gray-700">
-
-        <div class='w-full
-        '>
-          <apexchart type="line" height="300" width="1500" :options="chartOptions" :series="series">
+      <!-- Chart Main Profit Section -->
+      <div class=" w-full  mt-2 mr-5  rounded bg-gray-700">
+        <div class="flex p-2">
+          <apexchart type="line" height="300" width="1600" :options="chartOptions" :series="series">
           </apexchart>
         </div>
-
-
       </div>
+
 
     </div>
 
-    <div class="flex flex-col border-1 border-blue-500 h-full">
+    <!-- Second main Section -->
+    <div class="flex flex-col border- h-full">
 
-      <!-- Testing api balance -->
-      <div class="flex">
 
-        <button class="btn btn-primary btn-sm " role="button" @click='Get_Balance()'>show_access_token
-        </button>
-
+      <!-- Slope chart  -->
+      <div class=" bg-gray-700 w-fit  mx-3 rounded-2 ">
+        <div class="flex p-2">
+          <apexchart type="line" height="400" width="700" :options="Slope_options" :series="slope_series"></apexchart>
+        </div>
       </div>
 
       <div class="flex mt-2">
@@ -54,6 +53,7 @@
 <script>
 import axios from 'axios';
 import chalk from "chalk";
+import { line_option, Slope_option } from './chart_config/chart_config.js';
 
 export default {
 
@@ -62,75 +62,11 @@ export default {
 
       series: [],
 
-      chartOptions: {
-        chart: {
-          type: 'line',
-          toolbar: {
-            show: true,
-            tools: {
-              download: true,
-              selection: true,
-            },
-            style: {
-              background: '#333', // Set the toolbar background color
-            },
-          },
-        },
-        title: {
-          text: 'Line Chart',
-          align: 'left',
-          style: {
-            color: '#FFFFFF', // Set title color to white
-          },
-        },
-        xaxis: {
-          type: 'datetime',
-          title: {
-            text: 'Date',
-            style: {
-              color: '#FFFFFF', // Set x-axis title color to white
-            },
-          },
-          labels: {
-            style: {
-              colors: ['#FFFFFF'], // Set x-axis label color to white
-            },
-          },
-        },
-        yaxis: {
-          title: {
-            text: 'Price',
-            style: {
-              color: '#FFFFFF', // Set y-axis title color to white
-            },
-          },
-          labels: {
-            formatter: function (val) {
-              return val.toFixed(2);
-            },
-            style: {
-              colors: ['#FFFFFF'], // Set y-axis label color to white
-            },
-          },
-        },
-        stroke: {
-          width: 1,
-        },
-        tooltip: {
-          theme: 'dark',
-          style: {
-            fontSize: '12px',
-            background: '#000',
-            color: '#fff',
-          },
-        },
-        grid: {
-          borderColor: '#555', // Change grid color for better visibility
-          style: {
-            background: '#222', // Set grid background color
-          },
-        },
-      },
+      slope_series: [],
+
+      chartOptions: line_option,
+      Slope_options: Slope_option,
+
       access: null,
       order_pulse: false, // Contring the pulse container display
       pending_pulse: false, // Contring the pulse container display
@@ -165,6 +101,7 @@ export default {
     this.Balance();
     this.calculare_profit();
 
+    this.processing_chart_slope_data();
   },
 
   methods: {
@@ -256,7 +193,33 @@ export default {
         console.log(error)
 
       }
-    }
+    },
+    async processing_chart_slope_data() {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_TRADE_HISTORY}`);
+        const tradeHistory = response.data;
+
+        // Group trades by their ticker symbol
+        const groupedData = tradeHistory.reduce((acc, trade) => {
+          const { symbol, time, profit } = trade;
+
+          if (!acc[symbol]) {
+            acc[symbol] = [];
+          }
+          acc[symbol].push({ x: new Date(time).getTime(), y: profit });
+          return acc;
+        }, {});
+
+
+        // Create the series for each ticker symbol
+        this.slope_series = Object.keys(groupedData).map((symbol) => ({
+          name: symbol,
+          data: groupedData[symbol].sort((a, b) => a.x - b.x), // Sort data by time (ascending order)
+        }));
+      } catch (error) {
+        console.error("Error fetching trade history:", error);
+      }
+    },
   },
 
 
