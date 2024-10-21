@@ -32,7 +32,7 @@ import FloatLabel from 'primevue/floatlabel';
 import RadioButton from 'primevue/radiobutton';
 import ConfirmDialog from 'primevue/confirmdialog';
 import MultiSelect from 'primevue/multiselect';
-// import ripple from 'primevue/ripple';
+import Divider from 'primevue/divider';
 import Badge from 'primevue/badge';
 import Slider from 'primevue/slider';
 import TreeSelect from 'primevue/treeselect';
@@ -137,6 +137,7 @@ const globalComponents = {
   "Slider": Slider,
   "ConfirmPopup": ConfirmPopup,
   "Toast": Toast,
+  "Divider": Divider,
 
 };
 
