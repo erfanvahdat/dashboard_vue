@@ -7,8 +7,7 @@
       <!-- status bar -->
       <div>
         <status :balance="balance" :equity="equity" :unProfit="unProfit" :dailyProfit="dailyProfit"
-          :dailyProfitPercent="dailyProfitPercent" />
-
+          :WeeklyPorfit="WeeklyProfit" :available_margin="avlMargin" :dailyProfitPercent="dailyProfitPercent" />
 
       </div>
 
@@ -23,52 +22,30 @@
 
       </div>
 
-
     </div>
 
-
     <div class="flex flex-col border-1 border-blue-500 h-full">
-
 
       <!-- Testing api balance -->
       <div class="flex">
 
-
         <button class="btn btn-primary btn-sm " role="button" @click='Get_Balance()'>show_access_token
         </button>
-
 
       </div>
 
       <div class="flex mt-2">
         <p>{{ this.responseMessage }}</p>
 
-
-
         <button class="btn btn-primary btn-sm bg-slate-600 " role="button" @click='get_token()'>show_access tokne
         </button>
 
-        <!-- {{ this.access }} -->
-
-      </div>
 
 
-      <div v-if="balance !== null" class="">
-        <h3>Account Balance Information</h3>
-        <p><strong>Balance:</strong> {{ balance }}</p>
-        <p><strong>Equity:</strong> {{ equity }}</p>
-        <p><strong>Unrealized Profit:</strong> {{ unProfit }}</p>
-        <p><strong>Realized Profit:</strong> {{ reProfit }}</p>
-        <p><strong>Available Margin:</strong> {{ avlMargin }}</p>
-        <p><strong>Used Margin:</strong> {{ usedMargin }}</p>
       </div>
 
 
     </div>
-
-
-
-
 
 
   </div>
@@ -76,26 +53,15 @@
 
 <script>
 import axios from 'axios';
+import chalk from "chalk";
+
 export default {
 
   data() {
     return {
 
-      series: [{
-        name: 'Price',
-        data: [
-          { x: new Date(1538778600000), y: 6633.33 },
-          { x: new Date(1538780400000), y: 6630.11 },
-          { x: new Date(1538782200000), y: 6635.65 },
-          { x: new Date(1538784000000), y: 6638.24 },
-          { x: new Date(1538785800000), y: 6624.47 },
-          { x: new Date(1538787600000), y: 6624.31 },
-          { x: new Date(1538789400000), y: 6626.02 },
-          { x: new Date(1538791200000), y: 6603.02 },
-          { x: new Date(1538793000000), y: 6604.01 },
-          { x: new Date(1538794800000), y: 6608.02 },
-        ],
-      }],
+      series: [],
+
       chartOptions: {
         chart: {
           type: 'line',
@@ -169,6 +135,8 @@ export default {
       order_pulse: false, // Contring the pulse container display
       pending_pulse: false, // Contring the pulse container display
 
+      x: [],
+      y: [],
       balance: 0.00,
       equity: 0.00,
       unProfit: 0.00,
@@ -176,19 +144,13 @@ export default {
       avlMargin: 0.00,
       usedMargin: 0.00,
       dailyProfit: 0.00,
+      WeeklyProfit: 0.0,
       dailyProfitPercent: 0.00,
       cryptosBalance: [], // Since it's an array
       responseMessage: '',
       responseStatus: '',
 
       isOpen: false,
-
-      objectKeys: [],
-      peopleData: [
-        { name: "erfan", job: "programmer", favorit_color: "green" },
-        { name: "ali", job: "it", favorit_color: "blue" },
-        { name: "moh", job: "SEO", favorit_color: "red" }
-      ],
     };
   },
 
@@ -200,79 +162,99 @@ export default {
     // }
 
     this.get_token();
-
-
+    this.Balance();
+    this.calculare_profit();
 
   },
 
   methods: {
+
+
     get_token() {
 
       const Access = localStorage.getItem('access');
       this.access = Access;
-
     },
+
     toggleCollapse() {
       this.isOpen = !this.isOpen; // Toggle collapse
     },
 
-    async Get_Balance() {
+    //  Get the Trade history from db
+    async calculare_profit() {
       try {
-        const access = localStorage.getItem('access');
+        // Fetch the trade history data from the API
+        const response = await axios.get(`${import.meta.env.VITE_TRADE_HISTORY}`);
+        const tradeHistory = response.data;
 
-        // Ensure that access token is available
-        if (!access) {
-          this.responseMessage = 'Access token not found. Please log in.';
-          this.responseStatus = '401';  // Set status to 401 (Unauthorized)
-          return;
-        }
-
-        // Send GET request to fetch balance
-        const response = await axios.get(`${import.meta.env.VITE_BALANCE}`, {
-          headers: {
-            'Authorization': `Bearer ${access}`,
-            'Content-Type': 'application/json'
-          }
+        // Map the `time` and `profit` values for the chart's x and y axes
+        let chartData = tradeHistory.map(item => {
+          return {
+            x: new Date(item.time).getTime(), // Convert the time to a JS timestamp
+            y: item.profit, // Use the profit for the y axis
+          };
         });
 
+        // Sort the data by time in ascending order
+        chartData = chartData.sort((a, b) => a.x - b.x);
+
+        // Update the series data for the chart
+        this.series = [{
+          name: 'Profit',
+          data: chartData, // Set the sorted data
+        }];
+
+        // Calculate daily and weekly profits
+        const currentTime = Date.now();
+        const oneDayAgo = currentTime - (24 * 60 * 60 * 1000);
+        const sevenDayAgo = currentTime - (7 * 24 * 60 * 60 * 1000);
+
+        const last_day_profit = tradeHistory
+          .filter(item => item.time >= oneDayAgo)
+          .reduce((sum, item) => sum + item.profit, 0);
+
+        const last_week_profit = tradeHistory
+          .filter(item => item.time >= sevenDayAgo)
+          .reduce((sum, item) => sum + item.profit, 0);
+
+        // Update the daily and weekly profit data
+        this.dailyProfit = last_day_profit.toFixed(2);
+        this.WeeklyProfit = last_week_profit.toFixed(2);
+      } catch (error) {
+        console.log("Error fetching trade history:", error);
+      }
+    },
+    async Balance() {
+      try {
+
+        const response = await axios.get(`${import.meta.env.VITE_BALANCE}`);
+
+
         // Extracting the first item from the response data (since it's an array of objects)
-        const balanceData = response.data[0];
+        const balanceData = response.data.data;
 
-        // Mapping the response data to the Vue component's state
-        this.balance = balanceData.balance;
-        this.equity = balanceData.equity;
-        this.unProfit = balanceData.unProfit;
-        this.reProfit = balanceData.reProfit;
-        this.avlMargin = balanceData.avlMargin;
+        // // Mapping the response data to the Vue component's state
+        this.balance = parseFloat(balanceData.balance);
+        this.equity = parseFloat(balanceData.equity);
+        this.unProfit = parseFloat(balanceData.unProfit);
+        this.reProfit = parseFloat(balanceData.reProfit);
+        this.avlMargin = parseFloat(balanceData.availableMargin);
         this.usedMargin = balanceData.usedMargin;
-        this.cryptosBalance = balanceData.cryptosBalance;  // Assuming this is an array
 
-        this.responseMessage = 'Balance retrieved successfully';
-        this.responseStatus = response.status.toString(); // Set status based on response status
+        const save_meta_data_balance = {
+          balance: this.balance,
+          equity: this.equity,
+          asset: "USDT"
+
+        }
+        // Saving user balance into balances table
+        const save_meta_data = await axios.post(`${import.meta.env.VITE_SAVE_BALANCE}`, save_meta_data_balance);
+
+        console.log(chalk.green('User balance Table is updated'))
 
       } catch (error) {
-        // Error handling
-        if (error.response) {
-          if (error.response.status === 400) {
-            const errorMessage = error.response.data.error
-              ? error.response.data.error[0]
-              : 'Unknown error occurred';
-            this.responseMessage = `Failed to retrieve balance: ${errorMessage}`;
-            this.responseStatus = '400';  // Set status to 400 (Bad Request)
-          } else if (error.response.status === 401) {
-            this.responseMessage = 'Unauthorized. Please try agian.';
-            this.responseStatus = '401';  // Unauthorized access
-          } else {
-            this.responseMessage = `Error: ${error.response.status} - ${error.response.data.message || 'An error occurred'}`;
-            this.responseStatus = error.response.status.toString();
-          }
-        } else if (error.request) {
-          this.responseMessage = 'No response received from the server. Please try again later.';
-          this.responseStatus = '503';  // Service Unavailable
-        } else {
-          this.responseMessage = `Request error: ${error.message}`;
-          this.responseStatus = '500';  // Generic error status
-        }
+        console.log(error)
+
       }
     }
   },
