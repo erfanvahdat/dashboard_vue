@@ -1,8 +1,8 @@
 <template>
-  <div class="flex flex-col p-2 gap-3 bg-gray-800 h-[100vh] overflow-hidden">
+  <div class="flex flex-col   p-2.5 gap-3 bg-gray-800 h-[100vh] overflow-y-auto   ">
 
     <!-- Status Component with first chart -->
-    <div class=" flex flex-row rounded w-full mx-3 gap-2  mr-10 ">
+    <div class=" flex flex-row rounded  mx-3 gap-2.5">
 
       <!-- status bar -->
       <div>
@@ -12,23 +12,22 @@
       </div>
 
       <!-- Chart Main Profit Section -->
-      <div class=" w-full  mt-2 mr-5  rounded bg-gray-700">
-        <div class="flex p-2">
-          <apexchart type="line" height="300" width="1600" :options="chartOptions" :series="series">
-          </apexchart>
-        </div>
-      </div>
+      <div class="w-[100%]   rounded bg-gray-700   ">
 
+        <!-- border-1 border-blue-500 -->
+        <apexchart type="line" height="100%" width="100%" class=" w-full p-2 " :options="chartOptions" :series="series">
+        </apexchart>
+
+      </div>
 
     </div>
 
     <!-- Second main Section -->
-    <div class="flex flex-col border- h-full">
-
+    <div class="flex flex-col ">
 
       <!-- Slope chart  -->
       <div class=" bg-gray-700 w-fit  mx-3 rounded-2 ">
-        <div class="flex p-2">
+        <div class="flex p-2 w-fit">
           <apexchart type="line" height="400" width="700" :options="Slope_options" :series="slope_series"></apexchart>
         </div>
       </div>
@@ -39,14 +38,8 @@
         <button class="btn btn-primary btn-sm bg-slate-600 " role="button" @click='get_token()'>show_access tokne
         </button>
 
-
-
       </div>
-
-
     </div>
-
-
   </div>
 </template>
 
@@ -100,8 +93,8 @@ export default {
     this.get_token();
     this.Balance();
     this.calculare_profit();
-
     this.processing_chart_slope_data();
+
   },
 
   methods: {
@@ -226,3 +219,12 @@ export default {
 }
 
 </script>
+
+
+
+<style>
+.apexcharts-yaxis-label {
+  /* font-family: sans-serif; */
+
+}
+</style>
