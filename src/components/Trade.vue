@@ -196,7 +196,6 @@
                 </table>
             </div>
 
-
             <div class="mt-2 ml-2">
 
                 <div>
@@ -205,17 +204,15 @@
                     <p> type_pos : {{ this.type_pos }}</p>
                     <p>TP: {{ tp_price }}</p>
                     <p>SL: {{ sl_price }}</p>
-                    <p>Selected Interval: {{ risk }}</p>
-                    <br>
-                    <p>full_order : {{ this.full_order }}</p>
-                    <br>
-                    <p>trade : {{ this.Trades }}</p>
-                    <br>
                     <p> Pending_order : {{ this.pending_order }}</p>
                     <br>
                     <p>Open position : {{ this.open_position }}</p>
                     <br>
                     <p> position_id : {{ this.positon_id }}</p>
+                    <br>
+                    <p> trade_history : {{ this.trade_history }}</p>
+
+
 
 
                     <!-- <p> cryptoList {{ this.cryptoList }}</p> -->
@@ -258,6 +255,7 @@ export default {
             pending_order: [],
 
 
+            trade_history: null,
             STATUS: {},
             risk: 1,
             value: 1,
@@ -812,6 +810,15 @@ export default {
             }
             return type;
         },
+
+        async get_trade_history() {
+
+            const res = await axios.get(import.meta.env.VITE_TRADE_HISTORY);
+
+            return res;
+
+        },
+
     },
 
     mounted() {
@@ -820,13 +827,16 @@ export default {
         this.Trade_status();  // Get current Live orders
         this.Merging_data();
 
-        // setInterval(() => {
+        const vara = this.get_trade_history();
+        console.log(vara)
 
-        //     // Get current Live orders
-        //     this.Trade_status();
 
-        // }, 10000);
+        setInterval(() => {
 
+            // Get current Live orders
+            this.Trade_status();
+
+        }, 10000);
 
         // Load a default ticker when the component is mounted
         const default_ticker = "BINGX:BTCUSDT.P" // Set default ticker
@@ -849,6 +859,7 @@ export default {
         type_toggle() {
             return this.isLong ? 'bg-green-500' : 'bg-red-500';
         },
+
 
     },
 };
