@@ -83,7 +83,7 @@ export default {
     async calculare_profit() {
       try {
         // Fetch the trade history data from the API
-        const response = await axios.get(`${import.meta.env.VITE_TRADE_HISTORY}`);
+        const response = await axios.get(`${import.meta.env.VITE_TRADE_HISTORY_ALL}`);
         const tradeHistory = response.data;
 
         // Map the `time` and `profit` values for the chart's x and y axes
@@ -157,7 +157,7 @@ export default {
     },
     async processing_chart_slope_data() {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_TRADE_HISTORY}`);
+        const response = await axios.get(`${import.meta.env.VITE_TRADE_HISTORY_ALL}`);
         const tradeHistory = response.data;
 
         // Group trades by their ticker symbol
