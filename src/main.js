@@ -37,7 +37,7 @@ import Badge from 'primevue/badge';
 import Slider from 'primevue/slider';
 import TreeSelect from 'primevue/treeselect';
 import ConfirmPopup from 'primevue/confirmpopup';
-
+import Skeleton from 'primevue/skeleton';
 
 
 // Import Main components
@@ -45,7 +45,7 @@ import Sidebar from './components/Sidebar.vue';
 import Header from './components/header.vue';
 import Status from './components/Status.vue';
 import Home from './components/Home.vue';
-import Main from './components/Main_content.vue';
+import Main from './components/Main.vue';
 import Rank from './components/Rank.vue';
 import Charts from './components/Charts.vue';
 import Trade_history from './components/Trade_history.vue';
@@ -138,6 +138,7 @@ const globalComponents = {
   "ConfirmPopup": ConfirmPopup,
   "Toast": Toast,
   "Divider": Divider,
+  "Skeleton": Skeleton,
 
 };
 
