@@ -1,10 +1,9 @@
 <template>
-    <div class="h-100vh overflow-auto  bg-gray-700 x-full ">
+    <div class="h-100vh  bg-gray-700  overflow-auto ">
         <div class="flex flex-row p-2 space-y gap-2  ">
 
             <!-- Trade Section 1️⃣-->
-            <div
-                class="flex md:flex-row rounded-3 overflow-hidden gap-3  bg-gray-800 w-110 h-[460px]   w-[1150px] ml-2">
+            <div class="flex md:flex-row rounded-3  gap-3  bg-gray-800 w-110 h-[460px]  ml-2 w-3/5">
 
                 <!-- input_limit_section -->
                 <div class=" flex flex-col space-y-0 ml-2   ">
@@ -13,7 +12,7 @@
                     <!-- Selecting TIcker -->
                     <div class="card flex w-fit ml-2 mt-2">
                         <Select v-model="Ticker" :options="cryptoList" filter optionLabel="symbol"
-                            @change="updateChart('chart')" placeholder="Select a Crypto" class="w-full md:w-72">
+                            @change="updateChart('chart')" placeholder="Select a Crypto" class=" md:w-72">
 
                             <template #value="slotProps">
                                 <div v-if="slotProps.value" class="flex items-center">
@@ -35,9 +34,6 @@
                         </button>
                     </div>
 
-
-
-                    <!-- Limit_price -->
                     <!-- Limit_price -->
                     <div class="m-1 mb-3">
                         <span class="text-sm font-bold font-mono text-[10px] mb-0 underline decoration-dashed "> Limit:
@@ -79,11 +75,10 @@
                         Risk: </span>
                     <div class=" flex w-fit h-fit mt-1 justify-center">
                         <div class="flex flex-col w-52 ml-12 ">
-                            <InputText v-model.number="risk" class="w-full mb-3 justify-center " />
-                            <Slider v-model="risk" class="flex w-full justify-center" :min=0.2 :max=2 :step=0.1 />
+                            <InputText v-model.number="risk" class=" mb-3 justify-center " />
+                            <Slider v-model="risk" class="flex  justify-center" :min=0.2 :max=2 :step=0.1 />
                         </div>
                     </div>
-
 
                     <!-- Submit open_trades -->
                     <div class="flex flex-wrap gap-2 justify-center mt-3">
@@ -95,13 +90,13 @@
 
                 </div>
 
-
-                <!-- Chart section  1️⃣-->
+                <!-- Chart section  1️⃣_0️⃣-->
                 <div id="chart" class="p-2 w-full"></div>
 
             </div>
+
             <!-- Pending Section 2️⃣-->
-            <div class="flex flex-col    h-[calc(100vh-150px    )]  w-[960px]  ml-2   ">
+            <div class="flex flex-col    h-[calc(100vh-150px )]  ml-2   w-fit ">
 
                 <div class="card">
                     <DataTable :value="full_order" tableStyle="min-width: 50rem">
@@ -109,17 +104,12 @@
                         <Column field="symbol" header="Ticker"> <template #body="slotProps">
                                 <span style="text-decoration: underline; text-decoration-style: dashed;">
                                     {{ slotProps.data.symbol }}
-
                                 </span>
                             </template></Column>
 
-
-
                         <Column field="orderId" header="ID">
                             <template #body="slotProps">
-
                                 {{ slotProps.data.order_id }}
-                                <!-- {{ console.log(slotProps.data.orderId ) }} -->
                             </template>
                         </Column>
 
@@ -127,7 +117,6 @@
                         <Column field="time" header="Time">
                             <template #body="slotProps">
                                 {{ Time(slotProps.data.time).minutesPast }} minute ago
-
                             </template>
                         </Column>
 
@@ -136,19 +125,15 @@
 
                                 <Tag :value="transformStatus(slotProps.data.type)"
                                     :severity="getStatusLabel(slotProps.data.type)" />
-
-
                             </template>
                         </Column>
 
                         <Column field="" header="Close">
                             <template #body="slotProps">
-
                                 <Toast></Toast>
                                 <Button label="Close order/position" severity="warn"
                                     @click='RemoveTrade(slotProps.data.order_id, slotProps.data.symbol, this.STATUS[slotProps.data.symbol])'></Button>
                             </template>
-
                         </Column>
                     </DataTable>
                 </div>
@@ -156,80 +141,30 @@
 
         </div>
 
-        <!-- Bottom Section=> orders table -->
-        <div class="flex flex-col    h-[calc(100vh-150px)]     mr-5 ml-2  ">
+        <!-- Bottom Section=> Trade_history -->
+        <div class="flex flex-col    h-[calc(100vh-150px)]   ml-2   mr-4 ">
 
-            <div class=" w-full   mt-2 mx-2 ">
-                <!-- Table with Pulse animation -->
-                <table class="table rounded-lg border border-gray-300 overflow-hidden">
-
-                    <thead>
-                        <tr>
-                            <th>Ticker</th>
-                            <th>Position Side</th>
-                            <th>Limit Price</th>
-                            <th>Stop Loss Price</th>
-                            <th>Take Profit Price</th>
-                            <th>Type</th>
-                            <th>Risk</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        <tr v-if="trades.length === 0">
-                            <td colspan="8" class="text-center">No trades available</td>
-                            <!-- Message when no trades are found -->
-                        </tr>
-
-                        <tr v-else v-for="(trade, index) in trades" :key="index">
-                            <td>{{ trade.ticker }}</td>
-                            <td>{{ trade.positionSide }}</td>
-                            <!-- Format numbers to 2 decimal places -->
-                            <td>{{ formatNumber(trade.limitPrice) }}</td>
-                            <td>{{ formatNumber(trade.slPrice) }}</td>
-                            <td>{{ formatNumber(trade.tpPrice) }}</td>
-                            <td>{{ trade.type }}</td>
-                            <td>{{ formatNumber(trade.risk) }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="mt-2 ml-2">
-
-                <div>
-                    <!-- <p>Ticker : {{ this.Ticker.symbol }}</p> -->
-                    <p>limit : {{ this.limit_price }}</p>
-                    <p> type_pos : {{ this.type_pos }}</p>
-                    <p>TP: {{ tp_price }}</p>
-                    <p>SL: {{ sl_price }}</p>
-                    <p> Pending_order : {{ this.pending_order }}</p>
-                    <br>
-                    <p>Open position : {{ this.open_position }}</p>
-                    <br>
-                    <p> position_id : {{ this.positon_id }}</p>
-                    <br>
-                    <p> trade_history : {{ this.trade_history }}</p>
-
-
-
-
-                    <!-- <p> cryptoList {{ this.cryptoList }}</p> -->
-                    <div class="border-1 border-yellow-500 mt-2">
-
-                    </div>
-
-                    <a class="btn btn-primary btn-sm mt-10 " role="button" @click='Remove_cash()'>Remove Access
-                        token</a>
-
-                </div>
-
+            <div class="card">
+                <DataTable :value="trade_history" paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
+                    tableStyle="min-width: 50rem">
+                    <Column field="symbol" header="SYMBOL" style="width: 25%"></Column>
+                    <Column field="side" header="TYPE" style="width: 25%"></Column>
+                    <Column field="profit" header="PROFIT" style="width: 25%">
+                        <template #body="slotProps">
+                            <Tag :value="slotProps.data.profit" :severity="profit_label(slotProps.data.profit)" />
+                        </template>
+                    </Column>
+                    <Column field="time" header="DAY" style="width: 25%">
+                        <template #body="slotProps">
+                            <!-- Call the modified get_time method to display weekday (e.g., Mon, Sat, etc.) -->
+                            {{ get_day_of_week(slotProps.data.time) }}
+                        </template>
+                    </Column>
+                </DataTable>
             </div>
         </div>
     </div>
 </template>
-
 
 
 <script>
@@ -247,67 +182,27 @@ export default {
             sl_price: null,
             tp_price: null,
 
-
-            position_order: [],
-
-            full_order: [],
-            open_position: [],
+            trade_history: [],
             pending_order: [],
-
-
-            trade_history: null,
+            position_order: [],
+            open_position: [],
+            full_order: [],
             STATUS: {},
+
             risk: 1,
             value: 1,
-            liveOrdersInterval: null, // Interval reference
 
-            num_header: 8,
-            isWarning: null,
             isLong: true,
-            alert_status: false,
-            turn_on: false,
 
             timeframe: '1',
             cryptoList: [],
             access: localStorage.getItem('access'),
             trades: [], // Array to hold trade data
 
-
             errorMessage: null, // Error message to display
-            objectKeys: [],
-            alert: false,
-
-
             Trades: [],
-
             last_col: [
                 { field: 'Delete', header: 'Submit' },
-
-            ],
-            columns: [
-                { field: 'code', header: 'Code' },
-                { field: 'name', header: 'Name' },
-                { field: 'category', header: 'Category' },
-                { field: 'quantity', header: 'Quantity' }
-            ],
-
-
-            product: [{
-                id: '1000',
-                code: 'f230fh0g3',
-                name: 'Bamboo Watch',
-                description: 'Product Description',
-                image: 'bamboo-watch.jpg',
-                price: 65,
-                category: 'Accessories',
-                quantity: 24,
-                inventoryStatus: 'INSTOCK',
-                rating: 5
-            }],
-            peopleData: [
-                { name: "erfan", job: "programmer", favorit_color: "green" },
-                { name: "ali", job: "it", favorit_color: "blue" },
-                { name: "moh", job: "SEO", favorit_color: "red" }
             ],
 
         };
@@ -337,10 +232,6 @@ export default {
                 }
             });
         },
-        show_access() {
-            const access = localStorage.getItem('access');
-            return access;
-        },
 
         async get_ticker() {
             try {
@@ -359,25 +250,13 @@ export default {
             }
         },
 
-        async Remove_cash() {
-
-            localStorage.removeItem('access');
-            localStorage.removeItem('refresh ');
-        },
+        // async Remove_cash() {
+        //     localStorage.removeItem('access');
+        //     localStorage.removeItem('refresh ');
+        // },
 
         async OpenTrade() {
             try {
-                // const token = this.show_access(); // Get the access token
-                // const orderParams = {
-                //     symbol: 'SAND-USDT',
-                //     type: 'LONG',
-                //     risk: 1,
-                //     limitprice: 0.256795492457761,
-                //     slprice: 0.252279361313897,
-                //     tpprice: 0.262246917033786,
-                //     market: "trigger"
-                // };
-
                 // Prepare the data for the POST request
                 const open_trade_params = {
                     "symbol": `${this.Ticker.symbol}`.toUpperCase(),
@@ -389,12 +268,11 @@ export default {
                     "market": "trigger",
                 };
 
-
-
-
                 // Make the POST request to open_trade
                 const response = await axios.post(`${import.meta.env.VITE_OPEN_TRADE}`, open_trade_params);
 
+
+                // console.log(repsonse)
                 // Trade status
                 const status = response.status;
 
@@ -548,31 +426,59 @@ export default {
                     // Trigger Conditon
                     const cond = pending_response.find(item => item.type == "TRIGGER_MARKET" || item.type == "TRIGGER_LIMIT")
 
-
                     if (cond) {
                         console.log(`conditon for ${symbol}`)
-                        console.log(pending_response)
-
                     } else {
-                        console.log('we are at positon ')
-
 
                         if (!takeProfitMarket) {
                             console.log(chalk.green(`Tp is not not set for ${symbol}. try to send it into BINGX`))
                             const set_tp_params = { symbol: symbol, status: "TP" };
                             const set_tp = await axios.post(import.meta.env.VITE_SET_SL_TP, set_tp_params);
-                            console.log(chalk.blue(set_tp.data))
+                            console.log('Set_tp is here', set_tp.data.code)
+
+                            if (set_tp.data.code == 'GREEN') {
+                                this.$toast.add({
+                                    severity: 'success',
+                                    summary: 'Success',
+                                    detail: set_tp.data.msg,
+                                    life: 5000
+                                })
+                            }
+                            else {
+                                this.$toast.add({
+                                    severity: 'danger',
+                                    summary: 'danger',
+                                    detail: set_tp.data.msg,
+                                    life: 5000
+                                })
+                            }
+
                         }
                         if (!stopMarket) {
                             console.log(chalk.red(`SL for ${symbol} does not exist!`))
                             const set_sl_params = { symbol: symbol, status: "SL" };
                             const set_sl = await axios.post(import.meta.env.VITE_SET_SL_TP, set_sl_params);
-                            console.log(chalk.bgRedBright(set_sl.data))
+                            console.log("code is here", set_sl)
+
+                            if (set_sl.code == 'GREEN') {
+                                this.$toast.add({
+                                    severity: 'success',
+                                    summary: 'Success',
+                                    detail: set_sl.data.msg,
+                                    life: 5000
+                                })
+                            }
+                            else {
+                                this.$toast.add({
+                                    severity: 'danger',
+                                    summary: 'danger',
+                                    detail: set_sl.data.msg,
+                                    life: 5000
+                                })
+                            }
+                            // console.log(chalk.bgRedBright(set_sl.data))
                         }
                     }
-
-
-
 
                     let ID = null;
                     let time = null;
@@ -606,11 +512,7 @@ export default {
                 // Asign the trade values to display it with tables
                 this.full_order = Trade_dict;
 
-                // Validation for the stop and take profit 
-
-
             } catch (error) {
-
                 let errorMessage = 'Failed to fetch trades: ';
 
                 this.Trades = null;
@@ -622,80 +524,6 @@ export default {
                 }
                 console.error(errorMessage);
             }
-        },
-        Merging_data() {
-
-            const data = this.full_order;
-            // console.log('we are here on merginf data :', this.full_order)
-            // An object to consolidate orders by symbol
-            const consolidatedTrades = {};
-
-            this.position_order.forEach(order => {
-
-
-                if (order.positionId) {
-                    console.log("Position ID:", order.positionId);
-                }
-            });
-
-
-            console.log(this.full_order)
-
-            data.forEach(item => {
-
-                const symbol = item.symbol;
-                let ID = null;
-                let ID_pos = null;
-                if (item.type == 'TRIGGER_MARKET') {
-                    ID = item.orderId
-                }
-
-                if (item.type == 'TAKE_PROFIT_MARKET') {
-                    ID = item.orderId
-                }
-
-                if (item.type == 'STOP_MARKET') {
-                    ID = item.orderId
-                }
-
-                if (item.positionId) {
-                    ID_pos = item.positionId
-                }
-
-                if (item.positionId) {
-                    console.log("Position ID:", item.positionId);
-                }
-
-
-                // If the symbol doesn't exist, initialize it in consolidatedTrades
-                if (!consolidatedTrades[symbol]) {
-                    consolidatedTrades[symbol] = {
-                        symbol: symbol,
-                        side: item.side,
-                        order_id_sl: null,
-                        order_id_tp: null,
-                        order_pending_id: ID,
-                        order_position_id: item.positionId,
-                        type: item.type
-                    };
-                }
-
-                // Assign STOP_MARKET or TAKE_PROFIT_MARKET based on the order type
-                if (item.type === "STOP_MARKET") {
-                    consolidatedTrades[symbol]["order_id_sl"] = item.orderId.toString();
-                }
-                if (item.type === "TAKE_PROFIT_MARKET") {
-                    consolidatedTrades[symbol]["order_id_tp"] = item.orderId.toString();
-                }
-
-                // Store other necessary details like side, symbol, etc.
-                consolidatedTrades[symbol]["side"] = item.side;
-                consolidatedTrades[symbol]["time"] = item.time;
-            });
-
-            // Convert consolidatedTrades from an object back to an array
-            this.Trades = Object.values(consolidatedTrades);
-            return this.Trades;
         },
 
         createChart(containerId, symbol, timeframe = "1", theme = "Dark") {
@@ -811,13 +639,36 @@ export default {
             return type;
         },
 
-        async get_trade_history() {
+        profit_label(value) {
+            const profit = parseFloat(value);
+            return profit > 0 ? 'success' : "danger";
+            // if (profit > 0) return 'success'
+            // else return 'danger'
+        },
 
-            const res = await axios.get(import.meta.env.VITE_TRADE_HISTORY);
+        get_time(time) {
+
+            const time_it = time.toUTCString();
+            return time_it
+        },
+
+        async get_trade_history() {
+            console.log("we are here!")
+            const res = await axios.get(import.meta.env.VITE_TRADE_HISTORY_ALL);
+
+            console.log("res is here",res)
+            this.trade_history = res.data;
 
             return res;
 
         },
+        get_day_of_week(timestamp) {
+            const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const date = new Date(timestamp); // Convert timestamp to date
+            const day = date.getUTCDay();
+            return daysOfWeek[day];
+        },
+
 
     },
 
@@ -825,16 +676,13 @@ export default {
 
         this.get_ticker() // get the ticker_list
         this.Trade_status();  // Get current Live orders
-        this.Merging_data();
 
-        const vara = this.get_trade_history();
-        console.log(vara)
-
+        this.get_trade_history();
 
         setInterval(() => {
 
             // Get current Live orders
-            this.Trade_status();
+            // this.Trade_status();
 
         }, 10000);
 
@@ -843,19 +691,7 @@ export default {
         this.createChart("chart", default_ticker, "1", "Dark");
     },
 
-    // beforeUnmount() {
-    //     // Clear the interval when the component is destroyed to prevent memory leaks
-    //     if (this.liveOrdersInterval) {
-    //         clearInterval(this.liveOrdersInterval);
-    //     }
-    // },
-
     computed: {
-
-        //     getTradeKeys() {
-        //   // Returns an array of keys in the trades object
-        //   return Object.keys(this.trades);
-        // },
         type_toggle() {
             return this.isLong ? 'bg-green-500' : 'bg-red-500';
         },
