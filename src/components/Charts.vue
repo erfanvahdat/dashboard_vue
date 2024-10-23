@@ -1,25 +1,28 @@
 <template>
   <div class="flex flex-col h-full overflow-hidden">
+
     <!-- Setting section -->
-    <div class="rounded-md bg-blue-500 mx-2 mt-1 h-[70px]">
-      <span class="font-serif text-xs ml-2 rounded w-fit text-gray-700">chart_setting</span>
+    <div class="rounded-md bg-blue-500 mx-2 mt-1 h-[70px] 1️⃣">
+      
+
+      <span class="font-serif text-xs ml-2 rounded w-fit text-gray-700 mr-2">chart_setting</span>
 
       <!-- Header=> Boxes  -->
-      <div class="flex flex-row space-x-2">
+      <div class="inline-flex flex-row space-x-2 mt-3 gap-3 ">
         <div>
           <Select :options="box_number" v-model="box_select" @change="changeChartCount(box_select)" placeholder="Boxes"
-            class="w-[115px] h-[35px] m-2"></Select>
+            class=" "></Select>
         </div>
 
         <!-- header=> Timeframe -->
         <div>
           <Select :options="timeframe" v-model="main_select_timeframe" @change="changeChartCount(box_select)"
-            placeholder="Timeframe" class="w-[115px] h-[35px] m-2"></Select>
+            placeholder="Timeframe" class=""></Select>
         </div>
 
         <!-- Header=> Theme  -->
         <div>
-          <label class="relative inline-flex cursor-pointer mt-[18px]">
+          <label class="relative inline-flex cursor-pointer mt-2 ">
             <input id="switch-3" type="checkbox" class="peer sr-only" v-model="isLightTheme" @change="toggleTheme" />
             <label for="switch-3" class="hidden"></label>
             <div
@@ -28,10 +31,15 @@
             <div class="font-bold ml-2 pb-2">{{ chart_theme }}</div>
           </label>
         </div>
+
+        <div class="card flex justify-center">
+          <MultiSelect v-model="selectedTickers[index]" display="chip" :options="cryptoList" optionLabel="symbol" filter
+            placeholder="Favorite Ticker" :maxSelectedLabels="3" class="w-full md:w-80" />
+        </div>
       </div>
     </div>
 
-    <!-- Chart section -->
+    <!-- Chart section 2️⃣-->
     <div :class="gridClass" class="grid gap-1 ml-1 mr-1 h-full">
       <div v-for="(symbol, index) in all_symbol.slice(0, chartCount)" :key="index"
         class="flex flex-col items-center m-1 h-full">
@@ -46,7 +54,6 @@
             <SelectButton v-model="select_timeframe" :options="timeframe" aria-labelledby="basic" size="small"
               class="w-[170px] h-[40px] m-2 text-sm p-1 " @change="changeTimeframe(index, select_timeframe)" />
           </div>
-
 
           <!-- Select Ticker -->
           <div class="card flex w-fit ml-2  mr-5 ">
@@ -118,7 +125,7 @@ export default {
       } else {
         return 'lg:grid-cols-3 lg:grid-rows-1';
       }
-      }
+    }
   },
   methods: {
     async get_ticker() {

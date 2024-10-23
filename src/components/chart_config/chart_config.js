@@ -3,6 +3,11 @@
 // Export slope chart options
 export const   line_option = {
   chart: {
+    // height: 200,
+    height: 'auto',
+
+    width: 'auto',  
+
     type: 'line',
     toolbar: {
       show: true,
@@ -14,6 +19,9 @@ export const   line_option = {
         background: '#333', // Set the toolbar background color
       },
     },
+  },
+  grid: {
+    show: false,
   },
   title: {
     text: 'Line Chart',
@@ -27,30 +35,37 @@ export const   line_option = {
     title: {
       text: 'Date',
       style: {
-        color: '#FFFFFF', // Set x-axis title color to white
+        color: '#9090EE',
       },
     },
     labels: {
       style: {
-        colors: ['#FFFFFF'], // Set x-axis label color to white
+        colors: '#fff',
+        fontSize: '13px',
       },
+
     },
   },
   yaxis: {
-    title: {
-      text: 'Price',
-      style: {
-        color: '#FFFFFF', // Set y-axis title color to white
+    labels: {
+      formatter: function (val) {
+        return val.toFixed(2);
       },
+      style: {
+        colors: ['#fff'],
+        fontSize: '12px',
+      }
     },
-    // labels: {
-    //   formatter: function (val) {
-    //     return val.toFixed(2);
-    //   },
-    //   style: {
-    //     colors: ['#FFFFFF'], // Set y-axis label color to white
-    //   },
-    // },
+    title: {
+      text: 'Profit/Loss',
+      style: {
+        color: '#90EE90', 
+        fontSize: '12px',
+        fontFamily: 'Helvetica, Arial, sans-serif',
+        fontWeight: 200,
+        cssClass: 'apexcharts-yaxis-label',
+      }
+    }
   },
   stroke: {
     width: 1,
@@ -63,15 +78,25 @@ export const   line_option = {
       color: '#fff',
     },
   },
-  grid: {
-    borderColor: '#555', // Change grid color for better visibility
-    style: {
-      background: '#222', // Set grid background color
-    },
-  },
+
+  // responsive: [{
+  //   breakpoint: 1000,  // Adjust breakpoint based on your design
+  //   options: {
+  //     chart: {
+  //       width: '100%',
+  //       height: 300  // Adjust height if needed
+  //     },
+  //     legend: {
+  //       position: 'bottom'
+  //     }
+  //   }
+  // }]
+
+  
 }
 
 
+//  Slope chart config
 export const Slope_option =  {
   chart: {
     height: 400,
@@ -105,6 +130,7 @@ export const Slope_option =  {
       size: 8,
     },
   },
+  
 
   tooltip: {
     theme: "dark",
@@ -120,7 +146,6 @@ export const Slope_option =  {
   yaxis: {
     labels: {
       formatter: function (val) {
-        // Custom logic for formatting the y-axis values
         return val.toFixed(2);
       },
       style: {
@@ -129,9 +154,13 @@ export const Slope_option =  {
       }
     },
     title: {
-      text: 'Profit/Loss',  // Customize the y-axis title
+      text: 'Profit/Loss',
       style: {
-        color: '#fff', // Change the color of the title
+        color: '#90EE90', 
+        fontSize: '12px',
+        fontFamily: 'Helvetica, Arial, sans-serif',
+        fontWeight: 200,
+        cssClass: 'apexcharts-yaxis-label',
       }
     }
   },
@@ -140,7 +169,7 @@ export const Slope_option =  {
     title: {
       text: 'Date',
       style: {
-        color: '#FFFFFF',
+        color: '#9090EE',
       },
     },
     labels: {
