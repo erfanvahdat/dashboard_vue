@@ -1,22 +1,82 @@
 <template>
-    <div class="h-100vh  bg-gray-700  overflow-auto ">
+    <div class=" h-100vh  bg-gray-700  overflow-auto ">
+
+        <Toast />
+        <ConfirmPopup group="templating">
+            <template #message="slotProps">
+                <div
+                    class="flex flex-col items-center w-full gap-4 border-b border-surface-200 dark:border-surface-700 p-4 mb-4 pb-0">
+                    <i :class="slotProps.message.icon" class="text-6xl text-primary-500"></i>
+                    <p>{{ slotProps.message.message }}</p>
+
+                    <!-- Updating SL-->
+                    <div class="card flex flex-row justify-start text-start  ">
+                        <div class="flex">
+                            <FloatLabel>
+                                <InputText id="Updated_Sl" v-model="Updated_Sl" />
+                                <label for="Updated_Sl">SL</label>
+                            </FloatLabel>
+
+                            <div class="mt-2.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                    stroke="currentColor" class="tp-icon h-5 w-5 text-green-500">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7 7 7M12 3v18" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <Checkbox v-model="SL_status" inputId="ingredient1" name="SL" value="SL" />
+                        <label class="ml-2"> SL_status </label>
+
+                    </div>
+
+                    <!-- Updating TP -->
+                    <div class="card flex flex-row justify-center ">
+                        <div class="flex">
+                            <FloatLabel>
+                                <InputText id="Updated_TP" v-model="Updated_Tp" />
+                                <label for="Updated_Tp">TP</label>
+                            </FloatLabel>
+
+
+                            <div class="mt-2.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                    stroke="currentColor" class="sl-icon h-5 w-5 text-red-500">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7-7-7M12 21V3" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <Checkbox v-model="TP_status" name="TP" value="TP" />
+                        <label class="ml-2"> TP_status </label>
+
+                    </div>
+
+                </div>
+            </template>
+        </ConfirmPopup>
+
+
         <div class="flex flex-row p-2 space-y gap-2  ">
 
             <!-- Trade Section 1️⃣-->
-            <div class="flex md:flex-row rounded-3  gap-3  bg-gray-800 w-110 h-[460px]  ml-2 w-3/5">
+            <div class="flex md:flex-row rounded-3  gap-3  bg-gray-800 w-110 h-[460px]  ml-2  w-4/5">
 
                 <!-- input_limit_section -->
                 <div class=" flex flex-col space-y-0 ml-2   ">
                     <span class="text-sm font-bold font-serif mt-2 ml-1">Limit_order</span>
 
-                    <!-- Selecting TIcker -->
+                    <!-- Selecting Ticker -->
                     <div class="card flex w-fit ml-2 mt-2">
                         <Select v-model="Ticker" :options="cryptoList" filter optionLabel="symbol"
-                            @change="updateChart('chart')" placeholder="Select a Crypto" class=" md:w-72">
+                            @change="updateChart('chart',null)" placeholder="Select a Crypto" class=" md:w-72">
 
                             <template #value="slotProps">
                                 <div v-if="slotProps.value" class="flex items-center">
                                     <div>{{ slotProps.value.symbol }}</div>
+
                                 </div>
                                 <span v-else>
                                     {{ slotProps.placeholder }}
@@ -95,44 +155,79 @@
 
             </div>
 
-            <!-- Pending Section 2️⃣-->
-            <div class="flex flex-col    h-[calc(100vh-150px )]  ml-2   w-fit ">
+            <!-- Pending Section 2️ 🅱️-->
+            <div class="flex flex-col    h-[calc(100vh-150px )]  mr-2   w-4/5 ">
 
                 <div class="card">
                     <DataTable :value="full_order" tableStyle="min-width: 50rem">
 
-                        <Column field="symbol" header="Ticker"> <template #body="slotProps">
-                                <span style="text-decoration: underline; text-decoration-style: dashed;">
-                                    {{ slotProps.data.symbol }}
+                        <!-- Ticker Column with Dynamic Header -->
+                        <Column field="symbol">
+                            <template #header="slotProps" >
+                                <span style=" text-decoration-style: dashed; font-weight: bold " >
+                                    {{ "Symbol" }} - ( {{ this.trades_count }} )
+                                    
                                 </span>
-                            </template></Column>
 
+                            </template>
+                            <template #body="slotProps">
+                        <button
+                        @click="updateChart('chart', slotProps.data.symbol)"
+                        style="text-decoration: underline; text-decoration-style: dashed; background: none; border: none; cursor: pointer;">
+                        {{ slotProps.data.symbol }}
+                    </button>
+                </template>
+                        </Column>
+
+                        <!-- Order ID Column -->
                         <Column field="orderId" header="ID">
                             <template #body="slotProps">
                                 {{ slotProps.data.order_id }}
                             </template>
                         </Column>
 
-
+                        <!-- Time Column -->
                         <Column field="time" header="Time">
                             <template #body="slotProps">
                                 {{ Time(slotProps.data.time).minutesPast }} minute ago
                             </template>
                         </Column>
 
+                        <!-- Status Column -->
                         <Column field="type" header="Status">
                             <template #body="slotProps">
-
                                 <Tag :value="transformStatus(slotProps.data.type)"
                                     :severity="getStatusLabel(slotProps.data.type)" />
                             </template>
                         </Column>
 
+                        <!-- INFO Column -->
+                        <Column field="type" header="INFO">
+                            <template #body="slotProps">
+                                <div class="flex mt-2">
+                                    <Button @click="showTemplate($event, slotProps.data.symbol)"
+                                        label="Trade_info"></Button>
+                                </div>
+                            </template>
+                        </Column>
+
+                        <Column field="type" header="Reversed">
+                            <template #body="slotProps">
+                                <div class="flex mt-2">
+                                    <Button label="Reversed" severity="danger"
+                                        @click='Reverse_pos(slotProps.data.symbol, slotProps.data.order_id)'>
+                                    </Button>
+                                </div>
+                            </template>
+                        </Column>
+
+                        <!-- Close Order Column -->
                         <Column field="" header="Close">
                             <template #body="slotProps">
                                 <Toast></Toast>
                                 <Button label="Close order/position" severity="warn"
-                                    @click='RemoveTrade(slotProps.data.order_id, slotProps.data.symbol, this.STATUS[slotProps.data.symbol])'></Button>
+                                    @click='RemoveTrade(slotProps.data.order_id, slotProps.data.symbol, this.STATUS[slotProps.data.symbol])'>
+                                </Button>
                             </template>
                         </Column>
                     </DataTable>
@@ -141,28 +236,57 @@
 
         </div>
 
-        <!-- Bottom Section=> Trade_history -->
-        <div class="flex flex-col    h-[calc(100vh-150px)]   ml-2   mr-4 ">
+        <!-- Bottom Section=> Trade_history 3️⃣ -->
+        <!-- h-[calc(100vh-150px)] -->
+        <div class="flex flex-col mx-2 mr-4 overflow-hidden  h-[100vh]">
 
-            <div class="card">
+            <div v-if="skeleton_status" @click="toggleSkeleton" class="rounded  p-6  ">
+                <div class="flex mb-4 ">
+                    <Skeleton shape="circle" size="4rem" class="mr-2 custom-skeleton"></Skeleton>
+                    <div>
+                        <Skeleton width="10rem" class="mb-2 custom-skeleton"></Skeleton>
+                        <Skeleton width="5rem" class="mb-2 custom-skeleton"></Skeleton>
+                        <Skeleton height=".5rem" class="custom-skeleton">click me</Skeleton>
+                    </div>
+                </div>
+                <Skeleton width="100%" height="150px" class="custom-skeleton"></Skeleton>
+                <div class="flex justify-between mt-4">
+
+                    <Skeleton width="4rem" height="2rem" class="custom-skeleton"></Skeleton>
+                    <Skeleton width="4rem" height="2rem" class="custom-skeleton"></Skeleton>
+                </div>
+
+            </div>
+
+            <div class="card h-fit m-2 mb-3" v-if="table_status">
                 <DataTable :value="trade_history" paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
-                    tableStyle="min-width: 50rem">
+                    tableStyle="min-width: 50rem" :sortField="'time'">
                     <Column field="symbol" header="SYMBOL" style="width: 25%"></Column>
-                    <Column field="side" header="TYPE" style="width: 25%"></Column>
-                    <Column field="profit" header="PROFIT" style="width: 25%">
+                    <Column field="side" header="TYPE" style="width: 25%">
                         <template #body="slotProps">
-                            <Tag :value="slotProps.data.profit" :severity="profit_label(slotProps.data.profit)" />
+                            <Tag :value="slotProps.data.side" :severity="Type_status(slotProps.data.side)" />
                         </template>
                     </Column>
-                    <Column field="time" header="DAY" style="width: 25%">
+                    <Column field="profit" header="PROFIT" sortable style="width: 25%">
                         <template #body="slotProps">
-                            <!-- Call the modified get_time method to display weekday (e.g., Mon, Sat, etc.) -->
+                            <Tag :value="slotProps.data.profit" :severity="profit_label(slotProps.data.profit)"
+                                class='font-bold' />
+                        </template>
+                    </Column>
+                    <Column field="time" header="DAY" sortable style="width: 25%" tableStyle="min-width: 50px"
+                        class='font-bold'>
+                        <template #body="slotProps">
                             {{ get_day_of_week(slotProps.data.time) }}
                         </template>
                     </Column>
                 </DataTable>
             </div>
+
+        
+
         </div>
+
+
     </div>
 </template>
 
@@ -176,11 +300,22 @@ export default {
     data() {
         return {
 
+            // Information of setting stop_loss and take_profit
+            Updated_Tp: null,
+            Updated_Sl: null,
+            TP_status: null,
+            SL_status: null,
+            updated_info_symbol: null,
+
             Ticker: null,
             type_pos: 'LONG',
             limit_price: null,
             sl_price: null,
             tp_price: null,
+            trades_count: 0,
+
+            table_status: true,
+            skeleton_status: false,
 
             trade_history: [],
             pending_order: [],
@@ -209,6 +344,32 @@ export default {
     },
 
     methods: {
+        showTemplate(event, symbol) {
+            this.$confirm.require({
+                target: event.currentTarget,
+                group: 'templating',
+                message: 'Please update the Take_profit and Stop_loss',
+                icon: 'pi pi-exclamation-circle',
+                rejectProps: {
+                    icon: 'pi pi-times',
+                    label: 'Cancel',
+                    outlined: true
+                },
+                acceptProps: {
+                    icon: 'pi pi-check',
+                    label: 'Confirm'
+                },
+                accept: () => {
+                    this.$toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
+                    this.set_tp_sl()
+                    this.updated_info_symbol = symbol
+                },
+                reject: () => {
+                    this.$toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+                }
+            });
+        },
+
 
         confirm1(event) {
             this.$confirm.require({
@@ -250,11 +411,6 @@ export default {
             }
         },
 
-        // async Remove_cash() {
-        //     localStorage.removeItem('access');
-        //     localStorage.removeItem('refresh ');
-        // },
-
         async OpenTrade() {
             try {
                 // Prepare the data for the POST request
@@ -285,7 +441,6 @@ export default {
                 const stop_loss = open_trade_params.slprice;
                 const take_profit = open_trade_params.tpprice;
 
-
                 // meta dara params
                 const meta_data_trade = {
                     "symbol": symbol,
@@ -296,7 +451,6 @@ export default {
                     "side": order.side,
                 }
 
-
                 // Querry params
                 const find_user_params_d = { "symbol": open_trade_params.symbol };
 
@@ -305,7 +459,7 @@ export default {
                     params: find_user_params_d
                 });
                 // Saving meta data of trade in DB
-                const trade_meta_data_response = await axios.post(`${import.meta.env.VITE_STATUS_TRADE}`, meta_data_trade, {
+                const trade_meta_data_response = await axios.post(`${import.meta.env.VITE_SAVE_CURRENT_TRADE}`, meta_data_trade, {
                 });
 
                 // Handle successful response (status 201)
@@ -342,10 +496,8 @@ export default {
         async RemoveTrade(orderid, symbol, pending_status) {
             try {
 
-                console.log(orderid, pending_status)
                 const params = {
                     orderId: orderid,
-
                 };
 
                 // Remove Pending/position orders
@@ -388,6 +540,36 @@ export default {
                 console.error(errorMessage);
             }
         },
+        async Reverse_pos(symbol, orderid) {
+            try {
+
+                // Revese Current Pos Pending/position orders
+                const params_reverse = {
+                    symbol: symbol,
+                    orderId: orderid
+                }
+                const response = await axios.post(import.meta.env.VITE_REVERSE_POS, params_reverse);
+
+                if (response.status == 200) {
+                    this.$toast.add({
+                        severity: 'success',
+                        summary: 'Success',
+                        detail: `${symbol} Position is Reversed... `,
+                        life: 5000
+                    })
+                }
+
+            } catch (error) {
+                console.log(error);
+                this.$toast.add({
+                        severity: 'warn',
+                        summary: 'Error',
+                        detail: `Something went wrong with reversing ${symbol} Position`,
+                        life: 5000
+                    })
+            }
+        },
+
 
         async Trade_status() {
             try {
@@ -405,6 +587,11 @@ export default {
                 this.open_position = await position_response;
                 this.pending_order = await pending_response;
 
+                if (pending_response == undefined) {
+                    return console.log(chalk.orange('Network is not responising...'))
+                }
+
+                this.trades_count = pending_response.length;
 
                 let Trade_dict = {};
 
@@ -526,6 +713,43 @@ export default {
             }
         },
 
+        async set_tp_sl() {
+
+            const response_pending = await axios.get(import.meta.env.VITE_ALL_PENDING_ORDER)
+            const pending_response = await response_pending['data'].data;
+            const stop_loss_orderId = pending_response.find(item => item.type === 'STOP_MARKET' && item.symbol == 'SAND-USDT').orderId;
+            const take_profit_orderId = pending_response.find(item => item.type === 'TAKE_PROFIT_MARKET' && item.symbol == 'SAND-USDT').orderId;
+
+
+            if (this.SL_status) {
+
+                const remove_params = {
+                    orderId: stop_loss_orderId,
+                };
+                // Remove TP/SL befor updating it
+                const remove_response = await axios.delete(import.meta.env.VITE_CLOSE_PENDING_ORDER, { data: remove_params });
+
+                // Set new TP/SL
+                const set_sl_params = { symbol: this.updated_info_symbol, status: "SL", use_db: false, sl_price: this.Updated_Sl, tp_price: this.Updated_Tp };
+                const set_sl = await axios.post(import.meta.env.VITE_SET_SL_TP, set_sl_params);
+            }
+
+            if (this.TP_status) {
+
+
+                const remove_params = {
+                    orderId: take_profit_orderId,
+                };
+                // Remove TP/SL befor updating it
+                const remove_response = await axios.delete(import.meta.env.VITE_CLOSE_PENDING_ORDER, { data: remove_params });
+
+                // Set new TP/SL
+                const set_tp_params = { symbol: this.updated_info_symbol, status: "TP", use_db: false, sl_price: this.Updated_Sl, tp_price: this.Updated_Tp };
+                const set_tp = await axios.post(import.meta.env.VITE_SET_SL_TP, set_tp_params);
+
+            }
+        },
+
         createChart(containerId, symbol, timeframe = "1", theme = "Dark") {
             new TradingView.widget({
                 "autosize": true,
@@ -562,10 +786,18 @@ export default {
             });
         },
 
-        updateChart(index) {
+        updateChart(index,ticker) {
 
-            let Ticker = this.Ticker['symbol'].split("-")[0]
-            const symbol = `BINANCE:${Ticker}USDT.P`
+            let Ticker_select = null;
+            if (ticker == null){
+                Ticker_select = this.Ticker['symbol'].split("-")[0]
+            }else{
+                Ticker_select = ticker.split("-")[0]
+            }
+        
+            console.log(Ticker_select)
+
+            const symbol = `BINANCE:${Ticker_select}USDT.P`
             this.createChart(index, symbol, "1", "Dark");
         },
         toggleValue() {
@@ -613,6 +845,14 @@ export default {
             } else {
                 return 'success';
             }
+        },
+        Type_status(type) {
+
+            if (type == 'SELL') {
+                return 'danger';
+            } else {
+                return 'success';
+            }
 
         },
 
@@ -653,20 +893,29 @@ export default {
         },
 
         async get_trade_history() {
-            console.log("we are here!")
+        
+            const update_db_trade_history = await axios.get(import.meta.env.VITE_UPDATE_TRADE_HISTORY);
             const res = await axios.get(import.meta.env.VITE_TRADE_HISTORY_ALL);
 
-            console.log("res is here",res)
-            this.trade_history = res.data;
+            const sortedData = res.data.data.sort((a, b) => b.time - a.time);
+
+            this.trade_history = sortedData;
 
             return res;
-
         },
         get_day_of_week(timestamp) {
             const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             const date = new Date(timestamp); // Convert timestamp to date
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
             const day = date.getUTCDay();
-            return daysOfWeek[day];
+
+            return `${daysOfWeek[day]}   ${date.toLocaleDateString('en-US', options)} `;
+        },
+
+        toggleSkeleton() {
+            // Toggle the skeleton visibility
+            this.skeleton_status = !this.skeleton_status;
+            this.table_status = !this.table_status;
         },
 
 
@@ -674,13 +923,14 @@ export default {
 
     mounted() {
 
+        // @click='Reverse_pos(slotProps.data.symbol, slotProps.data.order_id)'>
+        // this.Reverse_pos('SAND-USDT', 1)
         this.get_ticker() // get the ticker_list
         this.Trade_status();  // Get current Live orders
 
         this.get_trade_history();
 
         setInterval(() => {
-
             // Get current Live orders
             // this.Trade_status();
 
@@ -700,3 +950,15 @@ export default {
     },
 };
 </script>
+
+
+
+<style>
+.custom-skeleton {
+    --p-skeleton-background: "rgb(31 41 55)";
+
+    /* Tailwind's bg-blue-800 */
+    --p-skeleton-animation-background: rgb(209 213 219);
+    /* Tailwind's bg-blue-400 */
+}
+</style>
