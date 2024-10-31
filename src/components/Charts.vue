@@ -3,7 +3,7 @@
 
     <!-- Setting section -->
     <div class="rounded-md bg-blue-500 mx-2 mt-1 h-[70px] 1️⃣">
-      
+
 
       <span class="font-serif text-xs ml-2 rounded w-fit text-gray-700 mr-2">chart_setting</span>
 
@@ -32,10 +32,33 @@
           </label>
         </div>
 
+
+        <div>
+          <label class="relative inline-flex cursor-pointer mt-2 ">
+            <input id="switch-3" type="checkbox" class="peer sr-only" @click = "change_market" />
+            <label for="switch-3" class="hidden"></label>
+            <div
+              class="peer h-4 w-11 rounded border bg-slate-200 after:absolute after:-top-1 after:left-0 after:h-6 after:w-6 after:rounded-md after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-green-300 peer-checked:after:translate-x-full peer-focus:ring-green-300">
+            </div>
+            <div class="font-bold ml-2 pb-2">{{ status }}</div>
+          </label>
+        </div>
+
+
+        
+        
+
         <div class="card flex justify-center">
           <MultiSelect v-model="selectedTickers[index]" display="chip" :options="cryptoList" optionLabel="symbol" filter
             placeholder="Favorite Ticker" :maxSelectedLabels="3" class="w-full md:w-80" />
         </div>
+        
+        <div>
+
+          <clock></clock>
+        </div>
+
+
       </div>
     </div>
 
@@ -46,7 +69,9 @@
         <!-- Header section with dynamic ticker label -->
         <div class="flex flex-row justify-between items-center w-full bg-blue-600 rounded h-[40px]">
           <div :id="'ticker-name-' + index" class="font-bold ml-3 font-serif rounded text-white">
-            {{ all_label[index] }}
+            
+            {{ this.status === "FOREX" ? forex_label[index] : all_label[index] }}
+
           </div>
 
           <!-- Primevue Timeframe -->
@@ -99,6 +124,8 @@ export default {
       selectedTickers: Array(12).fill(null), // Array to hold selected ticker for each chart
       cryptoList: [],
 
+      status : "CRYPTO",
+      status_bol : true,
       all_symbol: [
         "BINANCE:GALAUSDT.P", "BINANCE:FILUSDT.P", "BINANCE:DOTUSDT.P",
         "BINANCE:BTCUSD.P", "BINANCE:ETHUSD.P", "BINANCE:BNBUSDT.P",
@@ -109,6 +136,16 @@ export default {
         "GALA", "FIL", "DOT", "BTC", "ETH", "BNB",
         "POL", "SOL", "WIF", "EUR_USD", "GBP_USD", "AUD_USD"
       ],
+
+      forex_ticker : ["OANDA:USDJPY",
+        "OANDA:USDCAD",
+        "OANDA:EURUSD",
+        "OANDA:USDCHF",
+        "OANDA:GBPUSD",
+        "OANDA:AUDUSD",],
+
+        forex_label:["USDJPY","USDCAD","EURUSD","USDCHF","GBPUSD","AUDUSD"],
+
       box_number: [1, 3, 6, 9, 12],
       timeframe: ['1', '5'],
       timeframes: ['1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'], // Default to 1 minute for each chart
@@ -197,10 +234,8 @@ export default {
         //     "BINGX:POLUSDT.P"
         // ],
         "calendar": true,
-
         "studies": ['IchimokuCloud@tv-basicstudies',],
         "container_id": containerId,
-
         studies_overrides: {
           "paneProperties.background": "#ffffff",
           "allow_symbol_change": "true",
@@ -224,15 +259,34 @@ export default {
       this.createChart(`chart-all-${index}`, this.all_symbol[index], this.timeframes[index], this.chart_theme);
     },
 
-    initCharts() {
-      this.all_symbol.slice(0, this.chartCount).forEach((symbol, index) => {
+    initCharts( ) {
+
+      if(this.status == 'FOREX'){
+        this.forex_ticker.slice(0, this.chartCount).forEach((symbol, index) => {
         this.createChart(`chart-all-${index}`, symbol, this.main_select_timeframe, this.chart_theme);
       });
-    }
+
+      }else{
+        this.all_symbol.slice(0, this.chartCount).forEach((symbol, index) => {
+        this.createChart(`chart-all-${index}`, symbol, this.main_select_timeframe, this.chart_theme);
+      });
+      }
+      
+    },
+    change_market(){
+      
+      this.status_bol = !this.status_bol;
+      if(this.status_bol){
+        this.status  = "CRYPTO";
+      }else{
+        this.status  = "FOREX";
+      }
+      this.initCharts();
+      
   },
   mounted() {
     this.get_ticker();
     this.initCharts();
-  }
+  }}
 };
 </script>
