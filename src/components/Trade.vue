@@ -62,12 +62,22 @@
         <div class="flex flex-row p-2 space-y gap-2  ">
 
             <!-- Trade Section 1️⃣-->
-            <div class="flex md:flex-row rounded-3  gap-3  bg-gray-800 w-110 h-[460px]  ml-2  w-4/5">
+            <div class="flex md:flex-row rounded-3  gap-3  bg-gray-800 w-110 h-[480px]  ml-2  w-4/5">
 
                 <!-- input_limit_section -->
                 <div class=" flex flex-col space-y-0 ml-2   ">
-                    <span class="text-sm font-bold font-serif mt-2 ml-1">Limit_order</span>
 
+                    <div class="flex flex-row gap-2">
+                        <div>
+                        <span class="text-sm font-bold font-serif mt-2 ml-1">Limit_order</span>
+                    </div>
+                    <div >
+                        <clock class="font-lg"> </clock>
+                    </div>
+                    
+                    </div>
+                     
+                    
                     <!-- Selecting Ticker -->
                     <div class="card flex w-fit ml-2 mt-2">
                         <Select v-model="Ticker" :options="cryptoList" filter optionLabel="symbol"
@@ -85,6 +95,7 @@
                         </Select>
                     </div>
 
+                    <div class="flex flex-row">
                     <!-- Toggle Type -->
                     <div class="flex  ml-3 mt-3 h-[60px]  justify-center ">
                         <button @click="toggleValue"
@@ -93,6 +104,15 @@
                             <span class='text-sm font-bold font-mono'>{{ isLong ? 'LONG' : 'SHORT' }}</span>
                         </button>
                     </div>
+                    <!-- Type Position -->
+                    <div class="flex  ml-3 mt-3 h-[60px]  justify-center ">
+                        <button @click="Type_position"
+                            class="btn rounded-1 btn-sm w-36 my-2 hover:border-gray-200 hover:bg-gray-800 "
+                            type="button" :class="[type_market_toggle]">
+                            <span class='text-sm font-bold font-mono'>{{ Type_market_value }}</span>
+                        </button>
+                    </div>
+                </div>
 
                     <!-- Limit_price -->
                     <div class="m-1 mb-3">
@@ -280,9 +300,12 @@
                         </template>
                     </Column>
                 </DataTable>
+                
             </div>
 
+            <div>{{ this.Type_market_value }}</div>
         
+            
 
         </div>
 
@@ -307,6 +330,8 @@ export default {
             SL_status: null,
             updated_info_symbol: null,
 
+            Type_market_con : true,
+            Type_market_value : "TRIGGER_MARKET",
             Ticker: null,
             type_pos: 'LONG',
             limit_price: null,
@@ -421,7 +446,7 @@ export default {
                     "limitprice": parseFloat(this.limit_price),
                     "slprice": parseFloat(this.sl_price),
                     "tpprice": parseFloat(this.tp_price),
-                    "market": "trigger",
+                    "market": this.Type_market_value,
                 };
 
                 // Make the POST request to open_trade
@@ -550,6 +575,7 @@ export default {
                 }
                 const response = await axios.post(import.meta.env.VITE_REVERSE_POS, params_reverse);
 
+                console.log(response,symbol)
                 if (response.status == 200) {
                     this.$toast.add({
                         severity: 'success',
@@ -789,23 +815,35 @@ export default {
         updateChart(index,ticker) {
 
             let Ticker_select = null;
+
             if (ticker == null){
                 Ticker_select = this.Ticker['symbol'].split("-")[0]
             }else{
                 Ticker_select = ticker.split("-")[0]
             }
         
-            console.log(Ticker_select)
-
             const symbol = `BINANCE:${Ticker_select}USDT.P`
             this.createChart(index, symbol, "1", "Dark");
         },
+
         toggleValue() {
             this.isLong = !this.isLong;
             if (this.isLong) {
                 this.type_pos = 'LONG';
             } else {
                 this.type_pos = 'SHORT';
+            }
+        },
+        Type_position() {
+            
+            this.Type_market_con = !this.Type_market_con;
+            
+            if (this.Type_market_con) {
+                this.Type_market_value = "TRIGGER_MARKET";
+                
+            } else {
+                this.Type_market_value = "MARKET";
+               
             }
         },
 
@@ -923,8 +961,6 @@ export default {
 
     mounted() {
 
-        // @click='Reverse_pos(slotProps.data.symbol, slotProps.data.order_id)'>
-        // this.Reverse_pos('SAND-USDT', 1)
         this.get_ticker() // get the ticker_list
         this.Trade_status();  // Get current Live orders
 
@@ -944,6 +980,9 @@ export default {
     computed: {
         type_toggle() {
             return this.isLong ? 'bg-green-500' : 'bg-red-500';
+        },
+        type_market_toggle() {
+            return this.Type_market_con ? 'bg-blue-500' : 'bg-yellow-500';
         },
 
 
