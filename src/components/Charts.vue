@@ -4,7 +4,6 @@
     <!-- Setting section -->
     <div class="rounded-md bg-blue-500 mx-2 mt-1 h-[70px] 1️⃣">
 
-
       <span class="font-serif text-xs ml-2 rounded w-fit text-gray-700 mr-2">chart_setting</span>
 
       <!-- Header=> Boxes  -->
@@ -118,8 +117,8 @@ export default {
       chartCount: 6,
 
       main_select_timeframe: '1',
-      select_timeframe: null,
-      box_select: null,
+      select_timeframe: 1,
+      box_select: 6,
 
       selectedTickers: Array(12).fill(null), // Array to hold selected ticker for each chart
       cryptoList: [],
@@ -138,16 +137,16 @@ export default {
       ],
 
       forex_ticker : ["OANDA:USDJPY",
-        "OANDA:USDCAD",
+        "OANDA:XAUUSD",
         "OANDA:EURUSD",
         "OANDA:USDCHF",
         "OANDA:GBPUSD",
         "OANDA:AUDUSD",],
 
-        forex_label:["USDJPY","USDCAD","EURUSD","USDCHF","GBPUSD","AUDUSD"],
+        forex_label:["USDJPY","XAU","EURUSD","USDCHF","GBPUSD","AUDUSD"],
 
       box_number: [1, 3, 6, 9, 12],
-      timeframe: ['1', '5'],
+      timeframe: ['1', '5','15','60','D'],
       timeframes: ['1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'], // Default to 1 minute for each chart
     };
   },
@@ -261,15 +260,17 @@ export default {
 
     initCharts( ) {
 
-      if(this.status == 'FOREX'){
-        this.forex_ticker.slice(0, this.chartCount).forEach((symbol, index) => {
+      if(this.status == 'CRYPTO'){
+
+        console.log('we are here')
+        this.all_symbol.slice(0, this.chartCount).forEach((symbol, index) => {
         this.createChart(`chart-all-${index}`, symbol, this.main_select_timeframe, this.chart_theme);
       });
 
       }else{
-        this.all_symbol.slice(0, this.chartCount).forEach((symbol, index) => {
+        this.forex_ticker.slice(0, this.chartCount).forEach((symbol, index) => {
         this.createChart(`chart-all-${index}`, symbol, this.main_select_timeframe, this.chart_theme);
-      });
+      });  
       }
       
     },
@@ -284,9 +285,10 @@ export default {
       this.initCharts();
       
   },
+  },
   mounted() {
     this.get_ticker();
     this.initCharts();
-  }}
+  }
 };
 </script>
