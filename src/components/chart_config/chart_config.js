@@ -8,6 +8,8 @@ export const   line_option = {
 
     width: 'auto',  
 
+    colors: ['#FFFF00'], // Set the line color to yellow
+
     type: 'line',
     toolbar: {
       show: true,
@@ -20,6 +22,8 @@ export const   line_option = {
       },
     },
   },
+  colors: ['#FFFF00'], // Set the line color to yellow
+  
   grid: {
     show: false,
   },

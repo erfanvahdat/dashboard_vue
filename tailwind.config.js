@@ -1,14 +1,8 @@
 module.exports = {
-  
-
 
   content: [
-    './index.html',
-    './src/**/*.{vue,js,ts,jsx,tsx}',
-    
-
-    
-
+    './src/**/*.{vue,js,ts,jsx,tsx}',  // Default path for components inside src
+    './components/**/*.{vue,js,ts,jsx,tsx}',  // Include the components folder if it's outside src
   ],
   theme: {
     extend: {
@@ -34,5 +28,3 @@ module.exports = {
 
   ],
 }
-
-

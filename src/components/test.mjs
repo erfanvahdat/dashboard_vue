@@ -1,131 +1,56 @@
-let full_order = [
-    { 
-      "symbol": "SAND-USDT", 
-      "orderId": 1846216338172170200, 
-      "side": "BUY", 
-      "positionSide": "BOTH", 
-      "type": "STOP_MARKET", 
-      "origQty": "13", 
-      "price": "0", 
-      "executedQty": "0", 
-      "avgPrice": "0.2645", 
-      "cumQuote": "0", 
-      "stopPrice": "0.2802", 
-      "profit": "0.0", 
-      "commission": "0.0", 
-      "status": "NEW", 
-      "time": 1729007251000, 
-      "updateTime": 1729007251000, 
-      "clientOrderId": "", 
-      "leverage": "8X", 
-      "takeProfit": { 
-        "type": "", 
-        "quantity": 0, 
-        "stopPrice": 0, 
-        "price": 0, 
-        "workingType": "", 
-        "stopGuaranteed": "" 
-      }, 
-      "stopLoss": { 
-        "type": "", 
-        "quantity": 0, 
-        "stopPrice": 0, 
-        "price": 0, 
-        "workingType": "", 
-        "stopGuaranteed": "" 
-      }, 
-      "advanceAttr": 0, 
-      "positionID": 0, 
-      "takeProfitEntrustPrice": 0, 
-      "stopLossEntrustPrice": 0, 
-      "orderType": "", 
-      "workingType": "CONTRACT_PRICE", 
-      "onlyOnePosition": true, 
-      "reduceOnly": true, 
-      "postOnly": false, 
-      "stopGuaranteed": "false", 
-      "triggerOrderId": 0, 
-      "trailingStopRate": 0, 
-      "trailingStopDistance": 0 
-    }, 
-    { 
-      "symbol": "SAND-USDT", 
-      "orderId": 1846216329007616000, 
-      "side": "BUY", 
-      "positionSide": "BOTH", 
-      "type": "TAKE_PROFIT_MARKET", 
-      "origQty": "13", 
-      "price": "0", 
-      "executedQty": "0", 
-      "avgPrice": "0.0", 
-      "cumQuote": "0", 
-      "stopPrice": "0.2506", 
-      "profit": "0.0", 
-      "commission": "0.0", 
-      "status": "NEW", 
-      "time": 1729007249000, 
-      "updateTime": 1729007249000, 
-      "clientOrderId": "", 
-      "leverage": "8X", 
-      "takeProfit": { 
-        "type": "", 
-        "quantity": 0, 
-        "stopPrice": 0, 
-        "price": 0, 
-        "workingType": "", 
-        "stopGuaranteed": "" 
-      }, 
-      "stopLoss": { 
-        "type": "", 
-        "quantity": 0, 
-        "stopPrice": 0, 
-        "price": 0, 
-        "workingType": "", 
-        "stopGuaranteed": "" 
-      }, 
-      "advanceAttr": 0, 
-      "positionID": 0, 
-      "takeProfitEntrustPrice": 0, 
-      "stopLossEntrustPrice": 0, 
-      "orderType": "", 
-      "workingType": "CONTRACT_PRICE", 
-      "onlyOnePosition": true, 
-      "reduceOnly": true, 
-      "postOnly": false, 
-      "stopGuaranteed": "false", 
-      "triggerOrderId": 0, 
-      "trailingStopRate": 0, 
-      "trailingStopDistance": 0 
-    }, 
-    { 
-      "positionId": "1846204222094184448", 
-      "symbol": "SAND-USDT", 
-      "currency": "USDT", 
-      "positionAmt": "13", 
-      "availableAmt": "13", 
-      "positionSide": "SHORT", 
-      "isolated": true, 
-      "avgPrice": "0.2645", 
-      "initialMargin": "0.4298", 
-      "margin": "0.4181", 
-      "leverage": 8, 
-      "unrealizedProfit": "-0.0118", 
-      "realisedProfit": "-0.0017", 
-      "liquidationPrice": 0.2946, 
-      "pnlRatio": "-0.0273", 
-      "maxMarginReduction": "0.0000", 
-      "riskRate": "0.0825", 
-      "markPrice": "0.2654", 
-      "positionValue": "3.4503", 
-      "onlyOnePosition": true, 
-      "updateTime": 1729004362024 
-    }
-  ];
+import axios from 'axios';
+import dotenv from 'dotenv';
+import { spawn } from 'child_process'; // Modular import of spawn
+
+dotenv.config({ path: '../../.env' }); 
+
+const pythonProcess = spawn('python', ['test.py']);
+
+
+
+pythonProcess.stdout.on('data', (data) => {
   
-  // Extract positionId using forEach
-  full_order.forEach(order => {
-    if (order.positionId) {
-      console.log("Position ID:", order.positionId);
-    }
-  });
+
+  const output = data.toString().trim();
+  // const [value1,value2,value3,value5] = data.toString().trim()
+
+  // console.log(value1,value2,value5,value3)
+  const [value1, value2, value3 ] = output.split(',');
+
+  console.log(value1)
+
+  // const base64Data = data.toString('base64');
+  // console.log(data.toString() );
   
+});
+
+
+// console.log(pythonProcess.stdout.on())
+
+
+// pythonProcess.stdout.on('data',(data)=>
+//   console.log(data)
+// )
+// // pythonProcess.stderr.on('data', (data) => {
+//   console.error(`Error from Python: ${data.toString()}`);
+// });
+
+// pythonProcess.on('close', (code) => {
+//   console.log(`Python process exited with code ${code}`);
+// });
+
+
+// // console.log(process.env.VITE_GET_BALANCE_DB)
+// async function A(){
+//   console.log(process.env.VITE_GET_BALANCE_DB)
+//   const url  = `${process.env.VITE_GET_BALANCE_DB}`
+//   const  data  = await  axios.get(url)
+
+//   return  data
+// }
+
+
+
+// const obj = (await A()).data.data ; 
+
+// console.log()

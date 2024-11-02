@@ -515,7 +515,7 @@ export default {
                     life: 5000
                 });
 
-                console.error(errorMessage);
+                // console.error(errorMessage);
             }
         },
         async RemoveTrade(orderid, symbol, pending_status) {
@@ -968,7 +968,7 @@ export default {
 
         setInterval(() => {
             // Get current Live orders
-            // this.Trade_status();
+            this.Trade_status();
 
         }, 10000);
 

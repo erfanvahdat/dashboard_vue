@@ -23,12 +23,23 @@
     </div>
 
     <!-- Second main Section -->
-    <div class="flex flex-col ">
+    <div class="flex flex-row ">
 
       <!-- Slope chart  -->
       <div class=" bg-gray-700 w-fit  mx-3 rounded-1 ">
         <div class="flex p-2 w-fit">
           <apexchart type="line" height="400" width="700" :options="Slope_options" :series="slope_series"></apexchart>
+        </div>
+      </div>
+
+      <div class=" rounded-2  bg-gray-700 w-full mr-3">
+
+        <div class="tradingview-widget-container p-2 bg-gray-700 m-2  ">
+          <div class="tradingview-widget-container__widget  "></div>
+          <!-- <div class="tradingview-widget-copyright "> -->
+          <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">
+          </a>
+
         </div>
       </div>
 
@@ -71,23 +82,27 @@ export default {
     this.Balance();
     this.calculare_profit();
     this.processing_chart_slope_data();
+    this.Market_watch()
 
   },
   methods: {
+
     // get_token() {
     //   const Access = localStorage.getItem('access');
     //   this.access = Access;
     // },
+
 
     //  Get the Trade history from db
     async calculare_profit() {
       try {
         // Fetch the trade history data from the API
         const response = await axios.get(`${import.meta.env.VITE_TRADE_HISTORY_ALL}`);
-        const tradeHistory = response.data;
+        const tradeHistory = response.data.data ;
 
         // Map the `time` and `profit` values for the chart's x and y axes
         let chartData = tradeHistory.map(item => {
+
           return {
             x: new Date(item.time).getTime(), // Convert the time to a JS timestamp
             y: item.profit, // Use the profit for the y axis
@@ -119,10 +134,12 @@ export default {
         // Update the daily and weekly profit data
         this.dailyProfit = last_day_profit.toFixed(2);
         this.WeeklyProfit = last_week_profit.toFixed(2);
+
       } catch (error) {
         console.log("Error fetching trade history:", error);
       }
     },
+    // Update the 
     async Balance() {
       try {
 
@@ -149,7 +166,6 @@ export default {
         const save_meta_data = await axios.post(`${import.meta.env.VITE_SAVE_BALANCE}`, save_meta_data_balance);
 
         console.log(chalk.green('User balance Table is updated'))
-
       } catch (error) {
         console.log(error)
 
@@ -158,7 +174,7 @@ export default {
     async processing_chart_slope_data() {
       try {
         const response = await axios.get(`${import.meta.env.VITE_TRADE_HISTORY_ALL}`);
-        const tradeHistory = response.data;
+        const tradeHistory = response.data.data;
 
         // Group trades by their ticker symbol
         const groupedData = tradeHistory.reduce((acc, trade) => {
@@ -181,6 +197,54 @@ export default {
         console.error("Error fetching trade history:", error);
       }
     },
+
+
+    async Market_watch() {
+      // Make sure the DOM element exists
+      const container = this.$el.querySelector(".tradingview-widget-container__widget");
+      if (container) {
+        const script = document.createElement("script");
+        script.type = "text/javascript";
+        script.async = true;
+        script.src = "https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js";
+        script.innerHTML = JSON.stringify({
+          colorTheme: "dark",
+          dateRange: "12M",
+          showChart: true,
+          locale: "en",
+          largeChartUrl: "",
+          isTransparent: false,
+          showSymbolLogo: true,
+          showFloatingTooltip: true,
+          width: "670",
+          height: "400",
+          plotLineColorGrowing: "rgba(41, 98, 255, 1)",
+          plotLineColorFalling: "rgba(41, 98, 255, 1)",
+          gridLineColor: "rgba(240, 243, 250, 0)",
+          scaleFontColor: "rgba(209, 212, 220, 1)",
+          belowLineFillColorGrowing: "rgba(41, 98, 255, 0.12)",
+          belowLineFillColorFalling: "rgba(41, 98, 255, 0.12)",
+          belowLineFillColorGrowingBottom: "rgba(41, 98, 255, 0)",
+          belowLineFillColorFallingBottom: "rgba(41, 98, 255, 0)",
+          symbolActiveColor: "rgba(41, 98, 255, 0.12)",
+          tabs: [
+            {
+              title: "Crypto",
+              symbols: [
+                { s: "BINGX:BTCUSDT.P", d: "BTC" },
+                { s: "BINGX:SANDUSDT.P", d: "SAND" },
+                { s: "BINGX:FILUSDT.P", d: "FIL" },
+                { s: "BINGX:DOTUSDT.P", d: "DOT" },
+                { s: "BINGX:GALAUSDT.P", d: "GALA" },
+                { s: "BINGX:BNBUSDT.P", d: "BNB" },
+                { s: "BINGX:ETHUSDT.P", d: "ETH" }
+              ]
+            }
+          ]
+        });
+        container.appendChild(script); // Append the script to the widget container
+      }
+    }
   },
 }
 
@@ -202,7 +266,7 @@ export default {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #4b5563;
+  background-color: #4d5257;
 
   border-radius: 6px;
 }

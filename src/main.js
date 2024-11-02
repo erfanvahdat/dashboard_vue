@@ -10,6 +10,7 @@ import Aura from '@primevue/themes/aura';
 import 'primeicons/primeicons.css';
 import ConfirmationService from 'primevue/confirmationservice';
 
+
 // Import PrimeVue components
 import Menu from 'primevue/menu';
 import Select from 'primevue/select';
@@ -19,7 +20,7 @@ import ToggleButton from 'primevue/togglebutton';
 import InputNumber from 'primevue/inputnumber';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import ColumnGroup from 'primevue/columngroup';   // optional
+import ColumnGroup from 'primevue/columngroup';
 import Row from 'primevue/row';
 import Tag from 'primevue/tag';
 import Button from 'primevue/button';
@@ -38,6 +39,8 @@ import Slider from 'primevue/slider';
 import TreeSelect from 'primevue/treeselect';
 import ConfirmPopup from 'primevue/confirmpopup';
 import Skeleton from 'primevue/skeleton';
+import Checkbox from 'primevue/checkbox';
+
 
 
 // Import Main components
@@ -64,6 +67,8 @@ import input_sub from './sub_component/input.vue';
 import Alert from './sub_component/alert.vue';
 import login_icon from './sub_component/login_icon.vue';
 import loading_spin from './sub_component/loading_spin.vue';
+import clock from './sub_component/clock.vue';
+import second_clock from './sub_component/second_clock.vue';
 
 // Chart import modules
 import VueApexCharts from "vue3-apexcharts";
@@ -139,6 +144,9 @@ const globalComponents = {
   "Toast": Toast,
   "Divider": Divider,
   "Skeleton": Skeleton,
+  "Checkbox":Checkbox,
+  "clock":clock,
+  "second_clock":second_clock,
 
 };
 
