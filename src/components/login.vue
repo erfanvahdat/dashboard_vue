@@ -3,23 +3,22 @@
     <section class="flex w-[30rem] flex-col space-y-10">
       <div class="flex flex-row justify-between space-x-5">
         <span class="w-full text-center justify-center text-4xl font-medium">Login</span>
-        <!-- <login_icon @click="Signup"></login_icon> -->
       </div>
 
       <!-- Username input -->
       <div class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500">
-        <input v-model="user" type="text" placeholder="Username" @keyup.enter="login"
+        <input v-model="user" type="text" placeholder="Username" @keyup.enter="handleLogin"
           class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none" />
       </div>
 
       <!-- Password input -->
       <div class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500">
-        <input v-model="password" type="password" placeholder="Password" @keyup.enter="login"
+        <input v-model="password" type="password" placeholder="Password" @keyup.enter="handleLogin"
           class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none" />
       </div>
 
       <!-- Login button -->
-      <button @click="login"
+      <button @click="handleLogin"
         class="transform rounded-sm bg-indigo-600 py-2 font-bold duration-300 hover:bg-indigo-400 rounded-2">
         Login
       </button>
@@ -35,7 +34,6 @@
       </span>
 
       <p class="flex justify-center space-x-1">
-        <!-- <span class="text-slate-700"> Have an account? </span> -->
         <button class="text-blue-500 hover:underline" @click="Signup">Sign Up</button>
       </p>
     </section>
@@ -44,7 +42,7 @@
 
 <script>
 import axios from "axios";
-
+import chalk from 'chalk';
 export default {
   data() {
     return {
@@ -59,36 +57,38 @@ export default {
     Signup() {
       this.$emit("sign_up");
     },
-    async login() {
-      this.$emit("login_success");
-      // Show spinner while the login request is in progress
-      // this.spin_loader = true;
-      // try {
-      //   const response = await axios.post(`${import.meta.env.VITE_LOGIN}`, {
-      //     username: this.user,
-      //     password: this.password,
-      //   });
+    async handleLogin() {
+      this.spin_loader = true;
+      
+      // Wait 5 seconds before proceeding with login attempt
+      setTimeout(async () => {
+        this.spin_loader = false;
 
-      //   // Handle login success
-      //   this.responseMessage = "Login successful: " + response.data.username;
-      //   localStorage.setItem("access", response.data.access);
-      //   localStorage.setItem("refresh", response.data.refresh);
+        // Uncomment and use the login functionality here
+        try {
+        //   const response = await axios.post(`${import.meta.env.VITE_LOGIN}`, {
+        //     username: this.user,
+        //     password: this.password,
+        //   });
 
-      //   console.log(response.data.access);
+          // Handle login success
+          // this.responseMessage = "Login successful: " + response.data.username;
+          // localStorage.setItem("access", response.data.access);
+          // localStorage.setItem("refresh", response.data.refresh);
 
-      //   // Hide the loading spinner after 2 seconds
-      //   setTimeout(() => {
-      //     this.spin_loader = false;
-      //     this.$emit("login_success");
-      //   }, 2000);
-      // } catch (error) {
-      //   // Handle login failure
-      //   this.spin_loader = false;
-      //   this.response_error = true;
-      //   setTimeout(() => {
-      //     this.response_error = false;
-      //   }, 2000);
-      // }
+          // Emit the success event
+          this.$emit("login_success");
+        } catch (error) {
+
+          console.log(chalk.red('something goes wrong!'))
+          // // Handle login failure
+          // this.response_error = true;
+          // setTimeout(() => {
+          //   this.response_error = false;
+          // }, 2000);
+        }
+
+      }, 1000);
     },
   },
 };
