@@ -125,15 +125,15 @@ export default {
 
       status : "CRYPTO",
       status_bol : true,
-      all_symbol: [
+      all_symbol : [
         "BINANCE:GALAUSDT.P", "BINANCE:FILUSDT.P", "BINANCE:DOTUSDT.P",
-        "BINANCE:BTCUSD.P", "BINANCE:ETHUSD.P", "BINANCE:BNBUSDT.P",
-        "BINANCE:POLUSDT.P", "BINANCE:SOLUSDT.P", "BINANCE:WIFUSDT.P",
+        "BINANCE:SANDUSDT.P", "BINANCE:BTCUSD.P", "BINANCE:LTCUSDT.P",
+        "BINANCE:ETHUSDT.P", "BINANCE:SOLUSDT.P", "BINANCE:WIFUSDT.P",
         "OANDA:EURUSD", "OANDA:GBPUSD", "OANDA:AUDUSD"
       ],
       all_label: [
-        "GALA", "FIL", "DOT", "BTC", "ETH", "BNB",
-        "POL", "SOL", "WIF", "EUR_USD", "GBP_USD", "AUD_USD"
+        "GALA", "FIL", "DOT", "SAND", "BTC", "LTC",
+        "ETH", "SOL", "WIF", "EUR_USD", "GBP_USD", "AUD_USD"
       ],
 
       forex_ticker : ["OANDA:USDJPY",
