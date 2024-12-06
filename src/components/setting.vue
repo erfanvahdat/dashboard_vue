@@ -29,17 +29,11 @@
 
 
 
-            
-
+        
     </div>
 
 
 
-    <div>
-        <p>{{ type }}</p>
-        <p>{{ profit_status }}</p>
-    </div>
-    
     
 </template>
 

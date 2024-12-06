@@ -43,6 +43,8 @@ import Checkbox from 'primevue/checkbox';
 
 
 
+
+
 // Import Main components
 import Sidebar from './components/Sidebar.vue';
 import Header from './components/header.vue';
@@ -69,6 +71,7 @@ import login_icon from './sub_component/login_icon.vue';
 import loading_spin from './sub_component/loading_spin.vue';
 import clock from './sub_component/clock.vue';
 import second_clock from './sub_component/second_clock.vue';
+import calculator from './sub_component/calculator.vue';
 
 // Chart import modules
 import VueApexCharts from "vue3-apexcharts";
@@ -147,6 +150,8 @@ const globalComponents = {
   "Checkbox":Checkbox,
   "clock":clock,
   "second_clock":second_clock,
+  "calculator": calculator,
+  
 
 };
 

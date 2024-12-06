@@ -15,6 +15,13 @@ module.exports = {
           '100%': { transform: 'rotate(360deg)' },
         },
       },
+      colors: {
+        customGray: '#2e2f30', 
+        filed_label: "#2e2f30",
+        filed_body: "#8e9298"
+        
+      },
+
       
       
     },

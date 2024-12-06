@@ -48,6 +48,7 @@ export default {
                         { label: 'Home', icon: 'pi pi-home', class_name: 'HOME', color: "bg-blue-500  rounded-3" },
                         { label: 'Charts', icon: 'pi pi-table', class_name: 'Charts', color: "bg-blue-500  rounded-3" },
                         { label: 'Trade', icon: 'pi pi-chart-line', class_name: 'Trade', color: "bg-blue-500  rounded-3" },
+                        { label: 'Crypto_CAL', icon: 'pi pi-calculator', class_name: 'CALCULATOR', color: "bg-blue-500  rounded-3" },
                     ]
                 },
                 {
@@ -59,7 +60,7 @@ export default {
                 {
                     label: 'LAB',
                     items: [
-                        { label: 'Analyzing', icon: 'pi pi-chart-line', class_name: 'ANALYZE', color: "bg-blue-500  rounded-3" },
+                        
                         { label: 'Registration', icon: 'pi pi-user-plus', class_name: 'REG', color: "bg-blue-500  rounded-3" },
                         { label: 'trade_journal', icon: 'pi pi-book', class_name: 'journal', color: "bg-blue-500  rounded-3" }
                     ]
@@ -89,7 +90,7 @@ export default {
         Trade() {
             this.$emit('Trade')
         },
-        ANALYZE() {
+        CALCULATOR() {
             this.$emit('showAnalyze');
         },
         SETTING() {

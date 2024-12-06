@@ -1,144 +1,119 @@
 <template>
-    <!-- component -->
-    <main class="mx-auto flex min-h-screen w-full items-center justify-center bg-gray-900 text-white">
-        <section class="flex w-[30rem] flex-col space-y-10">
+    <Toast />
+    <ConfirmPopup group="templating">
+        <template #message="slotProps">
+            <div class="flex flex-col items-center w-full gap-4 p-4">
+                <i :class="slotProps.message.icon" class="text-6xl text-primary-500 "></i>
+                <p class="font-bold font-serif">{{ slotProps.message.message }}</p>
 
-            <div class="flex flex-row justify-between  space-x-5">
+                <!-- Calculator Content -->
+                <div class="flex flex-col  rounded-lg max-w-lg w-full border-1">
 
+                    <div class="card flex flex-wrap gap-4 bg-filed_label font-bold text-filed_body">
+                        <div class="flex flex-row">
+                            
+                            <label for="integeronly" class="font-bold mt-2 ml-2 ">Balance (USD)</label>
+                            <InputNumber v-model="accountBalance" inputId="integeronly" fluid mode="currency" class="mr-2 mt-1 "
+                                currency="USD" />
+                        </div>
+                        <div class="flex flex-row">
+                            <label for="riskPercentage" class="font-bold mt-2 ml-2">Risk %</label>
+                            <InputNumber v-model="riskPercentage" inputId="riskPercentage" mode="decimal" prefix=" % "
+                                :minFractionDigits="0.5" :maxFractionDigits="2.5" fluid step="0.2"  class="mr-2"/>
+                        </div>
+                        <div class="flex flex-row">
+                            <label for="entryPrice" class="font-bold block ml-2">Entry Price</label>
+                            <InputNumber v-model="entryPrice" inputId="entryPrice" :minFractionDigits="1" class="mr-2"
+                                :maxFractionDigits="10" fluid />
+                        </div>
+                        <div class="flex flex-row">
+                            <label for="stopLoss" class="font-bold block ml-2">Stop Loss</label>
+                            <InputNumber v-model="stopLoss" inputId="stopLoss" :minFractionDigits="1" class="mr-2 mb-2"
+                                :maxFractionDigits="10" fluid />
+                        </div>
+                    </div>
+                    <!-- Buttons -->
+                    <div class="flex flex-row gap-2 mt-4">
+                        <Button label="Calculate" severity="info" class="w-1/2 rounded-0"
+                            @click="calculatePositionSizeCrypto" />
+                        <Button label="Reset" class="w-1/2 rounded-0 bg-filed_label" @click="resetAll" />
+                    </div>
+                    <!-- Result -->
+                    <div class="flex flex-row gap-2 mt-2 mb-2">
+                    
+                        <p class="font-bold">Size_Crypto is :</p>
+                        <p for="" class="font-bold  border-1 border-orange-500  rounded  w-fit ">{{ size_crypto }} </p>
+                        
 
-                <span class="text-center text-4xl font-z">Sign Up</span>
-                <login_icon @click='login_direction'>login</login_icon>
-
-
-            </div>
-
-            <!-- Email or Username input -->
-            <div class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500">
-                <input v-model="user" type="text" placeholder="Username" @keyup.enter="register"
-                    class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none " />
-            </div>
-
-            <!-- Password input -->
-            <div class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500">
-                <input v-model="password" type="password" placeholder="Password" @keyup.enter="register"
-                    class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none" />
-            </div>
-
-            <!-- Register button -->
-            <button @click="register"
-                class="transform rounded-sm bg-indigo-600 py-2 font-bold duration-300 hover:bg-indigo-400 rounded-2">
-                Sign up
-            </button>
-            <div v-if="spin_loader">
-                <loading_spin></loading_spin>
-            </div>
-
-            <!-- Response message -->
-            <div v-if="responseMessage" class="text-center text-lg mt-4">
-
-                <!-- <p>{{ responseMessage }} _ Status: {{ responseStatus }}</p> -->
-
-
-                <!-- Show success message for status code 201 -->
-                <div v-if="displayStatus == '200'" class="mt-2 bg-teal-500 text-sm text-white rounded-lg p-4"
-                    role="alert" tabindex="-1" aria-labelledby="hs-solid-color-success-label">
-                    <span id="hs-solid-color-success-label" class="font-bold ">Success</span>
-                    <div class="font-serif">Registration Success</div>
-                    Token Is: {{ token }}
+                    </div>
+                
+                        <div class="w-full flex flex-row gap-2 mb-2">
+                            <p class="font-bold">Size_dollar($) is : </p>
+                        <p for="" class="font-bold  border-1 border-orange-500 rounded   ">{{ size_dollar.toFixed(2) }} $ </p>
+                    </div>
+                         
+                    
                 </div>
-
-                <!-- Show error message for status code 400 -->
-                <div v-if="responseStatus === '400' && displayStatus"
-                    class="mt-2 bg-red-500 text-sm text-white rounded-lg p-4" role="alert" tabindex="-1"
-                    aria-labelledby="hs-solid-color-danger-label">
-                    <span id="hs-solid-color-danger-label" class="font-bold font-serif underline"></span>
-                    <!-- user is already exist or something else happened! -->
-                    {{ responseMessage }}
-                </div>
-
-
             </div>
+        </template>
+    </ConfirmPopup>
 
-            <a href="#" class="transform text-center font-semibold text-gray-500 duration-300 hover:text-gray-300">
-                FORGOT PASSWORD?</a>
-
-            <!-- <p class="text-center text-lg">
-                No account?
-                <a href="#" class="font-medium text-indigo-500 underline-offset-4 hover:underline">Create One</a>
-            </p> -->
-        </section>
-    </main>
+    <div class="flex ">
+        <Button @click="showTemplate($event)" label="Show Calculator"></Button>
+    </div>
 </template>
 
 <script>
-import axios from 'axios';
-// const reg_api = process.env;
-
 export default {
     data() {
         return {
-            displayStatus: false,  // Controls visibility of status messages
-            user: '',
-            password: '',
-            responseMessage: '',
-            responseStatus: '',
-            spin_loader: false,   // Controls loading spinner visibility
+            accountBalance: null,
+            riskPercentage: 1,
+            entryPrice: null,
+            stopLoss: null,
+            size_crypto: 0,
+            size_dollar : 0,
         };
     },
     methods: {
-        login_direction() {
-            this.$emit('go_login');
-        },
-        async register() {
-            // Show the loading spinner while making the request
-            this.spin_loader = true;
-
-            try {
-                // Sending the POST request
-                const response = await axios.post(`${import.meta.env.VITE_REGIS}`, {
-                    username: this.user,
-                    password: this.password
-                });
-
-                // Success: registration successful
-                this.responseMessage = response.data.status;
-                this.responseStatus = '201';  // Set status to 201 (Success)
-
-                // Hide the loading spinner after 2 seconds
-                setTimeout(() => {
-                    this.spin_loader = false;
-                    this.displayStatus = true;  // Show the success message
-
-                    this.$emit('reg_success');
-
-                }, 500);
-
-
-            } catch (error) {
-                // Error: registration failed
-                if (error.response && error.response.status === 400) {
-                    // Extract error details
-                    const errorMessage = error.response.data.error
-                        ? error.response.data.error[0]
-                        : 'Unknown error';
-
-                    this.responseStatus = '400';  // Set status to 400 (Error)
-                    this.responseMessage = `Registration failed: ${errorMessage}`;
-                } else {
-                    this.responseMessage = 'An error occurred. Please try again.';
+        showTemplate(event) {
+            this.$confirm.require({
+                target: event.currentTarget,
+                group: 'templating',
+                message: 'Calculating the Crypto Size position',
+                icon: 'pi pi-calculator',
+                rejectProps: {
+                    icon: 'pi pi-times',
+                    label: 'Cancel',
+                    outlined: true
+                },
+                acceptProps: {
+                    icon: 'pi pi-check',
+                    label: 'Confirm'
+                },
+                accept: () => {
+                    this.$toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Calculation accepted', life: 3000 });
+                },
+                reject: () => {
+                    this.$toast.add({ severity: 'error', summary: 'Rejected', detail: 'Calculation canceled', life: 3000 });
                 }
+            });
+        },
+        calculatePositionSizeCrypto() {
 
-                // Stop the spinner and show error after a short delay
-                setTimeout(() => {
-                    this.spin_loader = false;  // Stop the loading spinner
-                    this.displayStatus = true;  // Show the error message
+            const diff = Math.abs(( ( (this.entryPrice - this.stopLoss) / this.stopLoss)) *100 )
+            const SIZE = ((this.accountBalance * this.riskPercentage)/diff) ; 
+            this.size_dollar  = SIZE; 
+            this.size_crypto = SIZE > 0 ? (SIZE / this.entryPrice).toFixed(2)  : 0; 
 
-                    // Hide the message after 2 seconds
-                    setTimeout(() => {
-                        this.displayStatus = false;
-                    }, 3000);
-                }, 500);
-            }
+        },
+        resetAll() {
+            this.accountBalance = null;
+            this.riskPercentage = null;
+            this.entryPrice = null;
+            this.stopLoss = null;
+            this.size_crypto = 0;
+            this.size_dollar = 0;
         }
     }
 };
