@@ -57,6 +57,11 @@
           <clock></clock>
         </div>
 
+        <div>
+          <calculator></calculator>
+        </div>
+        
+
 
       </div>
     </div>
@@ -136,14 +141,18 @@ export default {
         "ETH", "SOL", "WIF", "EUR_USD", "GBP_USD", "AUD_USD"
       ],
 
-      forex_ticker : ["OANDA:USDJPY",
+      forex_ticker : ["FOREXCOM:US2000",
         "OANDA:XAUUSD",
+        "CAPITALCOM:US100",
+        "CAPITALCOM:US30",
+        "NASDAQ:NDX",
+        "TVC:USOIL",
         "OANDA:EURUSD",
         "OANDA:USDCHF",
         "OANDA:GBPUSD",
         "OANDA:AUDUSD",],
-
-        forex_label:["USDJPY","XAU","EURUSD","USDCHF","GBPUSD","AUDUSD"],
+        forex_label:["US2000","XAU","US100","US30","NASDAQ","USOIL","EURUSD","USDCHF","GBPUSD","AUDUSD"
+        ],
 
       box_number: [1, 3, 6, 9, 12],
       timeframe: ['1', '5','15','60','D'],
@@ -195,12 +204,17 @@ export default {
     },
 
     changeTimeframe(index, newTimeframe) {
-      if (this.timeframes[index] !== newTimeframe) {
-        this.timeframes[index] = newTimeframe;
-        const symbol = this.all_symbol[index];
-        this.createChart(`chart-all-${index}`, symbol, newTimeframe, this.chart_theme);
-      }
-    },
+  if (this.timeframes[index] !== newTimeframe) {
+    // Update the timeframe for this specific chart
+    this.timeframes[index] = newTimeframe;
+
+    // Retrieve the correct symbol for this chart
+    const symbol = this.status === "FOREX" ? this.forex_ticker[index] : this.all_symbol[index];
+
+    // Re-create the chart with the updated timeframe
+    this.createChart(`chart-all-${index}`, symbol, newTimeframe, this.chart_theme);
+  }
+},
 
     createChart(containerId, symbol, timeframe = "1", theme = "Dark") {
       new TradingView.widget({
