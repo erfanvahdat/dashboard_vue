@@ -40,8 +40,8 @@ import TreeSelect from 'primevue/treeselect';
 import ConfirmPopup from 'primevue/confirmpopup';
 import Skeleton from 'primevue/skeleton';
 import Checkbox from 'primevue/checkbox';
-
-
+import DatePicker from 'primevue/datepicker';
+import Textarea from 'primevue/textarea';
 
 
 
@@ -151,6 +151,8 @@ const globalComponents = {
   "clock":clock,
   "second_clock":second_clock,
   "calculator": calculator,
+  "DatePicker" : DatePicker,
+
   
 
 };
