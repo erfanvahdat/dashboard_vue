@@ -1,6 +1,6 @@
 <template>
-    <div class="card flex overflow-hidden">
-        <Menu :model="items" class="w-full md:w-60 overflow-hidden">
+    <div class="card flex overflow-hidden w-3/4 "  id ='test_bar'>
+        <Menu :model="items" class=" md:w-60 overflow-hidden">
             <template #start>
                 <span class="inline-flex items-center gap-1 px-2 py-2">
                     <!-- Custom content here -->
@@ -111,3 +111,13 @@ export default {
     }
 };
 </script>
+
+
+<style>
+
+#test_bar{
+    
+    width: 20vw;
+
+}
+</style>

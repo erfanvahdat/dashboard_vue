@@ -42,6 +42,8 @@ import Skeleton from 'primevue/skeleton';
 import Checkbox from 'primevue/checkbox';
 import DatePicker from 'primevue/datepicker';
 import Textarea from 'primevue/textarea';
+import Galleria from 'primevue/galleria';
+
 
 
 
@@ -152,6 +154,7 @@ const globalComponents = {
   "second_clock":second_clock,
   "calculator": calculator,
   "DatePicker" : DatePicker,
+  "Galleria": Galleria,
 
   
 

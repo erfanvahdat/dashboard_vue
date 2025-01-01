@@ -1,120 +1,81 @@
 <template>
-    <Toast />
-    <ConfirmPopup group="templating">
-        <template #message="slotProps">
-            <div class="flex flex-col items-center w-full gap-4 p-4">
-                <i :class="slotProps.message.icon" class="text-6xl text-primary-500 "></i>
-                <p class="font-bold font-serif">{{ slotProps.message.message }}</p>
+  <div class="card">
+    <!-- PrimeVue Galleria Component -->
+    <Galleria
+      :value="images"
+      :responsiveOptions="responsiveOptions"
+      :numVisible="5"
+      :circular="true"
+      containerStyle="max-width: 640px"
+      :showItemNavigators="true"
+    >
+      <!-- Full Image -->
+      <template #item="slotProps">
+        <img
+          :src="slotProps.item.itemImageSrc"
+          :alt="slotProps.item.alt"
+          style="width: 100%; display: block;"
+        />
+      </template>
 
-                <!-- Calculator Content -->
-                <div class="flex flex-col  rounded-lg max-w-lg w-full border-1">
-
-                    <div class="card flex flex-wrap gap-4 bg-filed_label font-bold text-filed_body">
-                        <div class="flex flex-row">
-                            
-                            <label for="integeronly" class="font-bold mt-2 ml-2 ">Balance (USD)</label>
-                            <InputNumber v-model="accountBalance" inputId="integeronly" fluid mode="currency" class="mr-2 mt-1 "
-                                currency="USD" />
-                        </div>
-                        <div class="flex flex-row">
-                            <label for="riskPercentage" class="font-bold mt-2 ml-2">Risk %</label>
-                            <InputNumber v-model="riskPercentage" inputId="riskPercentage" mode="decimal" prefix=" % "
-                                :minFractionDigits="0.5" :maxFractionDigits="2.5" fluid step="0.2"  class="mr-2"/>
-                        </div>
-                        <div class="flex flex-row">
-                            <label for="entryPrice" class="font-bold block ml-2">Entry Price</label>
-                            <InputNumber v-model="entryPrice" inputId="entryPrice" :minFractionDigits="1" class="mr-2"
-                                :maxFractionDigits="10" fluid />
-                        </div>
-                        <div class="flex flex-row">
-                            <label for="stopLoss" class="font-bold block ml-2">Stop Loss</label>
-                            <InputNumber v-model="stopLoss" inputId="stopLoss" :minFractionDigits="1" class="mr-2 mb-2"
-                                :maxFractionDigits="10" fluid />
-                        </div>
-                    </div>
-                    <!-- Buttons -->
-                    <div class="flex flex-row gap-2 mt-4">
-                        <Button label="Calculate" severity="info" class="w-1/2 rounded-0"
-                            @click="calculatePositionSizeCrypto" />
-                        <Button label="Reset" class="w-1/2 rounded-0 bg-filed_label" @click="resetAll" />
-                    </div>
-                    <!-- Result -->
-                    <div class="flex flex-row gap-2 mt-2 mb-2">
-                    
-                        <p class="font-bold">Size_Crypto is :</p>
-                        <p for="" class="font-bold  border-1 border-orange-500  rounded  w-fit ">{{ size_crypto }} </p>
-                        
-
-                    </div>
-                
-                        <div class="w-full flex flex-row gap-2 mb-2">
-                            <p class="font-bold">Size_dollar($) is : </p>
-                        <p for="" class="font-bold  border-1 border-orange-500 rounded   ">{{ size_dollar.toFixed(2) }} $ </p>
-                    </div>
-                         
-                    
-                </div>
-            </div>
-        </template>
-    </ConfirmPopup>
-
-    <div class="flex ">
-        <Button @click="showTemplate($event)" label="Show Calculator"></Button>
-    </div>
+      <!-- Thumbnail Image -->
+      <template #thumbnail="slotProps">
+        <img
+          :src="slotProps.item.thumbnailImageSrc"
+          :alt="slotProps.item.alt"
+          style="display: block;"
+        />
+      </template>
+    </Galleria>
+  </div>
 </template>
 
 <script>
+import { ref, onMounted } from "vue";
+import Galleria from "primevue/galleria";
+
 export default {
-    data() {
+  components: {
+    Galleria,
+  },
+  setup() {
+    const images = ref([]);
+    const responsiveOptions = [
+      { breakpoint: "1300px", numVisible: 4 },
+      { breakpoint: "575px", numVisible: 1 },
+    ];
+
+    // Automatically load images from the 'assets' directory
+    const loadImages = () => {
+      const imagePaths = import.meta.glob("/src/assets/*.{png,jpg,jpeg}", {
+        eager: true,
+        import: "default",
+      });
+
+      // Map image paths to Galleria format
+      images.value = Object.keys(imagePaths).map((key) => {
         return {
-            accountBalance: null,
-            riskPercentage: 1,
-            entryPrice: null,
-            stopLoss: null,
-            size_crypto: 0,
-            size_dollar : 0,
+          itemImageSrc: imagePaths[key],
+          thumbnailImageSrc: imagePaths[key],
+          alt: key.split("/").pop().split(".")[0], // Filename as alt text
         };
-    },
-    methods: {
-        showTemplate(event) {
-            this.$confirm.require({
-                target: event.currentTarget,
-                group: 'templating',
-                message: 'Calculating the Crypto Size position',
-                icon: 'pi pi-calculator',
-                rejectProps: {
-                    icon: 'pi pi-times',
-                    label: 'Cancel',
-                    outlined: true
-                },
-                acceptProps: {
-                    icon: 'pi pi-check',
-                    label: 'Confirm'
-                },
-                accept: () => {
-                    this.$toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Calculation accepted', life: 3000 });
-                },
-                reject: () => {
-                    this.$toast.add({ severity: 'error', summary: 'Rejected', detail: 'Calculation canceled', life: 3000 });
-                }
-            });
-        },
-        calculatePositionSizeCrypto() {
+      });
+    };
 
-            const diff = Math.abs(( ( (this.entryPrice - this.stopLoss) / this.stopLoss)) *100 )
-            const SIZE = ((this.accountBalance * this.riskPercentage)/diff) ; 
-            this.size_dollar  = SIZE; 
-            this.size_crypto = SIZE > 0 ? (SIZE / this.entryPrice).toFixed(2)  : 0; 
+    onMounted(() => {
+      loadImages();
+    });
 
-        },
-        resetAll() {
-            this.accountBalance = null;
-            this.riskPercentage = null;
-            this.entryPrice = null;
-            this.stopLoss = null;
-            this.size_crypto = 0;
-            this.size_dollar = 0;
-        }
-    }
+    return {
+      images,
+      responsiveOptions,
+    };
+  },
 };
 </script>
+
+<style scoped>
+.card {
+  margin: 20px auto;
+}
+</style>
