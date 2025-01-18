@@ -217,6 +217,9 @@ export default {
 },
 
     createChart(containerId, symbol, timeframe = "1", theme = "Dark") {
+      
+      
+      
       new TradingView.widget({
         "autosize": true,
         "symbol": symbol,
